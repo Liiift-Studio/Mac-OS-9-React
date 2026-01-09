@@ -1,0 +1,59 @@
+/* Dialog Component Styles - Mac OS 9 */
+
+.backdrop {
+	/* Full screen backdrop */
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1000;
+	
+	/* Background overlay */
+	background-color: rgba(0, 0, 0, 0.3);
+	
+	/* Center dialog */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+	/* Prevent interaction with content behind */
+	backdrop-filter: none;
+}
+
+.dialogContainer {
+	/* Container for the window */
+	position: relative;
+	
+	/* Prevent backdrop click from closing when clicking dialog */
+	pointer-events: auto;
+	
+	/* Animation */
+	animation: dialogFadeIn 0.15s ease-out;
+}
+
+/* ========================================
+ * Animations
+ * ======================================== */
+
+@keyframes dialogFadeIn {
+	from {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	.dialogContainer {
+		animation: none;
+	}
+}

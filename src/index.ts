@@ -9,11 +9,12 @@ export { Radio, type RadioProps } from './components/Radio';
 export { TextField, type TextFieldProps } from './components/TextField';
 export { Select, type SelectProps, type SelectOption } from './components/Select';
 export { Tabs, TabPanel, type TabsProps, type TabPanelProps } from './components/Tabs';
+export { Window, type WindowProps } from './components/Window';
+export { Dialog, type DialogProps } from './components/Dialog';
+
 // Additional components (to be implemented)
-// export { Window, TitleBar } from './components/Window';
+// export { TitleBar } from './components/TitleBar';
 // export { MenuBar, MenuItem } from './components/MenuBar';
-// export { Dialog } from './components/Dialog';
-// export { Tabs } from './components/Tabs';
 
 // Export design tokens
 export * from './tokens';

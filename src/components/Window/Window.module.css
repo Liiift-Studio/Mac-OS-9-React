@@ -1,0 +1,253 @@
+/* Window Component Styles - Mac OS 9 */
+
+.window {
+	/* Base window styling */
+	display: flex;
+	flex-direction: column;
+	
+	/* Mac OS 9 window appearance */
+	background-color: var(--color-surface);
+	border: var(--border-width-thin) solid var(--color-border);
+	box-shadow: var(--shadow-raised);
+	
+	/* Layout */
+	position: relative;
+	overflow: hidden;
+	
+	/* Default dimensions */
+	width: auto;
+	height: auto;
+	min-width: 200px;
+	min-height: 100px;
+}
+
+/* ========================================
+ * Window States
+ * ======================================== */
+
+.window--active {
+	/* Active window - standard appearance */
+	z-index: 10;
+}
+
+.window--inactive {
+	/* Inactive window - slightly dimmed */
+	opacity: 0.92;
+	z-index: 1;
+}
+
+/* ========================================
+ * Title Bar
+ * ======================================== */
+
+.titleBar {
+	/* Title bar container */
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-2);
+	
+	/* Styling */
+	background-color: var(--color-surface);
+	border-bottom: var(--border-width-thin) solid var(--color-border);
+	
+	/* Padding */
+	padding: var(--spacing-1_5) var(--spacing-2);
+	
+	/* Height */
+	min-height: 22px;
+	
+	/* Prevent selection */
+	user-select: none;
+}
+
+/* ========================================
+ * Window Controls
+ * ======================================== */
+
+.controls {
+	/* Control buttons container */
+	display: flex;
+	gap: var(--spacing-1);
+	align-items: center;
+}
+
+.controlButton {
+	/* Base control button */
+	width: 12px;
+	height: 12px;
+	padding: 0;
+	margin: 0;
+	
+	/* Remove button defaults */
+	background: transparent;
+	border: var(--border-width-thin) solid var(--color-border);
+	cursor: pointer;
+	
+	/* Box shadow for depth */
+	box-shadow: var(--shadow-inset);
+	
+	/* Transitions */
+	transition: none;
+}
+
+.controlButton:hover {
+	background-color: var(--color-gray-300);
+}
+
+.controlButton:active {
+	box-shadow: var(--shadow-pressed);
+}
+
+.controlButton:focus-visible {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: 1px;
+}
+
+/* Control button visual indicators */
+.closeBox,
+.minimizeBox,
+.maximizeBox {
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+/* Close button: X pattern */
+.closeBox::before,
+.closeBox::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 6px;
+	height: 1px;
+	background-color: var(--color-border);
+}
+
+.closeBox::before {
+	transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.closeBox::after {
+	transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+/* Minimize button: dash */
+.minimizeBox::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 6px;
+	height: 1px;
+	background-color: var(--color-border);
+}
+
+/* Maximize button: small square */
+.maximizeBox::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 4px;
+	height: 4px;
+	border: 1px solid var(--color-border);
+}
+
+/* ========================================
+ * Title Text
+ * ======================================== */
+
+.titleText {
+	/* Title text styling */
+	font-family: var(--font-system);
+	font-size: var(--font-size-md);
+	font-weight: var(--font-weight-bold);
+	line-height: var(--line-height-snug);
+	color: var(--color-text);
+	
+	/* Center alignment */
+	flex: 1;
+	text-align: center;
+	
+	/* Truncate long titles */
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* ========================================
+ * Content Area
+ * ======================================== */
+
+.content {
+	/* Content area */
+	flex: 1;
+	overflow: auto;
+	
+	/* Background */
+	background-color: var(--color-surface);
+	
+	/* Padding */
+	padding: var(--spacing-4);
+	
+	/* Position for scrolling */
+	position: relative;
+}
+
+/* ========================================
+ * Resize Handle
+ * ======================================== */
+
+.resizeHandle {
+	/* Resize handle in bottom-right corner */
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 12px;
+	height: 12px;
+	
+	/* Visual indicator (diagonal lines) */
+	background-image: linear-gradient(
+		135deg,
+		transparent 0%,
+		transparent 40%,
+		var(--color-border) 40%,
+		var(--color-border) 45%,
+		transparent 45%,
+		transparent 55%,
+		var(--color-border) 55%,
+		var(--color-border) 60%,
+		transparent 60%
+	);
+	
+	/* Cursor */
+	cursor: nwse-resize;
+	
+	/* Layering */
+	z-index: 5;
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+	.window {
+		border-width: 2px;
+	}
+	
+	.controlButton {
+		border-width: 2px;
+	}
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	.controlButton {
+		transition: none;
+	}
+}
