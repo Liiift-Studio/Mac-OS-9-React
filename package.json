@@ -27,7 +27,8 @@
 	"files": [
 		"dist",
 		"README.md",
-		"LICENSE"
+		"LICENSE",
+		"ATTRIBUTION.md"
 	],
 	"scripts": {
 		"dev": "storybook dev -p 6006",
@@ -91,10 +92,18 @@
 		"retro",
 		"design-system"
 	],
-	"author": "",
+	"author": "Liiift Studio",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Liiift-Studio/Mac-OS-9-React.git"
+	},
+	"homepage": "https://github.com/Liiift-Studio/Mac-OS-9-React#readme",
+	"bugs": {
+		"url": "https://github.com/Liiift-Studio/Mac-OS-9-React/issues"
+	},
+	"attribution": {
+		"designs": "Mac OS 9 UI Kit by Michael Feeney (https://swallowmygraphicdesign.com/project/macostalgia)",
+		"license": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)"
 	}
 }

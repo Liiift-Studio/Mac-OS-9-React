@@ -1,0 +1,239 @@
+/* Checkbox Component Styles - Mac OS 9 */
+
+.wrapper {
+	/* Wrapper container for checkbox and label */
+	display: inline-flex;
+	align-items: center;
+	gap: var(--spacing-2);
+	position: relative;
+	cursor: pointer;
+}
+
+.wrapper--disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.wrapper--error {
+	/* Error state styling */
+}
+
+/* ========================================
+ * Label Positioning
+ * ======================================== */
+
+.wrapper--label-left {
+	flex-direction: row-reverse;
+}
+
+.wrapper--label-right {
+	flex-direction: row;
+}
+
+/* ========================================
+ * Checkbox Input
+ * ======================================== */
+
+.checkbox {
+	/* Hide native checkbox */
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	
+	/* Custom checkbox styling */
+	position: relative;
+	display: inline-block;
+	flex-shrink: 0;
+	margin: 0;
+	cursor: pointer;
+	
+	/* Mac OS 9 checkbox appearance */
+	background-color: var(--color-surface);
+	border: var(--border-width-thin) solid var(--color-border);
+	border-radius: var(--border-radius-none);
+	box-shadow: var(--shadow-inset);
+	
+	/* Transition for smooth state changes */
+	transition: none; /* Mac OS 9 had no transitions */
+}
+
+.checkbox:disabled {
+	cursor: not-allowed;
+}
+
+/* ========================================
+ * Size Variants
+ * ======================================== */
+
+.checkbox--sm {
+	width: 14px;
+	height: 14px;
+}
+
+.checkbox--md {
+	width: 16px;
+	height: 16px;
+}
+
+.checkbox--lg {
+	width: 20px;
+	height: 20px;
+}
+
+/* ========================================
+ * Checked State
+ * ======================================== */
+
+.checkbox:checked {
+	/* Checked state uses same background */
+	background-color: var(--color-surface);
+}
+
+/* Checkmark using pseudo-element */
+.checkbox:checked::after {
+	content: '';
+	position: absolute;
+	display: block;
+	
+	/* Mac OS 9 style checkmark */
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%) rotate(45deg);
+	
+	/* Default size (md) */
+	width: 4px;
+	height: 8px;
+	
+	border: solid var(--color-text);
+	border-width: 0 2px 2px 0;
+}
+
+.checkbox--sm:checked::after {
+	width: 3px;
+	height: 6px;
+	border-width: 0 1.5px 1.5px 0;
+}
+
+.checkbox--lg:checked::after {
+	width: 5px;
+	height: 10px;
+	border-width: 0 2.5px 2.5px 0;
+}
+
+/* ========================================
+ * Indeterminate State
+ * ======================================== */
+
+.checkbox--indeterminate::after {
+	content: '';
+	position: absolute;
+	display: block;
+	
+	/* Horizontal line for indeterminate */
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	
+	background-color: var(--color-text);
+	
+	/* Default size (md) */
+	width: 8px;
+	height: 2px;
+}
+
+.checkbox--sm.checkbox--indeterminate::after {
+	width: 6px;
+	height: 1.5px;
+}
+
+.checkbox--lg.checkbox--indeterminate::after {
+	width: 10px;
+	height: 2.5px;
+}
+
+/* ========================================
+ * Focus State
+ * ======================================== */
+
+.checkbox:focus-visible {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: 2px;
+}
+
+/* ========================================
+ * Error State
+ * ======================================== */
+
+.checkbox--error {
+	border-color: var(--color-error);
+}
+
+/* ========================================
+ * Label
+ * ======================================== */
+
+.label {
+	font-family: var(--font-system);
+	font-weight: var(--font-weight-normal);
+	color: var(--color-text);
+	cursor: pointer;
+	user-select: none;
+}
+
+.wrapper--disabled .label {
+	cursor: not-allowed;
+}
+
+.label--sm {
+	font-size: var(--font-size-xs);
+	line-height: var(--line-height-tight);
+}
+
+.label--md {
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-snug);
+}
+
+.label--lg {
+	font-size: var(--font-size-lg);
+	line-height: var(--line-height-normal);
+}
+
+/* ========================================
+ * Size Variants for Wrapper
+ * ======================================== */
+
+.wrapper--sm {
+	gap: var(--spacing-1);
+}
+
+.wrapper--md {
+	gap: var(--spacing-2);
+}
+
+.wrapper--lg {
+	gap: var(--spacing-2);
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+	.checkbox {
+		border-width: var(--border-width-medium);
+	}
+	
+	.checkbox:checked::after,
+	.checkbox--indeterminate::after {
+		border-width: 0 3px 3px 0;
+	}
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	.checkbox {
+		transition: none;
+	}
+}

@@ -1,0 +1,206 @@
+/* Button Component Styles - Mac OS 9 */
+
+.button {
+	/* Base styles */
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--spacing-1);
+	font-family: var(--font-system);
+	font-weight: var(--font-weight-normal);
+	text-align: center;
+	text-decoration: none;
+	white-space: nowrap;
+	user-select: none;
+	cursor: pointer;
+	transition: none; /* Mac OS 9 had no transitions */
+
+	/* Mac OS 9 button appearance */
+	background-color: var(--color-surface);
+	border: var(--border-width-thin) solid var(--color-border);
+	border-radius: var(--border-radius-none);
+	box-shadow: var(--shadow-bevel);
+	color: var(--color-text);
+
+	/* Remove default button styles */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+/* For links styled as buttons */
+.button[href] {
+	text-decoration: none;
+}
+
+.button[href]:visited {
+	color: var(--color-text);
+}
+
+/* ========================================
+ * Size Variants
+ * ======================================== */
+
+.button--sm {
+	min-height: 20px;
+	padding: var(--spacing-0_5) var(--spacing-2);
+	font-size: var(--font-size-xs);
+	line-height: var(--line-height-tight);
+}
+
+.button--md {
+	min-height: 24px;
+	padding: var(--spacing-1) var(--spacing-3);
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-snug);
+}
+
+.button--lg {
+	min-height: 32px;
+	padding: var(--spacing-2) var(--spacing-4);
+	font-size: var(--font-size-lg);
+	line-height: var(--line-height-normal);
+}
+
+/* ========================================
+ * Variant Styles
+ * ======================================== */
+
+.button--default {
+	/* Uses base styles */
+}
+
+.button--primary {
+	/* Slightly darker background for emphasis */
+	background-color: var(--color-gray-300);
+	font-weight: var(--font-weight-bold);
+}
+
+.button--danger {
+	/* Error state styling */
+	color: var(--color-error);
+	border-color: var(--color-error);
+}
+
+/* ========================================
+ * Interactive States
+ * ======================================== */
+
+/* Hover state - subtle highlight */
+.button:hover:not(:disabled) {
+	background-color: var(--color-gray-100);
+}
+
+/* Active/Pressed state - inverted bevel */
+.button:active:not(:disabled) {
+	box-shadow: var(--shadow-inset);
+	background-color: var(--color-gray-300);
+	/* Subtle visual feedback - button appears pressed */
+	transform: translate(1px, 1px);
+}
+
+/* Focus state - keyboard navigation */
+.button:focus-visible {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: 2px;
+}
+
+/* ========================================
+ * Disabled State
+ * ======================================== */
+
+.button--disabled,
+.button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
+/* ========================================
+ * Layout Modifiers
+ * ======================================== */
+
+.button--full-width {
+	width: 100%;
+}
+
+/* ========================================
+ * Loading States
+ * ======================================== */
+
+.button--loading {
+	position: relative;
+	pointer-events: none;
+}
+
+.button--loading:not(.button--cursor-loading) {
+	cursor: wait;
+}
+
+/* Mac OS 9 watch cursor during loading */
+.button--cursor-loading {
+	cursor: wait;
+}
+
+.button__loading-spinner {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: var(--font-size-md);
+}
+
+.button__text {
+	display: inline-flex;
+	align-items: center;
+}
+
+/* ========================================
+ * Icon Support
+ * ======================================== */
+
+.button__icon-left,
+.button__icon-right {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.button__icon-only {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* Icon-only buttons should be square */
+.button--icon-only {
+	padding: var(--spacing-1);
+	aspect-ratio: 1;
+}
+
+.button--icon-only.button--sm {
+	padding: var(--spacing-0_5);
+}
+
+.button--icon-only.button--lg {
+	padding: var(--spacing-2);
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+	.button {
+		border-width: var(--border-width-medium);
+	}
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	.button {
+		transition: none;
+	}
+}

@@ -1,0 +1,225 @@
+/* Select Component Styles - Mac OS 9 */
+
+.wrapper {
+	/* Wrapper container for select, label, and helper text */
+	display: inline-flex;
+	flex-direction: column;
+	gap: var(--spacing-1);
+	position: relative;
+}
+
+.wrapper--full-width {
+	width: 100%;
+}
+
+.wrapper--disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+/* ========================================
+ * Label Positioning
+ * ======================================== */
+
+.wrapper--label-top {
+	flex-direction: column;
+}
+
+.wrapper--label-left {
+	flex-direction: row;
+	align-items: center;
+	gap: var(--spacing-2);
+}
+
+.wrapper--label-right {
+	flex-direction: row-reverse;
+	align-items: center;
+	gap: var(--spacing-2);
+}
+
+/* ========================================
+ * Label
+ * ======================================== */
+
+.label {
+	font-family: var(--font-system);
+	font-weight: var(--font-weight-normal);
+	color: var(--color-text);
+	user-select: none;
+}
+
+.wrapper--disabled .label {
+	cursor: not-allowed;
+}
+
+.label--sm {
+	font-size: var(--font-size-xs);
+	line-height: var(--line-height-tight);
+}
+
+.label--md {
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-snug);
+}
+
+.label--lg {
+	font-size: var(--font-size-lg);
+	line-height: var(--line-height-normal);
+}
+
+/* ========================================
+ * Select Field
+ * ======================================== */
+
+.select {
+	/* Base styling */
+	font-family: var(--font-system);
+	font-weight: var(--font-weight-normal);
+	color: var(--color-text);
+	
+	/* Mac OS 9 popup menu appearance - raised bevel with dropdown arrow */
+	background-color: var(--color-surface);
+	border: var(--border-width-thin) solid var(--color-border);
+	border-radius: var(--border-radius-none);
+	box-shadow: var(--shadow-bevel);
+	
+	/* Add arrow indicator */
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23000000' d='M2 4l4 4 4-4z'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right var(--spacing-1) center;
+	
+	/* Remove default select styles */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	
+	/* Cursor */
+	cursor: pointer;
+	
+	/* Transition */
+	transition: none; /* Mac OS 9 had no transitions */
+}
+
+.select:disabled {
+	cursor: not-allowed;
+	background-color: var(--color-gray-200);
+}
+
+/* ========================================
+ * Size Variants
+ * ======================================== */
+
+.select--sm {
+	min-height: 20px;
+	padding: var(--spacing-0_5) var(--spacing-6) var(--spacing-0_5) var(--spacing-2);
+	font-size: var(--font-size-xs);
+	line-height: var(--line-height-tight);
+}
+
+.select--md {
+	min-height: 24px;
+	padding: var(--spacing-1) var(--spacing-6) var(--spacing-1) var(--spacing-2);
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-snug);
+}
+
+.select--lg {
+	min-height: 32px;
+	padding: var(--spacing-2) var(--spacing-8) var(--spacing-2) var(--spacing-3);
+	font-size: var(--font-size-lg);
+	line-height: var(--line-height-normal);
+}
+
+.select--full-width {
+	width: 100%;
+}
+
+/* ========================================
+ * Focus State
+ * ======================================== */
+
+.select:focus {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: 2px;
+}
+
+/* ========================================
+ * Error State
+ * ======================================== */
+
+.select--error {
+	border-color: var(--color-error);
+}
+
+.select--error:focus {
+	outline-color: var(--color-error);
+}
+
+/* ========================================
+ * Helper Text & Error Message
+ * ======================================== */
+
+.helper-text,
+.error-message {
+	margin: 0;
+	font-family: var(--font-system);
+	font-size: var(--font-size-xs);
+	line-height: var(--line-height-tight);
+}
+
+.helper-text {
+	color: var(--color-gray-700);
+}
+
+.error-message {
+	color: var(--color-error);
+}
+
+/* ========================================
+ * Wrapper Size Variants
+ * ======================================== */
+
+.wrapper--sm {
+	gap: var(--spacing-0_5);
+}
+
+.wrapper--md {
+	gap: var(--spacing-1);
+}
+
+.wrapper--lg {
+	gap: var(--spacing-1);
+}
+
+/* ========================================
+ * Option Styling (in dropdown)
+ * ======================================== */
+
+.select option {
+	font-family: var(--font-system);
+	padding: var(--spacing-1);
+	background-color: var(--color-surface);
+	color: var(--color-text);
+}
+
+.select option:disabled {
+	color: var(--color-gray-600);
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+	.select {
+		border-width: var(--border-width-medium);
+	}
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	.select {
+		transition: none;
+	}
+}

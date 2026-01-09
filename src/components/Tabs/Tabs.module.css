@@ -1,0 +1,209 @@
+/* Tabs Component Styles - Mac OS 9 */
+
+.container {
+	/* Container for tabs and panels */
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+/* ========================================
+ * Tab List (Row of tabs)
+ * ======================================== */
+
+.tabList {
+	display: flex;
+	gap: 0;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	border-bottom: var(--border-width-thin) solid var(--color-border);
+}
+
+.tabList--full-width {
+	width: 100%;
+}
+
+/* ========================================
+ * Individual Tab
+ * ======================================== */
+
+.tab {
+	/* Base styling */
+	font-family: var(--font-system);
+	font-weight: var(--font-weight-normal);
+	color: var(--color-text);
+	background-color: var(--color-surface);
+	
+	/* Mac OS 9 tab appearance - raised when active */
+	border: var(--border-width-thin) solid var(--color-border);
+	border-bottom: none;
+	border-radius: var(--border-radius-none);
+	
+	/* Positioning */
+	position: relative;
+	margin-bottom: -1px; /* Overlap with panel border */
+	
+	/* Layout */
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--spacing-1);
+	
+	/* Cursor */
+	cursor: pointer;
+	
+	/* Remove button defaults */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	
+	/* No transitions */
+	transition: none;
+	
+	/* Text */
+	white-space: nowrap;
+	user-select: none;
+}
+
+/* Inactive tab - slightly inset */
+.tab:not(.tab--active) {
+	background-color: var(--color-gray-300);
+	box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.1);
+	margin-top: 2px;
+}
+
+/* Active tab - raised above panel */
+.tab--active {
+	background-color: var(--color-surface);
+	box-shadow: var(--shadow-bevel);
+	z-index: 1;
+}
+
+/* Disabled tab */
+.tab--disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
+/* ========================================
+ * Tab Size Variants
+ * ======================================== */
+
+.tab--sm {
+	min-height: 24px;
+	padding: var(--spacing-1) var(--spacing-3);
+	font-size: var(--font-size-xs);
+	line-height: var(--line-height-tight);
+}
+
+.tab--md {
+	min-height: 28px;
+	padding: var(--spacing-1_5) var(--spacing-4);
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-snug);
+}
+
+.tab--lg {
+	min-height: 32px;
+	padding: var(--spacing-2) var(--spacing-5);
+	font-size: var(--font-size-lg);
+	line-height: var(--line-height-normal);
+}
+
+.tab--full-width {
+	flex: 1;
+}
+
+/* ========================================
+ * Tab Icon
+ * ======================================== */
+
+.tabIcon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* ========================================
+ * Tab Focus State
+ * ======================================== */
+
+.tab:focus-visible {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: -3px;
+}
+
+/* ========================================
+ * Tab Hover State (subtle)
+ * ======================================== */
+
+.tab:not(.tab--active):not(.tab--disabled):hover {
+	background-color: var(--color-gray-400);
+}
+
+/* ========================================
+ * Panel Container
+ * ======================================== */
+
+.panelContainer {
+	/* Mac OS 9 inset panel appearance */
+	background-color: var(--color-surface);
+	border: var(--border-width-thin) solid var(--color-border);
+	box-shadow: var(--shadow-inset);
+	
+	/* Layout */
+	position: relative;
+	width: 100%;
+}
+
+.panelContainer--sm {
+	padding: var(--spacing-3);
+}
+
+.panelContainer--md {
+	padding: var(--spacing-4);
+}
+
+.panelContainer--lg {
+	padding: var(--spacing-5);
+}
+
+/* ========================================
+ * Tab List Size Variants
+ * ======================================== */
+
+.tabList--sm {
+	/* Smaller gap for small tabs */
+}
+
+.tabList--md {
+	/* Default spacing */
+}
+
+.tabList--lg {
+	/* Larger spacing */
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+	.tab {
+		border-width: var(--border-width-medium);
+	}
+	
+	.tab--active {
+		border-width: var(--border-width-medium);
+	}
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	.tab {
+		transition: none;
+	}
+}

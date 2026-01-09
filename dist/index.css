@@ -1,0 +1,83 @@
+/* src/components/Button/Button.module.css */
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-system);
+  font-weight: var(--font-weight-normal);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  cursor: pointer;
+  transition: none;
+  background-color: var(--color-surface);
+  border: var(--border-width-thin) solid var(--color-border);
+  border-radius: var(--border-radius-none);
+  box-shadow: var(--shadow-bevel);
+  color: var(--color-text);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.button--sm {
+  min-height: 20px;
+  padding: var(--spacing-0_5) var(--spacing-2);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-tight);
+}
+.button--md {
+  min-height: 24px;
+  padding: var(--spacing-1) var(--spacing-3);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-snug);
+}
+.button--lg {
+  min-height: 32px;
+  padding: var(--spacing-2) var(--spacing-4);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-normal);
+}
+.button--default {
+}
+.button--primary {
+  background-color: var(--color-gray-300);
+  font-weight: var(--font-weight-bold);
+}
+.button--danger {
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+.button:hover:not(:disabled) {
+  background-color: var(--color-gray-100);
+}
+.button:active:not(:disabled) {
+  box-shadow: var(--shadow-inset);
+  background-color: var(--color-gray-300);
+  transform: translate(1px, 1px);
+}
+.button:focus-visible {
+  outline: 1px dotted var(--color-focus);
+  outline-offset: 2px;
+}
+.button--disabled,
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.button--full-width {
+  width: 100%;
+}
+@media (prefers-contrast: high) {
+  .button {
+    border-width: var(--border-width-medium);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+}
+/*# sourceMappingURL=index.css.map */

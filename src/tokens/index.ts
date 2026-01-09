@@ -1,63 +1,118 @@
 // Mac OS 9 Design Tokens
-// These will be populated from Figma design file
+// Extracted from Figma file: vy2T5MCXFz7QWf4Ba86eqN
+// Reference: docs/figma-map.md
 
 /**
- * Color tokens for Mac OS 9 UI
+ * Color tokens based on Mac OS 9 grayscale palette
+ * Extracted from Figma styles and component analysis
  */
 export const colors = {
-	// Base grays (to be extracted from Figma)
-	gray100: '#ffffff',
-	gray200: '#f0f0f0',
-	gray300: '#e0e0e0',
-	gray400: '#d0d0d0',
-	gray500: '#c0c0c0', // Classic Mac OS 9 gray
-	gray600: '#a0a0a0',
-	gray700: '#808080',
-	gray800: '#606060',
-	gray900: '#000000',
+	// Grayscale palette (Figma style IDs included for reference)
+	gray100: '#FFFFFF', // 18:47 - White
+	gray200: '#EEEEEE', // 19:2507 - Base UI background
+	gray300: '#DDDDDD', // 18:60 - Inferred mid-tone
+	gray400: '#CCCCCC', // 18:1970 - Inferred mid-tone
+	gray500: '#999999', // 20:7306 - Inferred mid-tone
+	gray600: '#666666', // 18:52 - Inferred dark tone
+	gray700: '#4D4D4D', // 18:46 - Inferred dark tone
+	gray800: '#333333', // 45:184845 - Inferred very dark
+	gray900: '#262626', // 18:48 - Black (strokes, borders, text)
 
-	// Accent colors (to be extracted from Figma)
-	black: '#000000',
-	white: '#ffffff',
+	// Accent colors
+	lavender: '#CCCCFF', // 60:134029 - Cover background
+	azul: '#0066CC', // 49:36229 - Accent (inferred)
+	linkRed: '#CC0000', // 102:398, 102:3935 - Link color (inferred)
 
-	// Status colors
-	focus: '#000080', // Classic Windows blue focus
-	error: '#ff0000',
+	// Semantic mappings
+	background: '#EEEEEE', // Gray 200
+	foreground: '#262626', // Gray 900
+	border: '#262626', // Gray 900
+	text: '#262626', // Gray 900
+	textInverse: '#FFFFFF', // Gray 100
+	surface: '#EEEEEE', // Gray 200
+	surfaceInset: '#FFFFFF', // Gray 100 (for inset areas)
+
+	// Legacy names for compatibility
+	black: '#262626',
+	white: '#FFFFFF',
+
+	// Status colors (Mac OS 9 style)
+	focus: '#000080',
+	error: '#CC0000',
 	success: '#008000',
-	warning: '#ff8c00',
+	warning: '#FF8C00',
 } as const;
 
 /**
  * Typography tokens
+ * Based on Figma text styles and Mac OS 9 conventions
  */
 export const typography = {
 	fontFamily: {
-		system: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+		// Mac OS 9 used Chicago for system UI, but we'll use modern equivalents
+		system: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif',
+		// Apple Garamond Light used for headlines in Figma
+		display: 'Garamond, "Apple Garamond", Georgia, serif',
+		// Classic Mac monospace
+		mono: '"SF Mono", Monaco, "Courier New", monospace',
+		// Fallbacks for classic Mac fonts
 		chicago: 'Chicago, "Chicago Classic", monospace',
 		geneva: 'Geneva, sans-serif',
 	},
 	fontSize: {
-		xs: '10px',
-		sm: '11px',
-		md: '12px',
-		lg: '13px',
-		xl: '14px',
+		xs: '10px', // Small labels
+		sm: '11px', // Body small
+		md: '12px', // Standard UI text (Mac OS 9 used smaller text)
+		lg: '13px', // Slightly larger
+		xl: '14px', // Headings
+		'2xl': '16px', // Large headings
+		'3xl': '18px', // Section headers
+		'4xl': '20px', // Major headings
 	},
 	fontWeight: {
 		normal: 400,
+		medium: 500,
+		semibold: 600,
 		bold: 700,
 	},
 	lineHeight: {
 		tight: 1.2,
+		snug: 1.375,
 		normal: 1.5,
-		relaxed: 1.75,
+		relaxed: 1.625,
+		loose: 2,
+	},
+	letterSpacing: {
+		tighter: '-0.05em',
+		tight: '-0.025em',
+		normal: '0',
+		wide: '0.025em',
+		wider: '0.05em',
 	},
 } as const;
 
 /**
- * Spacing tokens (to be refined from Figma)
+ * Spacing tokens based on Mac OS 9 measurements
+ * Mac OS 9 used tight spacing; using 2px as base unit
  */
 export const spacing = {
+	'0': '0',
+	px: '1px',
+	'0.5': '2px', // Minimal spacing
+	'1': '4px', // Base grid unit
+	'1.5': '6px',
+	'2': '8px',
+	'2.5': '10px',
+	'3': '12px',
+	'4': '16px',
+	'5': '20px',
+	'6': '24px',
+	'8': '32px',
+	'10': '40px',
+	'12': '48px',
+	'16': '64px',
+
+	// Legacy names
 	xs: '2px',
 	sm: '4px',
 	md: '8px',
@@ -68,41 +123,67 @@ export const spacing = {
 } as const;
 
 /**
+ * Shadow tokens for Mac OS 9 bevel effects
+ * Exact values from Figma Window Shadow effect (67:95038)
+ * 
+ * Classic 3-layer bevel:
+ * 1. Hard drop shadow (2px, 2px, 0 blur) - creates depth
+ * 2. Top-left highlight (light inner shadow)
+ * 3. Bottom-right shadow (dark inner shadow)
+ */
+export const shadows = {
+	// Standard raised bevel (default button state)
+	bevel:
+		'inset 2px 2px 0 rgba(255, 255, 255, 0.6), inset -2px -2px 0 rgba(38, 38, 38, 0.4), 2px 2px 0 rgba(38, 38, 38, 1)',
+
+	// Inverted bevel for pressed/inset states
+	inset:
+		'inset -2px -2px 0 rgba(255, 255, 255, 0.6), inset 2px 2px 0 rgba(38, 38, 38, 0.4), 2px 2px 0 rgba(38, 38, 38, 1)',
+
+	// Individual layers for custom composition
+	dropShadow: '2px 2px 0 rgba(38, 38, 38, 1)',
+	innerHighlight: 'inset 2px 2px 0 rgba(255, 255, 255, 0.6)',
+	innerShadow: 'inset -2px -2px 0 rgba(38, 38, 38, 0.4)',
+
+	// Legacy format for compatibility
+	raised: {
+		highlight: 'inset 2px 2px 0 rgba(255, 255, 255, 0.6)',
+		shadow: 'inset -2px -2px 0 rgba(38, 38, 38, 0.4)',
+		full: 'inset 2px 2px 0 rgba(255, 255, 255, 0.6), inset -2px -2px 0 rgba(38, 38, 38, 0.4), 2px 2px 0 rgba(38, 38, 38, 1)',
+	},
+
+	// No shadow (flat)
+	none: 'none',
+} as const;
+
+/**
  * Border tokens
+ * Mac OS 9 used consistent 1px borders with sharp corners
  */
 export const borders = {
 	width: {
+		none: '0',
 		thin: '1px',
 		medium: '2px',
 		thick: '3px',
 	},
+	style: {
+		solid: 'solid',
+		dashed: 'dashed',
+		dotted: 'dotted',
+		none: 'none',
+	},
 	radius: {
-		none: '0',
-		sm: '2px',
-		md: '4px',
+		none: '0', // Mac OS 9 always used square corners
+		sm: '0', // Kept for API consistency
+		md: '0',
+		lg: '0',
+		full: '0',
 	},
 } as const;
 
 /**
- * Shadow tokens for Mac OS 9 bevel effects
- */
-export const shadows = {
-	// Raised bevel (light top-left, dark bottom-right)
-	raised: {
-		highlight: 'inset 1px 1px 0 rgba(255, 255, 255, 0.9)',
-		shadow: 'inset -1px -1px 0 rgba(0, 0, 0, 0.3)',
-		full: 'inset 1px 1px 0 rgba(255, 255, 255, 0.9), inset -1px -1px 0 rgba(0, 0, 0, 0.3)',
-	},
-	// Pressed/inset bevel (dark top-left, light bottom-right)
-	inset: {
-		shadow: 'inset 1px 1px 0 rgba(0, 0, 0, 0.3)',
-		highlight: 'inset -1px -1px 0 rgba(255, 255, 255, 0.9)',
-		full: 'inset 1px 1px 0 rgba(0, 0, 0, 0.3), inset -1px -1px 0 rgba(255, 255, 255, 0.9)',
-	},
-} as const;
-
-/**
- * Z-index tokens for layering
+ * Z-index scale for layering
  */
 export const zIndex = {
 	base: 0,
@@ -113,6 +194,25 @@ export const zIndex = {
 	tooltip: 1400,
 } as const;
 
+/**
+ * Transition/Animation tokens
+ * Mac OS 9 had minimal animations, but we add subtle ones for modern feel
+ */
+export const transitions = {
+	duration: {
+		instant: '0ms',
+		fast: '100ms',
+		normal: '200ms',
+		slow: '300ms',
+	},
+	timing: {
+		linear: 'linear',
+		easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
+		easeOut: 'cubic-bezier(0, 0, 0.2, 1)',
+		easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
+	},
+} as const;
+
 // Export all tokens as a single object
 export const tokens = {
 	colors,
@@ -121,6 +221,7 @@ export const tokens = {
 	borders,
 	shadows,
 	zIndex,
+	transitions,
 } as const;
 
 export default tokens;
