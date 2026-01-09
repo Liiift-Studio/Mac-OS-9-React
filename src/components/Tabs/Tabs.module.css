@@ -13,11 +13,11 @@
 
 .tabList {
 	display: flex;
-	gap: 0;
+	gap: var(--spacing-1);
 	margin: 0;
 	padding: 0;
 	list-style: none;
-	border-bottom: var(--border-width-thin) solid var(--color-border);
+	margin-bottom: -1px; /* Overlap with panel border */
 }
 
 .tabList--full-width {
@@ -33,22 +33,18 @@
 	font-family: var(--font-system);
 	font-weight: var(--font-weight-normal);
 	color: var(--color-text);
-	background-color: var(--color-surface);
 	
-	/* Mac OS 9 tab appearance - raised when active */
+	/* Box styling */
+	background: var(--color-gray-400);
 	border: var(--border-width-thin) solid var(--color-border);
-	border-bottom: none;
 	border-radius: var(--border-radius-none);
+	box-shadow: var(--shadow-raised);
+	
+	/* Padding */
+	padding: var(--spacing-1_5) var(--spacing-4);
 	
 	/* Positioning */
 	position: relative;
-	margin-bottom: -1px; /* Overlap with panel border */
-	
-	/* Layout */
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	gap: var(--spacing-1);
 	
 	/* Cursor */
 	cursor: pointer;
@@ -66,18 +62,11 @@
 	user-select: none;
 }
 
-/* Inactive tab - slightly inset */
-.tab:not(.tab--active) {
-	background-color: var(--color-gray-300);
-	box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.1);
-	margin-top: 2px;
-}
-
 /* Active tab - raised above panel */
 .tab--active {
-	background-color: var(--color-surface);
-	box-shadow: var(--shadow-bevel);
+	background: var(--color-surface);
 	z-index: 1;
+	border-bottom-color: var(--color-surface); /* Hide bottom border */
 }
 
 /* Disabled tab */
@@ -92,21 +81,18 @@
  * ======================================== */
 
 .tab--sm {
-	min-height: 24px;
 	padding: var(--spacing-1) var(--spacing-3);
 	font-size: var(--font-size-xs);
 	line-height: var(--line-height-tight);
 }
 
 .tab--md {
-	min-height: 28px;
 	padding: var(--spacing-1_5) var(--spacing-4);
 	font-size: var(--font-size-md);
 	line-height: var(--line-height-snug);
 }
 
 .tab--lg {
-	min-height: 32px;
 	padding: var(--spacing-2) var(--spacing-5);
 	font-size: var(--font-size-lg);
 	line-height: var(--line-height-normal);
@@ -124,6 +110,7 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
+	margin-right: var(--spacing-1);
 }
 
 /* ========================================
@@ -140,7 +127,7 @@
  * ======================================== */
 
 .tab:not(.tab--active):not(.tab--disabled):hover {
-	background-color: var(--color-gray-400);
+	background: var(--color-gray-300);
 }
 
 /* ========================================
@@ -171,35 +158,8 @@
 }
 
 /* ========================================
- * Tab List Size Variants
- * ======================================== */
-
-.tabList--sm {
-	/* Smaller gap for small tabs */
-}
-
-.tabList--md {
-	/* Default spacing */
-}
-
-.tabList--lg {
-	/* Larger spacing */
-}
-
-/* ========================================
  * Accessibility
  * ======================================== */
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-	.tab {
-		border-width: var(--border-width-medium);
-	}
-	
-	.tab--active {
-		border-width: var(--border-width-medium);
-	}
-}
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {

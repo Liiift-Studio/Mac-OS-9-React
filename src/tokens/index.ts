@@ -45,49 +45,64 @@ export const colors = {
 
 /**
  * Typography tokens
- * Based on Figma text styles and Mac OS 9 conventions
+ * Based on Figma text styles and authentic Mac OS 9 system fonts
+ * 
+ * Mac OS 9 Typography:
+ * - Charcoal: Primary system UI font (menus, buttons, dialogs)
+ * - Geneva: Body text and secondary UI elements
+ * - Chicago: Classic Mac system font (menu bar, earlier versions)
+ * - Apple Garamond: Headlines and editorial content
  */
 export const typography = {
 	fontFamily: {
-		// Mac OS 9 used Chicago for system UI, but we'll use modern equivalents
-		system: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif',
-		// Apple Garamond Light used for headlines in Figma
-		display: 'Garamond, "Apple Garamond", Georgia, serif',
-		// Classic Mac monospace
-		mono: '"SF Mono", Monaco, "Courier New", monospace',
-		// Fallbacks for classic Mac fonts
-		chicago: 'Chicago, "Chicago Classic", monospace',
-		geneva: 'Geneva, sans-serif',
+		// Charcoal - Primary system UI font used throughout Mac OS 9
+		// Fallback chain: Try Charcoal variants, then Chicago, then modern system fonts
+		system: 'Charcoal, "Charcoal CY", Chicago, "Chicago Classic", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif',
+		
+		// Geneva - Used for dialog text and body content in Mac OS 9
+		// More readable for longer text than Charcoal
+		body: 'Geneva, "Geneva CY", "Lucida Grande", "Lucida Sans Unicode", sans-serif',
+		
+		// Apple Garamond Light - Used for headlines in Figma
+		display: '"Apple Garamond Light", "Apple Garamond", Garamond, Georgia, serif',
+		
+		// Chicago - Classic Mac OS system font (menu bar, classic UI)
+		chicago: 'Chicago, "Chicago Classic", "Charcoal CY", Charcoal, monospace',
+		
+		// Monaco - Mac OS 9 monospace font
+		mono: 'Monaco, "Monaco CY", "SF Mono", "Courier New", Courier, monospace',
 	},
 	fontSize: {
-		xs: '10px', // Small labels
-		sm: '11px', // Body small
-		md: '12px', // Standard UI text (Mac OS 9 used smaller text)
-		lg: '13px', // Slightly larger
-		xl: '14px', // Headings
-		'2xl': '16px', // Large headings
-		'3xl': '18px', // Section headers
-		'4xl': '20px', // Major headings
+		xs: '9px',   // Smallest UI text (9pt Chicago/Charcoal)
+		sm: '10px',  // Small labels (10pt)
+		md: '12px',  // Standard UI text - Mac OS 9 default (12pt)
+		lg: '13px',  // Slightly larger UI text
+		xl: '14px',  // Large UI text
+		'2xl': '16px',  // Headings
+		'3xl': '18px',  // Large headings
+		'4xl': '20px',  // Major headings
+		'5xl': '24px',  // Display text
 	},
 	fontWeight: {
-		normal: 400,
-		medium: 500,
-		semibold: 600,
-		bold: 700,
+		normal: 700,   // Charcoal Bold is the Mac OS 9 default
+		medium: 700,   // Medium (same as bold for Charcoal)
+		semibold: 700, // Semibold (same as bold)
+		bold: 700,     // Bold weight
+		light: 400,    // Light weight (regular Charcoal)
 	},
 	lineHeight: {
-		tight: 1.2,
-		snug: 1.375,
-		normal: 1.5,
-		relaxed: 1.625,
-		loose: 2,
+		tight: 1.2,    // Tight leading (Mac OS 9 style)
+		snug: 1.3,     // Snug
+		normal: 1.4,   // Normal (Mac OS 9 used tighter line heights)
+		relaxed: 1.5,  // Relaxed
+		loose: 1.6,    // Loose
 	},
 	letterSpacing: {
-		tighter: '-0.05em',
-		tight: '-0.025em',
-		normal: '0',
-		wide: '0.025em',
-		wider: '0.05em',
+		tighter: '-0.02em', // Slightly tighter
+		tight: '-0.01em',   // Tight
+		normal: '0',        // Normal - Mac OS 9 default
+		wide: '0.01em',     // Wide
+		wider: '0.02em',    // Wider
 	},
 } as const;
 

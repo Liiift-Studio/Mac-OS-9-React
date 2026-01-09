@@ -2,82 +2,136 @@
 
 ## Current Work Focus
 
-### Phase: Foundation Complete - Component Implementation (In Progress)
+### Phase: Core Components Complete - Container Components Next
 
-Foundation is complete with pixel-accurate design tokens extracted from Figma. Button component is fully implemented and serves as the reference for all future components.
+Foundation and all core form/navigation components are now complete. Moving into container components (Window, TitleBar, Dialog, MenuBar).
 
-#### Just Completed
-1. ✅ Full project infrastructure (package.json, TypeScript, build tools, testing, Storybook)
-2. ✅ **Custom Figma MCP server** - Built and integrated for direct Figma API access
-3. ✅ **Figma design token extraction** - Extracted all tokens from file `vy2T5MCXFz7QWf4Ba86eqN`
-4. ✅ **Complete component inventory** - Documented 26 components in `docs/figma-map.md`
-5. ✅ **Pixel-accurate design tokens** - Colors, typography, spacing, shadows all from Figma
-6. ✅ **Mac OS 9 bevel system** - Exact 3-layer shadow implementation
-7. ✅ **Button component (complete)** - All variants, sizes, states, stories, and tests
-8. ✅ **Storybook running** - Successfully started at http://localhost:6006/
-9. ✅ **CSS Modules type declarations** - Added to fix TypeScript errors
-10. ✅ **Theme system** - 200+ CSS custom properties ready for use
+#### Just Completed (2026-01-08 17:00)
+1. ✅ **Tabs Component** - Simplified square tabs with box shadows
+   - Basic square tabs with standard Mac OS 9 box shadows
+   - Active/inactive states with proper colors
+   - Keyboard navigation (arrows, Home, End)
+   - Full accessibility with ARIA
+   - **Note**: Trapezoid/stepped edge refinements deferred to Phase 2
+2. ✅ **Typography System** - Updated to Charcoal Bold (700 weight) as default
+3. ✅ **Pixelated Corners** - Created utility system for authentic Mac OS 9 corners
+4. ✅ **Button Enhancement** - Applied pixelated corners to Button component
+
+#### Phase 1 Components - ALL COMPLETE ✅
+- ✅ Button (all variants, sizes, states, tests, stories)
+- ✅ Checkbox (standard + indeterminate state)
+- ✅ Radio (with Radio.Group)
+- ✅ TextField (single + multi-line)
+- ✅ Select (custom dropdown)
+- ✅ Tabs (simplified, refinements deferred)
 
 #### Currently Working On
 - Updating memory-bank documentation to reflect current state
-- Planning next component implementations (Checkbox, Radio, TextField)
+- Planning Phase 2: Container components (Window, TitleBar, Dialog, MenuBar)
 
 ## Recent Changes
 
-### 2026-01-08 - Initial Project Scaffolding
-- Created complete project structure from scratch
-- Established all configuration files (TypeScript, ESLint, Prettier, Vitest, Storybook, Changesets)
-- Set up memory-bank documentation following custom instructions
-- Created placeholder design tokens based on Mac OS 9 conventions
-- Defined base TypeScript types for components
-- Established CSS architecture with custom properties
+### 2026-01-08 17:00 - Tabs Simplification
+- Reverted SVG trapezoid experiments
+- Implemented simple square tabs with box shadows
+- Active tabs: light background, hidden bottom border
+- Inactive tabs: darker background, visible borders
+- Deferred pixel-perfect trapezoid shapes to Phase 2
 
-### Design Decisions Made
+### 2026-01-08 Afternoon - Component Sprint
+- Completed Checkbox component with all states
+- Completed Radio component with Radio.Group
+- Completed TextField (single + multi-line variants)
+- Completed Select with custom dropdown styling
+- Started and simplified Tabs component
 
-#### 1. CSS Strategy
-**Decision**: CSS Modules + Custom Properties
-**Rationale**: Better performance than CSS-in-JS, easier to achieve pixel-perfect Mac OS 9 effects, smaller bundle size
-**Impact**: Components will use scoped CSS Modules that reference global CSS variables
+### 2026-01-08 Morning - Typography & Pixelation
+- Updated default font weight to Charcoal Bold (700)
+- Created `src/styles/pixelated-corners.css` utility system
+- Applied pixelated corners to Button component
 
-#### 2. Build Output
-**Decision**: Dual ESM/CJS with "use client" directive
-**Rationale**: Maximum compatibility with modern bundlers and Next.js App Router
-**Impact**: Library usable in both ESM and CJS contexts, explicit client-side marking
+### 2026-01-08 Initial - Project Foundation
+- Complete project scaffolding
+- Figma MCP server integration
+- Design token extraction
+- Button component (reference implementation)
 
-#### 3. Component API
-**Decision**: Controlled + Uncontrolled support for form inputs
-**Rationale**: Flexibility for different use cases, follows React best practices
-**Impact**: More code but better developer experience
+## Design Decisions Made
 
-#### 4. Accessibility First
-**Decision**: Build in ARIA and keyboard support from the start
-**Rationale**: Harder to retrofit later, core to project goals
-**Impact**: Every component includes ARIA attributes and keyboard handlers by default
+### 1. Typography: Charcoal Bold as Default
+**Decision**: Use Charcoal Bold (700 weight) as the primary font weight  
+**Rationale**: More authentic to Mac OS 9 which used bold text extensively in UI  
+**Impact**: All components now use `--font-weight-bold` (700) by default  
+**Date**: 2026-01-08
+
+### 2. Pixelated Corners System
+**Decision**: Create reusable utility classes for pixelated corners  
+**Rationale**: Mac OS 9 had characteristic stepped/pixelated corners on many UI elements  
+**Implementation**: CSS classes in `src/styles/pixelated-corners.css`  
+**Impact**: Can be applied to any component via className  
+**Date**: 2026-01-08
+
+### 3. Tabs: Simplified Implementation
+**Decision**: Use simple square tabs with box shadows (defer trapezoid shapes)  
+**Rationale**: SVG trapezoid approach was complex and not rendering correctly  
+**Impact**: Functional tabs now, can enhance visual fidelity in Phase 2  
+**Status**: Temporary, marked for future refinement  
+**Date**: 2026-01-08 17:00
+
+### 4. CSS Strategy
+**Decision**: CSS Modules + Custom Properties  
+**Rationale**: Better performance than CSS-in-JS, easier to achieve pixel-perfect Mac OS 9 effects  
+**Impact**: Components will use scoped CSS Modules that reference global CSS variables  
+**Date**: 2026-01-08 (initial)
+
+### 5. Build Output
+**Decision**: Dual ESM/CJS with TypeScript declarations  
+**Rationale**: Maximum compatibility with modern bundlers and Next.js  
+**Impact**: Library usable in both ESM and CJS contexts  
+**Date**: 2026-01-08 (initial)
+
+### 6. Component API
+**Decision**: Controlled + Uncontrolled support for form inputs  
+**Rationale**: Flexibility for different use cases, follows React best practices  
+**Impact**: More code but better developer experience  
+**Date**: 2026-01-08 (initial)
+
+### 7. Accessibility First
+**Decision**: Build in ARIA and keyboard support from the start  
+**Rationale**: Harder to retrofit later, core to project goals  
+**Impact**: Every component includes ARIA attributes and keyboard handlers by default  
+**Date**: 2026-01-08 (initial)
 
 ## Next Steps
 
-### Immediate (Now)
-1. **Install Dependencies**: Run `npm install` to install all packages
-2. **Connect to Figma**: Use Figma MCP server to access design file
-3. **Extract Design Tokens**: Pull accurate values from Figma (colors, spacing, typography, effects)
-4. **Document Component Variants**: Create `docs/figma-map.md` mapping Figma components to React components
+### Immediate (Next Session)
+1. **Window Component**: Classic Mac OS 9 window container
+   - Titlebar with controls (close, minimize, maximize)
+   - Resizable borders
+   - Content area
+   - Proper z-index layering
+2. **TitleBar Component**: Standalone titlebar for windows
+   - Window title text
+   - Close/minimize/maximize buttons
+   - Drag handle behavior (optional)
 
-### Short-term (Next Session)
-1. **Refine Design Tokens**: Update `src/tokens/index.ts` with actual Figma values
-2. **Update Theme CSS**: Sync CSS variables with refined tokens
-3. **Implement Button Component**: Start with foundation component
-   - All variants (default, primary, secondary)
-   - All states (default, hover, active, disabled, focus)
-   - Full accessibility (keyboard, ARIA, focus management)
-   - Comprehensive Storybook stories
-   - Unit and integration tests
+### Short-term (This Week)
+1. **Dialog/Modal Component**: Modal dialogs
+   - Centered window-style dialog
+   - Backdrop/overlay
+   - Focus trapping
+   - Escape key to close
+2. **MenuBar Component**: Top menu bar
+   - Horizontal menu layout
+   - MenuItem components
+   - Keyboard navigation
+   - Click-to-open behavior
 
-### Medium-term (This Week)
-1. **Implement Form Components**: Checkbox, Radio, TextField, Select
-2. **Implement Container Components**: Window, TitleBar, Dialog
-3. **Implement Navigation**: MenuBar, MenuItem, Tabs
-4. **Create Showcase Story**: Comprehensive example combining all components
-5. **Visual Verification**: Compare all components against Figma, document deltas
+### Medium-term (Phase 2 Enhancements)
+1. **Pixelated Corners**: Apply to all remaining components
+2. **Tab Shape Refinement**: Implement authentic trapezoid tabs with stepped edges
+3. **Visual Polish Pass**: Review all components against Figma
+4. **Icon System**: Expand icon library with more Mac OS 9 icons
 
 ### Long-term (Before Release)
 1. **Accessibility Audit**: Full WCAG 2.1 AA compliance check
@@ -90,155 +144,221 @@ Foundation is complete with pixel-accurate design tokens extracted from Figma. B
 ## Active Considerations
 
 ### Design Fidelity Questions
-- **Font Availability**: Mac OS 9 used Chicago and Geneva fonts - how to handle if unavailable?
-  - *Current approach*: System font stack fallback
-  - *May need*: Web font versions or pixel-perfect alternatives
 
-- **Bevel Rendering**: CSS box-shadow vs. border-image for bevels?
-  - *Current approach*: Dual inset box-shadows
-  - *To verify*: Check fidelity against Figma at different sizes
+#### Resolved
+- ~~Font Weight~~: **RESOLVED** - Using Charcoal Bold (700) as default
+- ~~Corner Style~~: **RESOLVED** - Created pixelated-corners utility system
 
-- **Disabled State**: Mac OS 9 used dithering for disabled elements
-  - *Current approach*: Reduced opacity
-  - *May need*: CSS pattern for authentic dithering effect
+#### Open Questions
+- **Tab Trapezoid Shape**: How to achieve pixel-perfect trapezoid tabs?
+  - *Current state*: Simple squares with box shadows
+  - *Deferred to*: Phase 2 refinement
+  - *Options*: SVG, CSS clip-path, or image-based approach
+
+- **Window Resize**: Should windows be actually resizable or just styled?
+  - *Need to decide*: Based on typical use cases
+  - *Leaning toward*: Styled only, consumers can add resize logic if needed
+
+- **MenuBar Behavior**: Should MenuBar handle state or be stateless?
+  - *Need to decide*: Before implementation
+  - *Leaning toward*: Controlled state, consumers manage open/closed
 
 ### Technical Considerations
 
-#### MCP Figma Integration
-- Need to establish connection to Figma MCP server
-- Extract all component variants and properties systematically
-- Document any discrepancies or missing information
-- Create comprehensive component inventory in `docs/figma-map.md`
+#### Component Implementation Status
+**Completed (6/9 v1 components):**
+- Button ✅
+- Checkbox ✅
+- Radio ✅
+- TextField ✅
+- Select ✅
+- Tabs ✅ (simplified)
 
-#### Component Implementation Order
-Following the "foundation first" principle:
-1. **Button** (establishes patterns)
-2. **Form inputs** (build on Button patterns)
-3. **Containers** (composition patterns)
-4. **Navigation** (complex state management)
+**Remaining (3/9):**
+- Window + TitleBar
+- MenuBar + MenuItem
+- Dialog / Modal
 
 #### Testing Strategy
-- Write tests alongside components (not after)
+- Unit tests alongside each component
 - Focus on behavior over implementation
-- Test keyboard navigation for every interactive component
-- Verify ARIA attributes are correct
+- Test keyboard navigation for all interactive components
+- Verify ARIA attributes
+
+#### Performance Patterns
+- Use React.memo for components that render frequently
+- Avoid unnecessary re-renders with proper prop comparison
+- Keep CSS scoped to avoid cascade issues
 
 ## Important Patterns Established
 
 ### Component Structure
 ```typescript
-// Every component follows this pattern:
-export interface ComponentProps extends BaseComponentProps {
-  // Component-specific props with JSDoc
+// Standard component pattern:
+import React, { forwardRef } from 'react';
+import styles from './Component.module.css';
+
+export interface ComponentProps {
+	/** JSDoc for every prop */
+	children?: React.ReactNode;
+	className?: string;
+	// ... other props
 }
 
-export const Component = forwardRef<RefType, ComponentProps>(
-  (props, ref) => {
-    // Implementation
-  }
+export const Component = forwardRef<HTMLDivElement, ComponentProps>(
+	({ children, className, ...props }, ref) => {
+		const classNames = [
+			styles.root,
+			className,
+		].filter(Boolean).join(' ');
+		
+		return (
+			<div ref={ref} className={classNames} {...props}>
+				{children}
+			</div>
+		);
+	}
 );
 
 Component.displayName = 'Component';
+export default Component;
 ```
 
-### CSS Module Pattern
+### Pixelated Corners Usage
 ```css
-/* Component.module.css */
-.root {
-  /* Use CSS custom properties from theme */
-  background-color: var(--mac-os9-gray-500);
-  box-shadow: var(--mac-os9-shadow-raised-full);
+/* In component CSS */
+@import '../../styles/pixelated-corners.css';
+
+.button {
+	/* Apply corner styles */
+}
+
+.button--pixelated {
+	/* Component-specific overrides */
 }
 ```
 
-### Story Pattern
+### State Management Pattern
 ```typescript
-// Component.stories.tsx
-export default {
-  title: 'Components/Component',
-  component: Component,
-} satisfies Meta<typeof Component>;
+// Controlled + uncontrolled pattern for form inputs:
+const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
+const isControlled = value !== undefined;
+const actualValue = isControlled ? value : uncontrolledValue;
 
-export const Default: Story = {
-  args: {
-    // Default props
-  },
+const handleChange = (newValue) => {
+	if (!isControlled) {
+		setUncontrolledValue(newValue);
+	}
+	onChange?.(newValue);
 };
 ```
 
-### Test Pattern
+### Keyboard Navigation Pattern
 ```typescript
-// Component.test.tsx
-describe('Component', () => {
-  it('renders correctly', () => {
-    // Test implementation
-  });
-
-  it('handles keyboard interaction', () => {
-    // Accessibility test
-  });
-});
+const handleKeyDown = (event: React.KeyboardEvent) => {
+	switch (event.key) {
+		case 'ArrowUp':
+		case 'ArrowDown':
+			event.preventDefault();
+			// Handle navigation
+			break;
+		case 'Enter':
+		case ' ':
+			event.preventDefault();
+			// Handle selection
+			break;
+		case 'Escape':
+			// Handle close/cancel
+			break;
+	}
+};
 ```
 
 ## Learnings & Insights
 
 ### Mac OS 9 Design Language
-- **Simplicity**: No gradients, simple bevels, clear hierarchy
-- **Consistency**: Same bevel effect across all raised elements
-- **Clarity**: High contrast, readable text, clear interaction states
+- **Simplicity**: Clean rectangles, clear bevels, no unnecessary flourishes
+- **Consistency**: Same shadow/bevel system across all raised elements
+- **Clarity**: High contrast, bold text, clear interaction affordances
 - **Efficiency**: Compact layouts, efficient use of space
+- **Pixelation**: Characteristic stepped edges on corners and diagonals
 
 ### Modern Web Constraints
-- Can't perfectly replicate bitmap fonts (use closest web fonts)
-- CSS limitations for some effects (dithering, pixel-perfect bevels)
-- Must add accessibility features not present in original OS
-- Balance authenticity with usability on modern displays
+- Can't perfectly replicate bitmap fonts → use web fonts + bold weight
+- CSS limitations for some effects → create utility systems for reuse
+- Must add accessibility → ARIA + keyboard beyond original OS
+- Balance authenticity with usability → pragmatic visual fidelity
 
 ### Development Philosophy
-1. **Fidelity over speed**: Take time to get visuals right
-2. **Accessibility non-negotiable**: Build it in from start
-3. **Documentation as code**: Keep memory-bank and code in sync
-4. **Test as you go**: Don't accumulate testing debt
+1. **Progress over perfection**: Ship simplified version, refine later
+2. **Fidelity where it matters**: Core components pixel-perfect, enhancements in Phase 2
+3. **Accessibility non-negotiable**: Build it in from start, no compromises
+4. **Documentation as code**: Keep memory-bank synchronized with implementation
+5. **Test as you go**: Write tests with components, not after
+
+### Component Implementation Insights
+- **Button sets the pattern**: First component establishes conventions for all others
+- **Composition over configuration**: Small, focused components that compose well
+- **Ref forwarding matters**: Consumers need access to underlying DOM nodes
+- **TypeScript strictness pays off**: Catches issues early, better DX
 
 ## Blockers & Risks
 
 ### Current Blockers
-- None (all tooling configured, ready to proceed)
+- None (all core components implemented)
+
+### Resolved Issues
+- ✅ Tab trapezoid shape → Simplified to squares, deferred to Phase 2
+- ✅ Typography weight → Resolved with Charcoal Bold default
+- ✅ Corner pixelation → Resolved with utility class system
 
 ### Potential Risks
-1. **Figma Access**: If Figma MCP fails, may need manual token extraction
-   - *Mitigation*: Have manual extraction process ready
-2. **Font Availability**: May not find web versions of Mac OS 9 fonts
-   - *Mitigation*: Document closest alternatives, consider custom web fonts
-3. **Browser Compatibility**: Some CSS effects may not render identically across browsers
-   - *Mitigation*: Test early, document known differences
-4. **Bundle Size**: Component library could grow beyond 50KB target
-   - *Mitigation*: Monitor bundle size during development, optimize before release
+1. **Window Component Complexity**: May be most complex component yet
+   - *Mitigation*: Start simple, add features iteratively
+2. **MenuBar State Management**: Complex hover/click interactions
+   - *Mitigation*: Use controlled component pattern, let consumers manage state
+3. **Bundle Size**: Adding more components increases bundle
+   - *Mitigation*: Monitor with each component, optimize before release
+4. **Browser Compatibility**: Some CSS effects may vary across browsers
+   - *Mitigation*: Test early on multiple browsers
 
 ## Questions to Resolve
 
-1. **Dithering Effect**: Should disabled states use authentic dithering or modern opacity?
-   - *Leaning toward*: Opacity for simplicity, with dithering as optional enhancement
-2. **Animation**: Should buttons have press animation or instant state change?
-   - *Mac OS 9 behavior*: Instant, no animation
-   - *Modern expectation*: May want subtle transition
-3. **Theming**: How extensible should theming be?
-   - *Current plan*: CSS variables can be overridden, but maintain Mac OS 9 character
-4. **Font Loading**: Should we include web fonts or rely on system fonts?
-   - *Need to decide*: After evaluating available web font options
+### For Window Component
+1. Should windows be draggable or just styled?
+   → **Leaning toward**: Styled only, consumers add drag behavior if needed
+2. Should windows be resizable?
+   → **Leaning toward**: No, just visual styling
+3. Should TitleBar be separate component or part of Window?
+   → **Leaning toward**: Separate, more flexible composition
+
+### For MenuBar
+1. Stateful or stateless?
+   → **Leaning toward**: Stateless, consumers manage open/closed state
+2. Keyboard navigation pattern?
+   → **Decision needed**: Left/Right for menus, Up/Down for items
+3. Single vs. multi-select mode?
+   → **Leaning toward**: Single only (authentic to Mac OS 9)
 
 ## Communication Notes
 
 ### For Future Sessions
-When resuming work, prioritize:
-1. Review activeContext.md and progress.md
-2. Check task_progress for current status
-3. Complete any in-progress steps before starting new work
-4. Update documentation as patterns evolve
+When resuming work:
+1. Review activeContext.md (this file) for current state
+2. Check progress.md for completion status
+3. Review recent changes section for context
+4. Proceed with "Next Steps" section
 
 ### For Collaborators
-- All design decisions documented in `memory-bank/`
-- Component patterns established in `memory-bank/systemPatterns.md`
-- Technical setup in `memory-bank/techContext.md`
-- Follow established patterns for consistency
-- Update memory-bank when making significant decisions- Technical setup in `memory-bank/techContext.md`
+- All components follow established patterns in systemPatterns.md
+- Design tokens documented in techContext.md
+- Each component has comprehensive JSDoc
+- Follow pixelated-corners pattern for authentic Mac OS 9 look
+- Accessibility is non-negotiable - include ARIA and keyboard support
+
+### Memory Bank Synchronization
+- **activeContext.md** (this file): Daily updates, current work focus
+- **progress.md**: Mark items complete as they finish
+- **systemPatterns.md**: Update when new patterns emerge
+- **techContext.md**: Update when tooling/setup changes
+- **projectbrief.md**, **productContext.md**: Reference only, rarely change

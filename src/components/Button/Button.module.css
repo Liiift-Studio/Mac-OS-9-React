@@ -23,6 +23,25 @@
 	box-shadow: var(--shadow-bevel);
 	color: var(--color-text);
 
+	/* Pixelated corners - authentic Mac OS 9 chamfered effect */
+	clip-path: polygon(
+		/* Top edge with corners */
+		2px 0,
+		calc(100% - 2px) 0,
+		/* Top-right corner */
+		100% 2px,
+		/* Right edge */
+		100% calc(100% - 2px),
+		/* Bottom-right corner */
+		calc(100% - 2px) 100%,
+		/* Bottom edge */
+		2px 100%,
+		/* Bottom-left corner */
+		0 calc(100% - 2px),
+		/* Left edge */
+		0 2px
+	);
+
 	/* Remove default button styles */
 	-webkit-appearance: none;
 	-moz-appearance: none;

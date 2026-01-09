@@ -51,51 +51,67 @@
 
 	/* ========================================
 	 * Typography - Font Families
+	 * Authentic Mac OS 9 system fonts
 	 * ======================================== */
-	--font-system: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial,
-		sans-serif;
-	--font-display: Garamond, 'Apple Garamond', Georgia, serif;
-	--font-mono: 'SF Mono', Monaco, 'Courier New', monospace;
-	--font-chicago: Chicago, 'Chicago Classic', monospace;
-	--font-geneva: Geneva, sans-serif;
+	
+	/* Charcoal - Primary system UI font (menus, buttons, dialogs) */
+	--font-system: Charcoal, 'Charcoal CY', Chicago, 'Chicago Classic', -apple-system,
+		BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+	
+	/* Geneva - Body text and secondary UI elements */
+	--font-body: Geneva, 'Geneva CY', 'Lucida Grande', 'Lucida Sans Unicode', sans-serif;
+	
+	/* Apple Garamond Light - Headlines and editorial content */
+	--font-display: 'Apple Garamond Light', 'Apple Garamond', Garamond, Georgia, serif;
+	
+	/* Chicago - Classic Mac OS system font (menu bar) */
+	--font-chicago: Chicago, 'Chicago Classic', 'Charcoal CY', Charcoal, monospace;
+	
+	/* Monaco - Mac OS 9 monospace font */
+	--font-mono: Monaco, 'Monaco CY', 'SF Mono', 'Courier New', Courier, monospace;
 
 	/* ========================================
 	 * Typography - Font Sizes
+	 * Mac OS 9 used smaller text (9-12pt typical)
 	 * ======================================== */
-	--font-size-xs: 10px;
-	--font-size-sm: 11px;
-	--font-size-md: 12px;
-	--font-size-lg: 13px;
-	--font-size-xl: 14px;
-	--font-size-2xl: 16px;
-	--font-size-3xl: 18px;
-	--font-size-4xl: 20px;
+	--font-size-xs: 9px;   /* 9pt - smallest UI text */
+	--font-size-sm: 10px;  /* 10pt - small labels */
+	--font-size-md: 12px;  /* 12pt - standard UI text (Mac OS 9 default) */
+	--font-size-lg: 13px;  /* 13pt - slightly larger */
+	--font-size-xl: 14px;  /* 14pt - large UI text */
+	--font-size-2xl: 16px; /* 16pt - headings */
+	--font-size-3xl: 18px; /* 18pt - large headings */
+	--font-size-4xl: 20px; /* 20pt - major headings */
+	--font-size-5xl: 24px; /* 24pt - display text */
 
 	/* ========================================
 	 * Typography - Font Weights
+	 * Charcoal Bold is the Mac OS 9 default
 	 * ======================================== */
-	--font-weight-normal: 400;
-	--font-weight-medium: 500;
-	--font-weight-semibold: 600;
-	--font-weight-bold: 700;
+	--font-weight-normal: 700;   /* Charcoal Bold - Mac OS 9 default */
+	--font-weight-medium: 700;   /* Medium (same as bold) */
+	--font-weight-semibold: 700; /* Semibold (same as bold) */
+	--font-weight-bold: 700;     /* Bold weight */
+	--font-weight-light: 400;    /* Light (regular Charcoal) */
 
 	/* ========================================
 	 * Typography - Line Heights
+	 * Mac OS 9 used tighter line heights
 	 * ======================================== */
-	--line-height-tight: 1.2;
-	--line-height-snug: 1.375;
-	--line-height-normal: 1.5;
-	--line-height-relaxed: 1.625;
-	--line-height-loose: 2;
+	--line-height-tight: 1.2;   /* Tight leading (Mac OS 9 style) */
+	--line-height-snug: 1.3;    /* Snug */
+	--line-height-normal: 1.4;  /* Normal (Mac OS 9 default) */
+	--line-height-relaxed: 1.5; /* Relaxed */
+	--line-height-loose: 1.6;   /* Loose */
 
 	/* ========================================
 	 * Typography - Letter Spacing
 	 * ======================================== */
-	--letter-spacing-tighter: -0.05em;
-	--letter-spacing-tight: -0.025em;
-	--letter-spacing-normal: 0;
-	--letter-spacing-wide: 0.025em;
-	--letter-spacing-wider: 0.05em;
+	--letter-spacing-tighter: -0.02em; /* Slightly tighter */
+	--letter-spacing-tight: -0.01em;   /* Tight */
+	--letter-spacing-normal: 0;        /* Normal - Mac OS 9 default */
+	--letter-spacing-wide: 0.01em;     /* Wide */
+	--letter-spacing-wider: 0.02em;    /* Wider */
 
 	/* ========================================
 	 * Spacing - Scale (2px base unit)

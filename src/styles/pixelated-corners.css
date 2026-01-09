@@ -1,0 +1,277 @@
+/**
+ * Pixelated Corner Effects for Mac OS 9
+ * 
+ * Mac OS 9 didn't use modern border-radius. Instead, rounded corners were 
+ * achieved through pixelated/stepped edges that created a retro aesthetic.
+ * 
+ * This is implemented using box-shadow technique to create pixel-perfect
+ * corner effects without relying on border-radius.
+ */
+
+/* ========================================
+ * Pixelated Corner Utilities
+ * ======================================== */
+
+/**
+ * Small pixelated corner (1-2px chamfer)
+ * Used for buttons, checkboxes, and small UI elements
+ */
+.pixelated-corner-sm {
+	/* Clip the actual corners */
+	clip-path: polygon(
+		/* Top-left corner */
+		2px 0,
+		0 2px,
+		/* Left edge */
+		0 100%,
+		/* Bottom-left - no clip */
+		0 100%,
+		/* Bottom edge */
+		100% 100%,
+		/* Bottom-right - no clip */
+		100% 100%,
+		/* Right edge */
+		100% 2px,
+		/* Top-right corner */
+		calc(100% - 2px) 0
+	);
+}
+
+/**
+ * Medium pixelated corner (3-4px chamfer)
+ * Used for dialog boxes, windows, larger UI elements
+ */
+.pixelated-corner-md {
+	clip-path: polygon(
+		/* Top-left corner */
+		4px 0,
+		3px 1px,
+		2px 2px,
+		1px 3px,
+		0 4px,
+		/* Left edge */
+		0 calc(100% - 4px),
+		/* Bottom-left corner */
+		1px calc(100% - 3px),
+		2px calc(100% - 2px),
+		3px calc(100% - 1px),
+		4px 100%,
+		/* Bottom edge */
+		calc(100% - 4px) 100%,
+		/* Bottom-right corner */
+		calc(100% - 3px) calc(100% - 1px),
+		calc(100% - 2px) calc(100% - 2px),
+		calc(100% - 1px) calc(100% - 3px),
+		100% calc(100% - 4px),
+		/* Right edge */
+		100% 4px,
+		/* Top-right corner */
+		calc(100% - 1px) 3px,
+		calc(100% - 2px) 2px,
+		calc(100% - 3px) 1px,
+		calc(100% - 4px) 0
+	);
+}
+
+/**
+ * Alternative technique using pseudo-elements
+ * Better browser compatibility but more complex
+  */
+.pixelated-corner-pseudo::before,
+.pixelated-corner-pseudo::after {
+	content: '';
+	position: absolute;
+	background-color: inherit;
+}
+
+/* Top corners */
+.pixelated-corner-pseudo::before {
+	top: 0;
+	left: 2px;
+	right: 2px;
+	height: 1px;
+	box-shadow:
+		-1px 1px 0 0 currentColor,
+		/* Left corner pixel */
+			calc(100% + 1px) 1px 0 0 currentColor; /* Right corner pixel */
+}
+
+/* Bottom corners */
+.pixelated-corner-pseudo::after {
+	bottom: 0;
+	left: 2px;
+	right: 2px;
+	height: 1px;
+	box-shadow:
+		-1px -1px 0 0 currentColor,
+		/* Left corner pixel */
+			calc(100% + 1px) -1px 0 0 currentColor; /* Right corner pixel */
+}
+
+/* ========================================
+ * Box-Shadow Technique (Most Authentic)
+ * ======================================== */
+
+/**
+ * Creates pixelated corners using box-shadow layering
+ * This is the most authentic Mac OS 9 appearance
+ * 
+ * Usage: Apply to element with background color
+ */
+.mac-corner {
+	position: relative;
+	/* Create notched corners effect */
+	background-clip: padding-box;
+}
+
+/* Top-left notch */
+.mac-corner::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 2px;
+	height: 2px;
+	background: transparent;
+	box-shadow:
+		0 0 0 1px var(--color-background, #eeeeee),
+		1px 1px 0 0 var(--color-border, #262626);
+}
+
+/* Top-right notch */
+.mac-corner::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 2px;
+	height: 2px;
+	background: transparent;
+	box-shadow:
+		0 0 0 1px var(--color-background, #eeeeee),
+		-1px 1px 0 0 var(--color-border, #262626);
+}
+
+/* ========================================
+ * Simple Chamfered Corners (CSS-only)
+ * ======================================== */
+
+/**
+ * Creates simple chamfered (cut) corners
+ * Lightweight alternative to full pixelated effect
+ */
+.chamfered-sm {
+	clip-path: polygon(
+		2px 0,
+		calc(100% - 2px) 0,
+		100% 2px,
+		100% calc(100% - 2px),
+		calc(100% - 2px) 100%,
+		2px 100%,
+		0 calc(100% - 2px),
+		0 2px
+	);
+}
+
+.chamfered-md {
+	clip-path: polygon(
+		3px 0,
+		calc(100% - 3px) 0,
+		100% 3px,
+		100% calc(100% - 3px),
+		calc(100% - 3px) 100%,
+		3px 100%,
+		0 calc(100% - 3px),
+		0 3px
+	);
+}
+
+/* ========================================
+ * Tab-specific Pixelated Corners
+ * Used for tab components
+ * ======================================== */
+
+/**
+ * Tab with pixelated top corners only
+ * Bottom remains flat for connection to content
+ */
+.tab-corner {
+	position: relative;
+	clip-path: polygon(
+		/* Top-left pixelated corner */
+		3px 0,
+		2px 1px,
+		1px 2px,
+		0 3px,
+		/* Left edge down */
+		0 100%,
+		/* Bottom edge (flat) */
+		100% 100%,
+		/* Right edge up */
+		100% 3px,
+		/* Top-right pixelated corner */
+		calc(100% - 1px) 2px,
+		calc(100% - 2px) 1px,
+		calc(100% - 3px) 0
+	);
+}
+
+/**
+ * Button with all rounded pixelated corners
+ */
+.button-corner {
+	clip-path: polygon(
+		/* Top edge with corners */
+		2px 0,
+		calc(100% - 2px) 0,
+		/* Top-right corner */
+		100% 2px,
+		/* Right edge */
+		100% calc(100% - 2px),
+		/* Bottom-right corner */
+		calc(100% - 2px) 100%,
+		/* Bottom edge */
+		2px 100%,
+		/* Bottom-left corner */
+		0 calc(100% - 2px),
+		/* Left edge */
+		0 2px
+	);
+}
+
+/* ========================================
+ * Window-specific Corners
+ * Larger radius for window chrome
+ * ======================================== */
+
+.window-corner {
+	clip-path: polygon(
+		/* Top-left stepped corner */
+		4px 0,
+		3px 1px,
+		2px 2px,
+		1px 3px,
+		0 4px,
+		/* Left edge */
+		0 calc(100% - 4px),
+		/* Bottom-left stepped corner */
+		1px calc(100% - 3px),
+		2px calc(100% - 2px),
+		3px calc(100% - 1px),
+		4px 100%,
+		/* Bottom edge */
+		calc(100% - 4px) 100%,
+		/* Bottom-right stepped corner */
+		calc(100% - 3px) calc(100% - 1px),
+		calc(100% - 2px) calc(100% - 2px),
+		calc(100% - 1px) calc(100% - 3px),
+		100% calc(100% - 4px),
+		/* Right edge */
+		100% 4px,
+		/* Top-right stepped corner */
+		calc(100% - 1px) 3px,
+		calc(100% - 2px) 2px,
+		calc(100% - 3px) 1px,
+		calc(100% - 4px) 0
+	);
+}
