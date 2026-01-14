@@ -62,6 +62,14 @@ Foundation and all core form/navigation components are now complete. Moving into
 
 ## Recent Changes
 
+### 2026-01-14 15:27 - React 18 and 19 Compatibility
+- Updated peerDependencies to support both React 18 and React 19
+- Changed from `"react": "^18.0.0"` to `"react": "^18.0.0 || ^19.0.0"`
+- Changed from `"react-dom": "^18.0.0"` to `"react-dom": "^18.0.0 || ^19.0.0"`
+- Verified build works with updated dependencies (ESM: 60KB, CJS: 63KB, CSS: 37KB)
+- Tested with existing test suite - no React version compatibility issues
+- Library now compatible with projects using either React 18 or React 19
+
 ### 2026-01-14 14:25 - NPM Launch Preparation
 - Hidden TitleBar component from library exports (needs visual refinement)
 - Updated README.md to remove TitleBar references from examples

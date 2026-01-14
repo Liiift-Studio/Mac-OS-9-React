@@ -4,10 +4,10 @@
 
 ### Core Dependencies
 
-#### React 18+
+#### React 18+ and React 19
 - **Purpose**: Component framework
-- **Version**: ^18.0.0 (peer dependency)
-- **Rationale**: Industry standard, excellent TypeScript support, hooks API
+- **Version**: ^18.0.0 || ^19.0.0 (peer dependency)
+- **Rationale**: Industry standard, excellent TypeScript support, hooks API, backward compatibility
 
 #### TypeScript 5.7+
 - **Purpose**: Type safety and developer experience
@@ -186,8 +186,10 @@ No IE11 support (uses modern JS features).
 
 ### React Compatibility
 - Minimum: React 18.0.0
+- Maximum: React 19.x
 - Tested with: React 18.3.1
 - Hooks required (functional components only)
+- Compatible with both React 18 and React 19
 
 ### Bundle Size Goals
 - **Total library**: < 50KB gzipped
@@ -258,8 +260,8 @@ No IE11 support (uses modern JS features).
 Only React and React DOM:
 ```json
 {
-  "react": "^18.0.0",
-  "react-dom": "^18.0.0"
+  "react": "^18.0.0 || ^19.0.0",
+  "react-dom": "^18.0.0 || ^19.0.0"
 }
 ```
 
