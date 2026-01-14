@@ -663,7 +663,7 @@ var Window = forwardRef(
         return titleBar;
       }
       if (title) {
-        return /* @__PURE__ */ jsxs("div", { className: Window_default.titleBar, children: [
+        return /* @__PURE__ */ jsxs("div", { className: Window_default.titleBar, "data-numControls": [onClose, onMinimize, onMaximize].filter(Boolean).length, children: [
           showControls && /* @__PURE__ */ jsxs("div", { className: Window_default.controls, children: [
             onClose && /* @__PURE__ */ jsx(
               "button",
@@ -699,7 +699,31 @@ var Window = forwardRef(
               }
             )
           ] }),
-          /* @__PURE__ */ jsx("div", { className: Window_default.titleText, children: title })
+          /* @__PURE__ */ jsxs("div", { className: Window_default.titleCenter, children: [
+            /* @__PURE__ */ jsxs("svg", { width: "132", height: "13", viewBox: "0 0 132 13", fill: "none", preserveAspectRatio: "none", xmlns: "http://www.w3.org/2000/svg", children: [
+              /* @__PURE__ */ jsx("rect", { width: "130.517", height: "13", fill: "#DDDDDD" }),
+              /* @__PURE__ */ jsx("rect", { width: "1", height: "13", fill: "#EEEEEE" }),
+              /* @__PURE__ */ jsx("rect", { x: "130", width: "1", height: "13", fill: "#C5C5C5" }),
+              /* @__PURE__ */ jsx("rect", { y: "1", width: "131.268", height: "1", fill: "#999999" }),
+              /* @__PURE__ */ jsx("rect", { y: "5", width: "131.268", height: "1", fill: "#999999" }),
+              /* @__PURE__ */ jsx("rect", { y: "9", width: "131.268", height: "1", fill: "#999999" }),
+              /* @__PURE__ */ jsx("rect", { y: "3", width: "131.268", height: "1", fill: "#999999" }),
+              /* @__PURE__ */ jsx("rect", { y: "7", width: "131.268", height: "1", fill: "#999999" }),
+              /* @__PURE__ */ jsx("rect", { y: "11", width: "131.268", height: "1", fill: "#999999" })
+            ] }),
+            /* @__PURE__ */ jsx("div", { className: Window_default.titleText, children: title }),
+            /* @__PURE__ */ jsxs("svg", { width: "132", height: "13", viewBox: "0 0 132 13", fill: "none", preserveAspectRatio: "none", xmlns: "http://www.w3.org/2000/svg", children: [
+              /* @__PURE__ */ jsx("rect", { width: "130.517", height: "13", fill: "#DDDDDD" }),
+              /* @__PURE__ */ jsx("rect", { width: "1", height: "13", fill: "#EEEEEE" }),
+              /* @__PURE__ */ jsx("rect", { x: "130", width: "1", height: "13", fill: "#C5C5C5" }),
+              /* @__PURE__ */ jsx("rect", { y: "1", width: "131.268", height: "1", fill: "#999999" }),
+              /* @__PURE__ */ jsx("rect", { y: "5", width: "131.268", height: "1", fill: "#999999" }),
+              /* @__PURE__ */ jsx("rect", { y: "9", width: "131.268", height: "1", fill: "#999999" }),
+              /* @__PURE__ */ jsx("rect", { y: "3", width: "131.268", height: "1", fill: "#999999" }),
+              /* @__PURE__ */ jsx("rect", { y: "7", width: "131.268", height: "1", fill: "#999999" }),
+              /* @__PURE__ */ jsx("rect", { y: "11", width: "131.268", height: "1", fill: "#999999" })
+            ] })
+          ] })
         ] });
       }
       return null;
@@ -817,99 +841,6 @@ var Dialog = forwardRef(
   }
 );
 Dialog.displayName = "Dialog";
-
-// src/components/TitleBar/TitleBar.module.css
-var TitleBar_default = {};
-var TitleBar = forwardRef(
-  ({
-    title,
-    active = true,
-    showControls = true,
-    showClose = true,
-    showMinimize = true,
-    showMaximize = true,
-    onClose,
-    onMinimize,
-    onMaximize,
-    onDoubleClick,
-    className = "",
-    titleClassName = "",
-    controlsClassName = "",
-    draggable = false,
-    onDragStart,
-    rightContent
-  }, ref) => {
-    const titleBarClassNames = [
-      TitleBar_default.titleBar,
-      active ? TitleBar_default["titleBar--active"] : TitleBar_default["titleBar--inactive"],
-      draggable ? TitleBar_default["titleBar--draggable"] : "",
-      className
-    ].filter(Boolean).join(" ");
-    const titleTextClassNames = [TitleBar_default.titleText, titleClassName].filter(Boolean).join(" ");
-    const controlsClassNames = [TitleBar_default.controls, controlsClassName].filter(Boolean).join(" ");
-    const handleMouseDown = (event) => {
-      if (draggable && onDragStart) {
-        onDragStart(event);
-      }
-    };
-    const renderControls = () => {
-      if (!showControls) return null;
-      const hasAnyControl = showClose && onClose || showMinimize && onMinimize || showMaximize && onMaximize;
-      if (!hasAnyControl) return null;
-      return /* @__PURE__ */ jsxs("div", { className: controlsClassNames, children: [
-        showClose && onClose && /* @__PURE__ */ jsx(
-          "button",
-          {
-            type: "button",
-            className: `${TitleBar_default.controlButton} ${TitleBar_default["controlButton--close"]}`,
-            onClick: onClose,
-            "aria-label": "Close",
-            title: "Close",
-            children: /* @__PURE__ */ jsx("div", { className: TitleBar_default.closeBox })
-          }
-        ),
-        showMinimize && onMinimize && /* @__PURE__ */ jsx(
-          "button",
-          {
-            type: "button",
-            className: `${TitleBar_default.controlButton} ${TitleBar_default["controlButton--minimize"]}`,
-            onClick: onMinimize,
-            "aria-label": "Minimize",
-            title: "Minimize",
-            children: /* @__PURE__ */ jsx("div", { className: TitleBar_default.minimizeBox })
-          }
-        ),
-        showMaximize && onMaximize && /* @__PURE__ */ jsx(
-          "button",
-          {
-            type: "button",
-            className: `${TitleBar_default.controlButton} ${TitleBar_default["controlButton--maximize"]}`,
-            onClick: onMaximize,
-            "aria-label": "Maximize",
-            title: "Maximize",
-            children: /* @__PURE__ */ jsx("div", { className: TitleBar_default.maximizeBox })
-          }
-        )
-      ] });
-    };
-    return /* @__PURE__ */ jsxs(
-      "div",
-      {
-        ref,
-        className: titleBarClassNames,
-        onDoubleClick,
-        onMouseDown: handleMouseDown,
-        role: "banner",
-        children: [
-          renderControls(),
-          /* @__PURE__ */ jsx("div", { className: titleTextClassNames, children: title }),
-          rightContent && /* @__PURE__ */ jsx("div", { className: TitleBar_default.rightContent, children: rightContent })
-        ]
-      }
-    );
-  }
-);
-TitleBar.displayName = "TitleBar";
 
 // src/components/MenuBar/MenuBar.module.css
 var MenuBar_default = {};
@@ -1625,6 +1556,6 @@ var tokens = {
   transitions
 };
 
-export { ArrowLeftIcon, ArrowRightIcon, Button, CalendarIcon, CheckIcon, Checkbox, ChevronDownIcon, ChevronUpIcon, CloseIcon, Dialog, DocumentIcon, DownloadIcon, ErrorIcon, EyeIcon, FileIcon, FolderIcon, FolderList, HeartIcon, HomeIcon, Icon, IconButton, ImageIcon, InfoIcon, LinkIcon, ListView, LockIcon, MailIcon, MenuBar, MenuIcon, MenuItem, MinusIcon, MoreIcon, MusicIcon, PlusIcon, PrintIcon, Radio, RefreshIcon, SaveIcon, Scrollbar, SearchIcon, Select, SettingsIcon, StarIcon, TabPanel, Tabs, TextField, TitleBar, TrashIcon, UserIcon, VideoIcon, WarningIcon, Window, borders, colors, shadows, spacing, tokens, transitions, typography, zIndex };
+export { ArrowLeftIcon, ArrowRightIcon, Button, CalendarIcon, CheckIcon, Checkbox, ChevronDownIcon, ChevronUpIcon, CloseIcon, Dialog, DocumentIcon, DownloadIcon, ErrorIcon, EyeIcon, FileIcon, FolderIcon, FolderList, HeartIcon, HomeIcon, Icon, IconButton, ImageIcon, InfoIcon, LinkIcon, ListView, LockIcon, MailIcon, MenuBar, MenuIcon, MenuItem, MinusIcon, MoreIcon, MusicIcon, PlusIcon, PrintIcon, Radio, RefreshIcon, SaveIcon, Scrollbar, SearchIcon, Select, SettingsIcon, StarIcon, TabPanel, Tabs, TextField, TrashIcon, UserIcon, VideoIcon, WarningIcon, Window, borders, colors, shadows, spacing, tokens, transitions, typography, zIndex };
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map

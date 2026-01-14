@@ -25,36 +25,6 @@
 	min-width: 200px;
 	min-height: 100px;
 	
-	/* Pixelated corners for authentic Mac OS 9 appearance */
-	clip-path: polygon(
-		/* Top-left stepped corner */
-		4px 0,
-		3px 1px,
-		2px 2px,
-		1px 3px,
-		0 4px,
-		/* Left edge */
-		0 calc(100% - 4px),
-		/* Bottom-left stepped corner */
-		1px calc(100% - 3px),
-		2px calc(100% - 2px),
-		3px calc(100% - 1px),
-		4px 100%,
-		/* Bottom edge */
-		calc(100% - 4px) 100%,
-		/* Bottom-right stepped corner */
-		calc(100% - 3px) calc(100% - 1px),
-		calc(100% - 2px) calc(100% - 2px),
-		calc(100% - 1px) calc(100% - 3px),
-		100% calc(100% - 4px),
-		/* Right edge */
-		100% 4px,
-		/* Top-right stepped corner */
-		calc(100% - 1px) 3px,
-		calc(100% - 2px) 2px,
-		calc(100% - 3px) 1px,
-		calc(100% - 4px) 0
-	);
 }
 
 /* ========================================
@@ -80,7 +50,6 @@
 	/* Title bar container */
 	display: flex;
 	align-items: center;
-	gap: var(--spacing-2);
 	
 	/* Styling - authentic Mac OS 9 header color */
 	background-color: #CBCBCB;
@@ -97,23 +66,40 @@
 	
 	/* Position for pseudo-elements */
 	position: relative;
-}
 
+}
+.titleBar[data-numControls="3"] .titleCenter > :first-child{
+	width: calc(100% - (48px + var(--spacing-2)));
+	margin-left: calc(48px + var(--spacing-2));
+}
+.titleBar[data-numControls="2"] .titleCenter> :first-child {
+	width: calc(100% - (36px + var(--spacing-2)));
+	margin-left: calc(36px + var(--spacing-2));
+}
+.titleBar[data-numControls="1"] .titleCenter> :first-child {
+	width: calc(100% - (24px));
+	margin-left: calc(24px);
+	}
+
+.titleCenter{	
+	display: grid;
+	align-items: center;
+	width: 100%;
+	grid-template-columns: 1fr max-content 1fr;
+}
+.titleCenter svg{
+	width: 100%;
+}
 /* Header striped lines - left side */
 .titleBar::before {
 	content: '';
-	position: absolute;
 	left: 60px;
 	top: 50%;
-	transform: translateY(-50%);
-	
+	flex-grow: 1;	
 	/* Responsive width - fills from after controls to center, with padding for title */
-	width: calc(50% - 140px);
-	max-width: 100px;
 	height: 12px;
-	
 	/* 6 horizontal lines pattern */
-	background: repeating-linear-gradient(
+	/* background: repeating-linear-gradient(
 		to bottom,
 		transparent 0px,
 		transparent 1px,
@@ -121,7 +107,7 @@
 		var(--color-gray-500) 2px,
 		transparent 2px,
 		transparent 3px
-	);
+	); */
 	
 	/* Prevent interaction */
 	pointer-events: none;
@@ -130,18 +116,16 @@
 /* Header striped lines - right side */
 .titleBar::after {
 	content: '';
-	position: absolute;
 	right: 8px;
-	top: 50%;
-	transform: translateY(-50%);
-	
+	top: 50%;	
+	flex-grow: 1;
 	/* Responsive width - extends from right edge to center, with padding for title */
-	width: calc(50% - 140px);
-	max-width: 100px;
+	flex: 1;
+	/* max-width: 100px; */
 	height: 12px;
 	
 	/* 6 horizontal lines pattern */
-	background: repeating-linear-gradient(
+	/* background: repeating-linear-gradient(
 		to bottom,
 		transparent 0px,
 		transparent 1px,
@@ -150,7 +134,7 @@
 		transparent 2px,
 		transparent 3px
 	);
-	
+	 */
 	/* Prevent interaction */
 	pointer-events: none;
 }
@@ -166,7 +150,8 @@
 	align-items: center;
 	
 	/* Ensure controls are above pseudo-elements */
-	position: relative;
+	position: absolute;
+	left: 12px;
 	z-index: 1;
 }
 
@@ -223,17 +208,17 @@
 	top: 50%;
 	left: 50%;
 	width: 6px;
-	height: 1px;
-	background-color: var(--color-border);
+	/* height: 1px;
+	background-color: var(--color-border); */
 }
 
-.closeBox::before {
+/* .closeBox::before {
 	transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .closeBox::after {
 	transform: translate(-50%, -50%) rotate(-45deg);
-}
+} */
 
 /* Minimize button: dash */
 .minimizeBox::before {
@@ -272,13 +257,9 @@
 	color: var(--color-text);
 	
 	/* Absolute positioning for true centering regardless of controls */
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
 	
 	/* Max width to prevent overlap with lines - centered with padding */
-	max-width: calc(100% - 160px);
+	/* max-width: calc(100% - 160px); */
 	padding: 0 var(--spacing-2);
 	
 	/* Truncate long titles */

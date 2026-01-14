@@ -158,19 +158,21 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 
 			if (title) {
 				return (
-					<div className={styles.titleBar}>
+					<div className={styles.titleBar} data-numControls={
+						[onClose, onMinimize, onMaximize].filter(Boolean).length
+					}>
 						{showControls && (
 							<div className={styles.controls}>
 								{onClose && (
-					<button
-						type="button"
-						className={styles.controlButton}
-						onClick={onClose}
-						aria-label="Close"
-						title="Close"
-					>
-						<div className={styles.closeBox} />
-					</button>
+								<button
+									type="button"
+									className={styles.controlButton}
+									onClick={onClose}
+									aria-label="Close"
+									title="Close"
+								>
+									<div className={styles.closeBox} />
+								</button>
 								)}
 								{onMinimize && (
 									<button
@@ -196,7 +198,32 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 								)}
 							</div>
 						)}
+						<div className={styles.titleCenter}>
+						<svg width="132" height="13" viewBox="0 0 132 13" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+							<rect width="130.517" height="13" fill="#DDDDDD"/>
+							<rect width="1" height="13" fill="#EEEEEE"/>
+							<rect x="130" width="1" height="13" fill="#C5C5C5"/>
+							<rect y="1" width="131.268" height="1" fill="#999999"/>
+							<rect y="5" width="131.268" height="1" fill="#999999"/>
+							<rect y="9" width="131.268" height="1" fill="#999999"/>
+							<rect y="3" width="131.268" height="1" fill="#999999"/>
+							<rect y="7" width="131.268" height="1" fill="#999999"/>
+							<rect y="11" width="131.268" height="1" fill="#999999"/>
+						</svg>
 						<div className={styles.titleText}>{title}</div>
+						<svg width="132" height="13" viewBox="0 0 132 13" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+							<rect width="130.517" height="13" fill="#DDDDDD"/>
+							<rect width="1" height="13" fill="#EEEEEE"/>
+							<rect x="130" width="1" height="13" fill="#C5C5C5"/>
+							<rect y="1" width="131.268" height="1" fill="#999999"/>
+							<rect y="5" width="131.268" height="1" fill="#999999"/>
+							<rect y="9" width="131.268" height="1" fill="#999999"/>
+							<rect y="3" width="131.268" height="1" fill="#999999"/>
+							<rect y="7" width="131.268" height="1" fill="#999999"/>
+							<rect y="11" width="131.268" height="1" fill="#999999"/>
+						</svg>
+						</div>
+
 					</div>
 				);
 			}

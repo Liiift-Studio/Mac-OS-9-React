@@ -1052,7 +1052,6 @@
   height: auto;
   min-width: 200px;
   min-height: 100px;
-  clip-path: polygon(4px 0, 3px 1px, 2px 2px, 1px 3px, 0 4px, 0 calc(100% - 4px), 1px calc(100% - 3px), 2px calc(100% - 2px), 3px calc(100% - 1px), 4px 100%, calc(100% - 4px) 100%, calc(100% - 3px) calc(100% - 1px), calc(100% - 2px) calc(100% - 2px), calc(100% - 1px) calc(100% - 3px), 100% calc(100% - 4px), 100% 4px, calc(100% - 1px) 3px, calc(100% - 2px) 2px, calc(100% - 3px) 1px, calc(100% - 4px) 0);
 }
 .window--active {
   z-index: 10;
@@ -1064,7 +1063,6 @@
 .titleBar {
   display: flex;
   align-items: center;
-  gap: var(--spacing-2);
   background-color: #CBCBCB;
   border-bottom: var(--border-width-thin) solid var(--color-black);
   padding: var(--spacing-1_5) var(--spacing-2);
@@ -1072,48 +1070,51 @@
   user-select: none;
   position: relative;
 }
+.titleBar[data-numControls="3"] .titleCenter > :first-child {
+  width: calc(100% - (48px + var(--spacing-2)));
+  margin-left: calc(48px + var(--spacing-2));
+}
+.titleBar[data-numControls="2"] .titleCenter > :first-child {
+  width: calc(100% - (36px + var(--spacing-2)));
+  margin-left: calc(36px + var(--spacing-2));
+}
+.titleBar[data-numControls="1"] .titleCenter > :first-child {
+  width: calc(100% - (24px));
+  margin-left: calc(24px);
+}
+.titleCenter {
+  display: grid;
+  align-items: center;
+  width: 100%;
+  grid-template-columns: 1fr max-content 1fr;
+}
+.titleCenter svg {
+  width: 100%;
+}
 .titleBar::before {
   content: "";
-  position: absolute;
-  left: 4px;
+  left: 60px;
   top: 50%;
-  transform: translateY(-50%);
-  width: 80px;
+  flex-grow: 1;
   height: 12px;
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      transparent 0px,
-      transparent 1px,
-      var(--color-gray-500) 1px,
-      var(--color-gray-500) 2px,
-      transparent 2px,
-      transparent 3px);
   pointer-events: none;
 }
 .titleBar::after {
   content: "";
-  position: absolute;
-  right: 4px;
+  right: 8px;
   top: 50%;
-  transform: translateY(-50%);
-  width: 80px;
+  flex-grow: 1;
+  flex: 1;
   height: 12px;
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      transparent 0px,
-      transparent 1px,
-      var(--color-gray-500) 1px,
-      var(--color-gray-500) 2px,
-      transparent 2px,
-      transparent 3px);
   pointer-events: none;
 }
 .controls {
   display: flex;
   gap: var(--spacing-1);
   align-items: center;
+  position: absolute;
+  left: 12px;
+  z-index: 1;
 }
 .controlButton {
   width: 12px;
@@ -1125,6 +1126,8 @@
   cursor: pointer;
   box-shadow: var(--shadow-inset);
   transition: none;
+  position: relative;
+  z-index: 2;
 }
 .controlButton:hover {
   background-color: var(--color-gray-300);
@@ -1150,14 +1153,6 @@
   top: 50%;
   left: 50%;
   width: 6px;
-  height: 1px;
-  background-color: var(--color-border);
-}
-.closeBox::before {
-  transform: translate(-50%, -50%) rotate(45deg);
-}
-.closeBox::after {
-  transform: translate(-50%, -50%) rotate(-45deg);
 }
 .minimizeBox::before {
   content: "";
@@ -1185,11 +1180,11 @@
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-snug);
   color: var(--color-text);
-  flex: 1;
-  text-align: center;
+  padding: 0 var(--spacing-2);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  z-index: 1;
 }
 .content {
   flex: 1;
@@ -1267,184 +1262,6 @@
 @media (prefers-reduced-motion: reduce) {
   .dialogContainer {
     animation: none;
-  }
-}
-
-/* src/components/TitleBar/TitleBar.module.css */
-.titleBar {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
-  background-color: #CBCBCB;
-  border-bottom: var(--border-width-thin) solid var(--color-black);
-  padding: var(--spacing-1_5) var(--spacing-2);
-  min-height: 22px;
-  user-select: none;
-  position: relative;
-}
-.titleBar--active {
-  background-color: #CBCBCB;
-}
-.titleBar--inactive {
-  background-color: #B3B3B3;
-  opacity: 0.92;
-}
-.titleBar--draggable {
-  cursor: move;
-  cursor: grab;
-}
-.titleBar--draggable:active {
-  cursor: grabbing;
-}
-.titleBar::before {
-  content: "";
-  position: absolute;
-  left: 4px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 80px;
-  height: 12px;
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      transparent 0px,
-      transparent 1px,
-      var(--color-gray-500) 1px,
-      var(--color-gray-500) 2px,
-      transparent 2px,
-      transparent 3px);
-  pointer-events: none;
-}
-.titleBar::after {
-  content: "";
-  position: absolute;
-  right: 4px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 80px;
-  height: 12px;
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      transparent 0px,
-      transparent 1px,
-      var(--color-gray-500) 1px,
-      var(--color-gray-500) 2px,
-      transparent 2px,
-      transparent 3px);
-  pointer-events: none;
-}
-.controls {
-  display: flex;
-  gap: var(--spacing-1);
-  align-items: center;
-  position: relative;
-  z-index: 1;
-}
-.controlButton {
-  width: 12px;
-  height: 12px;
-  padding: 0;
-  margin: 0;
-  background: transparent;
-  border: var(--border-width-thin) solid var(--color-border);
-  cursor: pointer;
-  box-shadow: var(--shadow-inset);
-  transition: none;
-  position: relative;
-  z-index: 2;
-}
-.controlButton:hover {
-  background-color: var(--color-gray-300);
-}
-.controlButton:active {
-  box-shadow: var(--shadow-pressed);
-}
-.controlButton:focus-visible {
-  outline: 1px dotted var(--color-focus);
-  outline-offset: 1px;
-}
-.controlButton--close {
-}
-.controlButton--minimize {
-}
-.controlButton--maximize {
-}
-.closeBox,
-.minimizeBox,
-.maximizeBox {
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
-.closeBox::before,
-.closeBox::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 6px;
-  height: 1px;
-  background-color: var(--color-border);
-}
-.closeBox::before {
-  transform: translate(-50%, -50%) rotate(45deg);
-}
-.closeBox::after {
-  transform: translate(-50%, -50%) rotate(-45deg);
-}
-.minimizeBox::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 6px;
-  height: 1px;
-  background-color: var(--color-border);
-}
-.maximizeBox::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 4px;
-  height: 4px;
-  border: 1px solid var(--color-border);
-}
-.titleText {
-  font-family: var(--font-system);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-snug);
-  color: var(--color-text);
-  flex: 1;
-  text-align: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  position: relative;
-  z-index: 1;
-}
-.rightContent {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-1);
-  position: relative;
-  z-index: 1;
-}
-@media (prefers-contrast: high) {
-  .titleBar {
-    border-width: 2px;
-  }
-  .controlButton {
-    border-width: 2px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .controlButton {
-    transition: none;
   }
 }
 
@@ -1822,11 +1639,14 @@
   transition: none;
 }
 .row:hover {
-  background: var(--color-gray-200);
+  background: var(--color-gray-300);
 }
 .row.selected {
-  background: var(--color-gray-300);
+  background: var(--color-gray-400);
   color: var(--color-text);
+}
+.row.selected:hover {
+  background: var(--color-gray-500);
 }
 .cell {
   padding: var(--spacing-1) var(--spacing-2);

@@ -157,7 +157,7 @@
 
 	/* Inverted bevel for pressed/inset states */
 	--shadow-inset: inset -2px -2px 0 rgba(255, 255, 255, 0.6),
-		inset 2px 2px 0 rgba(38, 38, 38, 0.4), 2px 2px 0 rgba(38, 38, 38, 1);
+		inset 2px 2px 0 rgba(38, 38, 38, 0.4), inset 0px 0px 0px rgba(38, 38, 38, 1);
 
 	/* Individual shadow layers for custom composition */
 	--shadow-drop: 2px 2px 0 rgba(38, 38, 38, 1);
