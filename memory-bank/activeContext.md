@@ -25,11 +25,58 @@ Foundation and all core form/navigation components are now complete. Moving into
 - ✅ Select (custom dropdown)
 - ✅ Tabs (simplified, refinements deferred)
 
+#### Phase 2 Container Components - COMPLETE ✅
+- ✅ Window (complete)
+- ✅ Dialog (complete)
+- ✅ TitleBar (complete)
+- ✅ MenuBar + MenuItem (complete)
+
+#### Just Completed (2026-01-09 14:40)
+1. ✅ **MenuBar + MenuItem Components** - Classic Mac OS 9 menu system
+   - MenuBar container component with horizontal menu layout
+   - MenuItem component with multiple variants (standard, separator, checkmark, submenu indicator)
+   - Controlled state management for open/close
+   - Click-to-open menu behavior
+   - Keyboard navigation (Left/Right arrows, Escape, Enter)
+   - Mac OS 9 blue highlight on hover (#0000BB)
+   - Disabled menu and item states
+   - Full TypeScript types with JSDoc
+   - Component exports (MenuBar, MenuItem, types)
+   - **Note**: Storybook stories file encountered corruption issues, to be resolved separately
+
+#### Just Completed (2026-01-09 14:30)
+1. ✅ **TitleBar Component** - Standalone title bar component
+   - Classic Mac OS 9 title bar with window controls
+   - Active/inactive states
+   - Draggable cursor styling support
+   - Customizable button visibility
+   - Right content area for additional elements
+   - Comprehensive Storybook stories (16 examples)
+   - Full TypeScript types and JSDoc
+
 #### Currently Working On
-- Updating memory-bank documentation to reflect current state
-- Planning Phase 2: Container components (Window, TitleBar, Dialog, MenuBar)
+- Phase 3: Visual refinements in progress
+- Applied pixelated corners to Window, Dialog (via Window), and Tabs components
+- Next: Continue visual polish and testing improvements
 
 ## Recent Changes
+
+### 2026-01-13 13:00 - Phase 3 Visual Refinements Started
+- Applied pixelated corners to Window component (4px stepped corners)
+- Dialog component automatically inherits pixelated corners from Window
+- Applied pixelated corners to Tabs component (pixelated top corners, flat bottom)
+- Improved authentic Mac OS 9 appearance across container and navigation components
+
+### 2026-01-09 14:40 - MenuBar + MenuItem Components Complete
+- Implemented MenuBar container component with horizontal layout
+- Implemented MenuItem component with multiple variants (standard, separator, checkmark, submenu)
+- Added controlled state management (open/close via props)
+- Implemented keyboard navigation (Left/Right arrows, Escape, Enter)
+- Applied Mac OS 9 blue highlight (#0000BB) on hover
+- Added disabled states for both menus and items
+- Exported components and types from main index
+- **Note**: Storybook stories file had corruption issues during creation, to be addressed separately
+- **Phase 2 Container Components now COMPLETE!**
 
 ### 2026-01-08 17:00 - Tabs Simplification
 - Reverted SVG trapezoid experiments

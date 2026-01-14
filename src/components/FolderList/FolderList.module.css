@@ -1,0 +1,26 @@
+/* FolderList Component Styles - Mac OS 9 */
+
+/* ========================================
+ * FolderList Content Area
+ * ======================================== */
+
+.folderListContent {
+	/* Remove default padding from Window content */
+	padding: 0;
+	
+	/* Ensure ListView fills the content area */
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+.listView {
+	/* Fill the entire content area */
+	flex: 1;
+	
+	/* Remove extra borders (Window already has a border) */
+	border: none;
+	
+	/* Remove shadow (already inset in Window) */
+	box-shadow: none;
+}

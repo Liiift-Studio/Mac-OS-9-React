@@ -1,79 +1,7 @@
-/* Window Component Styles - Mac OS 9 */
-
-/* Import pixelated corners utility */
-@import '../../styles/pixelated-corners.css';
-
-.window {
-	/* Base window styling */
-	display: flex;
-	flex-direction: column;
-	
-	/* Mac OS 9 window appearance */
-	background-color: var(--color-gray-300); /* #DDDDDD - authentic window background */
-	border: var(--border-width-thin) solid var(--color-black);
-	
-	/* Authentic Mac OS 9 drop shadow: sharp 2px offset, no blur */
-	filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.5));
-	
-	/* Layout */
-	position: relative;
-	overflow: hidden;
-	
-	/* Default dimensions */
-	width: auto;
-	height: auto;
-	min-width: 200px;
-	min-height: 100px;
-	
-	/* Pixelated corners for authentic Mac OS 9 appearance */
-	clip-path: polygon(
-		/* Top-left stepped corner */
-		4px 0,
-		3px 1px,
-		2px 2px,
-		1px 3px,
-		0 4px,
-		/* Left edge */
-		0 calc(100% - 4px),
-		/* Bottom-left stepped corner */
-		1px calc(100% - 3px),
-		2px calc(100% - 2px),
-		3px calc(100% - 1px),
-		4px 100%,
-		/* Bottom edge */
-		calc(100% - 4px) 100%,
-		/* Bottom-right stepped corner */
-		calc(100% - 3px) calc(100% - 1px),
-		calc(100% - 2px) calc(100% - 2px),
-		calc(100% - 1px) calc(100% - 3px),
-		100% calc(100% - 4px),
-		/* Right edge */
-		100% 4px,
-		/* Top-right stepped corner */
-		calc(100% - 1px) 3px,
-		calc(100% - 2px) 2px,
-		calc(100% - 3px) 1px,
-		calc(100% - 4px) 0
-	);
-}
+/* TitleBar Component Styles - Mac OS 9 */
 
 /* ========================================
- * Window States
- * ======================================== */
-
-.window--active {
-	/* Active window - standard appearance */
-	z-index: 10;
-}
-
-.window--inactive {
-	/* Inactive window - slightly dimmed */
-	opacity: 0.92;
-	z-index: 1;
-}
-
-/* ========================================
- * Title Bar
+ * Title Bar Container
  * ======================================== */
 
 .titleBar {
@@ -98,6 +26,35 @@
 	/* Position for pseudo-elements */
 	position: relative;
 }
+
+/* ========================================
+ * Title Bar States
+ * ======================================== */
+
+.titleBar--active {
+	/* Active title bar - standard appearance */
+	background-color: #CBCBCB;
+}
+
+.titleBar--inactive {
+	/* Inactive title bar - slightly dimmed */
+	background-color: #B3B3B3;
+	opacity: 0.92;
+}
+
+.titleBar--draggable {
+	/* Draggable title bar - change cursor */
+	cursor: move;
+	cursor: grab;
+}
+
+.titleBar--draggable:active {
+	cursor: grabbing;
+}
+
+/* ========================================
+ * Header Striped Lines Pattern
+ * ======================================== */
 
 /* Header striped lines - left side */
 .titleBar::before {
@@ -206,6 +163,23 @@
 	outline-offset: 1px;
 }
 
+/* Control button variants (for additional styling if needed) */
+.controlButton--close {
+	/* Close button specific styling */
+}
+
+.controlButton--minimize {
+	/* Minimize button specific styling */
+}
+
+.controlButton--maximize {
+	/* Maximize button specific styling */
+}
+
+/* ========================================
+ * Control Button Visual Indicators
+ * ======================================== */
+
 /* Control button visual indicators */
 .closeBox,
 .minimizeBox,
@@ -291,59 +265,18 @@
 }
 
 /* ========================================
- * Content Area
+ * Right Content Area
  * ======================================== */
 
-.content {
-	/* Content area */
-	flex: 1;
-	overflow: auto;
+.rightContent {
+	/* Right side content area */
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-1);
 	
-	/* Background - white content area like authentic Mac OS 9 */
-	background-color: var(--color-gray-100);
-	
-	/* Padding */
-	padding: var(--spacing-4);
-	
-	/* Position for scrolling */
+	/* Ensure content is above pseudo-elements */
 	position: relative;
-	
-	/* Authentic inset border */
-	margin: var(--spacing-2);
-	border: var(--border-width-thin) solid #555555;
-}
-
-/* ========================================
- * Resize Handle
- * ======================================== */
-
-.resizeHandle {
-	/* Resize handle in bottom-right corner */
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	width: 12px;
-	height: 12px;
-	
-	/* Visual indicator (diagonal lines) */
-	background-image: linear-gradient(
-		135deg,
-		transparent 0%,
-		transparent 40%,
-		var(--color-border) 40%,
-		var(--color-border) 45%,
-		transparent 45%,
-		transparent 55%,
-		var(--color-border) 55%,
-		var(--color-border) 60%,
-		transparent 60%
-	);
-	
-	/* Cursor */
-	cursor: nwse-resize;
-	
-	/* Layering */
-	z-index: 5;
+	z-index: 1;
 }
 
 /* ========================================
@@ -352,7 +285,7 @@
 
 /* High contrast mode */
 @media (prefers-contrast: high) {
-	.window {
+	.titleBar {
 		border-width: 2px;
 	}
 	

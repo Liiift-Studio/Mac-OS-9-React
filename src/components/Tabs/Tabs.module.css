@@ -1,5 +1,8 @@
 /* Tabs Component Styles - Mac OS 9 */
 
+/* Import pixelated corners utility */
+@import '../../styles/pixelated-corners.css';
+
 .container {
 	/* Container for tabs and panels */
 	display: flex;
@@ -60,6 +63,25 @@
 	/* Text */
 	white-space: nowrap;
 	user-select: none;
+	
+	/* Pixelated top corners for authentic Mac OS 9 tab appearance */
+	clip-path: polygon(
+		/* Top-left pixelated corner */
+		3px 0,
+		2px 1px,
+		1px 2px,
+		0 3px,
+		/* Left edge down */
+		0 100%,
+		/* Bottom edge (flat) */
+		100% 100%,
+		/* Right edge up */
+		100% 3px,
+		/* Top-right pixelated corner */
+		calc(100% - 1px) 2px,
+		calc(100% - 2px) 1px,
+		calc(100% - 3px) 0
+	);
 }
 
 /* Active tab - raised above panel */

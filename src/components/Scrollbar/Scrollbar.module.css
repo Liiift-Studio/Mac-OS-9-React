@@ -1,0 +1,211 @@
+/* Scrollbar Component Styles - Mac OS 9 */
+
+/* ========================================
+ * Base Scrollbar Container
+ * ======================================== */
+
+.scrollbar {
+	/* Base styling */
+	display: flex;
+	background: var(--color-surface);
+	border: var(--border-width-thin) solid var(--color-border);
+	
+	/* Position */
+	position: relative;
+	
+	/* No user select */
+	user-select: none;
+}
+
+.scrollbar--vertical {
+	flex-direction: column;
+	width: 16px;
+	min-height: 60px;
+}
+
+.scrollbar--horizontal {
+	flex-direction: row;
+	height: 16px;
+	min-width: 60px;
+}
+
+/* Disabled state */
+.scrollbar--disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+/* ========================================
+ * Arrow Buttons
+ * ======================================== */
+
+.arrow {
+	/* Base styling */
+	background: var(--color-gray-400);
+	border: none;
+	box-shadow: var(--shadow-raised);
+	
+	/* Size */
+	flex-shrink: 0;
+	width: 16px;
+	height: 16px;
+	
+	/* Layout */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+	/* Cursor */
+	cursor: pointer;
+	
+	/* Remove button defaults */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	
+	/* No transitions */
+	transition: none;
+	
+	/* Position */
+	position: relative;
+}
+
+/* Arrow states */
+.arrow:hover:not(:disabled) {
+	background: var(--color-gray-300);
+}
+
+.arrow:active:not(:disabled) {
+	box-shadow: var(--shadow-inset);
+	background: var(--color-gray-500);
+}
+
+.arrow:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+/* Arrow icons */
+.arrowIcon {
+	width: 0;
+	height: 0;
+	border-style: solid;
+}
+
+/* Vertical scrollbar arrows */
+.scrollbar--vertical .arrow--start .arrowIcon {
+	/* Up arrow */
+	border-width: 0 3px 4px 3px;
+	border-color: transparent transparent var(--color-text) transparent;
+}
+
+.scrollbar--vertical .arrow--end .arrowIcon {
+	/* Down arrow */
+	border-width: 4px 3px 0 3px;
+	border-color: var(--color-text) transparent transparent transparent;
+}
+
+/* Horizontal scrollbar arrows */
+.scrollbar--horizontal .arrow--start .arrowIcon {
+	/* Left arrow */
+	border-width: 3px 4px 3px 0;
+	border-color: transparent var(--color-text) transparent transparent;
+}
+
+.scrollbar--horizontal .arrow--end .arrowIcon {
+	/* Right arrow */
+	border-width: 3px 0 3px 4px;
+	border-color: transparent transparent transparent var(--color-text);
+}
+
+/* ========================================
+ * Track (scrollable area)
+ * ======================================== */
+
+.track {
+	/* Base styling */
+	background: var(--color-gray-200);
+	
+	/* Layout */
+	flex: 1;
+	position: relative;
+	
+	/* Cursor */
+	cursor: pointer;
+	
+	/* Pattern background for Mac OS 9 look */
+	background-image: repeating-linear-gradient(
+		0deg,
+		transparent,
+		transparent 1px,
+		rgba(0, 0, 0, 0.03) 1px,
+		rgba(0, 0, 0, 0.03) 2px
+	);
+}
+
+/* ========================================
+ * Thumb (draggable handle)
+ * ======================================== */
+
+.thumb {
+	/* Base styling */
+	background: var(--color-gray-400);
+	border: var(--border-width-thin) solid var(--color-border);
+	box-shadow: var(--shadow-raised);
+	
+	/* Position */
+	position: absolute;
+	
+	/* Cursor */
+	cursor: grab;
+	
+	/* No transitions for instant response */
+	transition: none;
+}
+
+.thumb:active {
+	cursor: grabbing;
+	background: var(--color-gray-300);
+}
+
+/* Vertical thumb */
+.scrollbar--vertical .thumb {
+	left: 0;
+	right: 0;
+	min-height: 16px;
+}
+
+/* Horizontal thumb */
+.scrollbar--horizontal .thumb {
+	top: 0;
+	bottom: 0;
+	min-width: 16px;
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* Keyboard focus */
+.arrow:focus-visible {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: -2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	.thumb {
+		transition: none;
+	}
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+	.scrollbar {
+		border-width: 2px;
+	}
+	
+	.thumb {
+		border-width: 2px;
+	}
+}

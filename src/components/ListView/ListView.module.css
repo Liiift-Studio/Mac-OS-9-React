@@ -1,0 +1,185 @@
+/* ListView Component Styles - Mac OS 9 */
+
+/* ========================================
+ * Base ListView Container
+ * ======================================== */
+
+.listView {
+	/* Base styling */
+	display: flex;
+	flex-direction: column;
+	background: var(--color-surface);
+	border: var(--border-width-thin) solid var(--color-border);
+	
+	/* Mac OS 9 inset appearance */
+	box-shadow: var(--shadow-inset);
+	
+	/* Font */
+	font-family: var(--font-system);
+	font-size: var(--font-size-md);
+	
+	/* No user select on structure */
+	user-select: none;
+	
+	/* Overflow */
+	overflow: auto;
+}
+
+/* ========================================
+ * Header (Column Headers)
+ * ======================================== */
+
+.header {
+	/* Layout */
+	display: flex;
+	flex-shrink: 0;
+	
+	/* Styling */
+	background: var(--color-gray-400);
+	border-bottom: var(--border-width-thin) solid var(--color-border);
+	box-shadow: var(--shadow-raised);
+	
+	/* Position */
+	position: sticky;
+	top: 0;
+	z-index: 1;
+}
+
+.headerCell {
+	/* Base styling */
+	padding: var(--spacing-1) var(--spacing-2);
+	
+	/* Text */
+	font-weight: var(--font-weight-bold);
+	color: var(--color-text);
+	
+	/* Layout */
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-1);
+	
+	/* Border */
+	border-right: var(--border-width-thin) solid var(--color-border);
+	
+	/* Prevent text wrap */
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.headerCell:last-child {
+	border-right: none;
+	flex: 1; /* Last column takes remaining space */
+}
+
+.headerCell.sortable {
+	cursor: pointer;
+}
+
+.headerCell.sortable:hover {
+	background: var(--color-gray-300);
+}
+
+.sortIndicator {
+	font-size: var(--font-size-xs);
+	color: var(--color-text);
+}
+
+/* ========================================
+ * Body (List Items)
+ * ======================================== */
+
+.body {
+	/* Layout */
+	flex: 1;
+	overflow-y: auto;
+	
+	/* Background */
+	background: var(--color-surface);
+}
+
+.row {
+	/* Layout */
+	display: flex;
+	
+	/* Styling */
+	border-bottom: var(--border-width-thin) solid var(--color-border);
+	
+	/* Cursor */
+	cursor: pointer;
+	
+	/* No transitions */
+	transition: none;
+}
+
+.row:hover {
+	background: var(--color-gray-200);
+}
+
+.row.selected {
+	background: var(--color-gray-300);
+	color: var(--color-text);
+}
+
+.cell {
+	/* Base styling */
+	padding: var(--spacing-1) var(--spacing-2);
+	
+	/* Layout */
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-1);
+	
+	/* Border */
+	border-right: var(--border-width-thin) solid var(--color-border);
+	
+	/* Prevent text wrap */
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.cell:last-child {
+	border-right: none;
+	flex: 1; /* Last cell takes remaining space */
+}
+
+.icon {
+	/* Layout */
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	
+	/* Size */
+	width: 16px;
+	height: 16px;
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* Keyboard focus */
+.row:focus-visible {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: -1px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	.row {
+		transition: none;
+	}
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+	.listView {
+		border-width: 2px;
+	}
+	
+	.row.selected {
+		outline: 2px solid var(--color-text);
+	}
+}

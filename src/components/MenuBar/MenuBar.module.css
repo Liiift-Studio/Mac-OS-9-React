@@ -1,0 +1,164 @@
+/* MenuBar Component Styles - Mac OS 9 */
+
+/* ========================================
+ * Menu Bar Container
+ * ======================================== */
+
+.menuBar {
+	/* Base menu bar styling */
+	display: flex;
+	align-items: stretch;
+	
+	/* Mac OS 9 menu bar appearance */
+	background-color: var(--color-gray-100); /* Light gray like Mac OS 9 */
+	border-bottom: var(--border-width-thin) solid var(--color-black);
+	
+	/* Layout */
+	width: 100%;
+	min-height: 24px;
+	
+	/* Position */
+	position: relative;
+	
+	/* Prevent selection */
+	user-select: none;
+}
+
+/* ========================================
+ * Menu Container
+ * ======================================== */
+
+.menuContainer {
+	/* Container for each menu button and dropdown */
+	position: relative;
+	display: flex;
+	align-items: stretch;
+}
+
+/* ========================================
+ * Menu Button
+ * ======================================== */
+
+.menuButton {
+	/* Base menu button styling */
+	padding: var(--spacing-1) var(--spacing-3);
+	
+	/* Text styling */
+	font-family: var(--font-system);
+	font-size: var(--font-size-md);
+	font-weight: var(--font-weight-bold);
+	line-height: var(--line-height-snug);
+	color: var(--color-text);
+	text-align: center;
+	white-space: nowrap;
+	
+	/* Remove button defaults */
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	
+	/* Transitions */
+	transition: background-color 50ms ease;
+	
+	/* Prevent text selection */
+	user-select: none;
+}
+
+/* ========================================
+ * Menu Button States
+ * ======================================== */
+
+.menuButton:hover:not(.menuButton--disabled) {
+	/* Hover state - blue highlight like Mac OS 9 */
+	background-color: #0000BB;
+	color: var(--color-white);
+}
+
+.menuButton:focus-visible {
+	/* Focus state */
+	outline: 1px dotted var(--color-focus);
+	outline-offset: -1px;
+}
+
+.menuButton--open {
+	/* Open state - highlighted */
+	background-color: #0000BB;
+	color: var(--color-white);
+}
+
+.menuButton--disabled {
+	/* Disabled state */
+	color: var(--color-gray-500);
+	cursor: not-allowed;
+}
+
+/* ========================================
+ * Dropdown Menu
+ * ======================================== */
+
+.dropdown {
+	/* Dropdown container */
+	position: absolute;
+	top: 100%;
+	left: 0;
+	z-index: 1000;
+	
+	/* Mac OS 9 menu appearance */
+	background-color: var(--color-gray-100);
+	border: var(--border-width-thin) solid var(--color-black);
+	
+	/* Drop shadow */
+	box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+	
+	/* Sizing */
+	min-width: 200px;
+	
+	/* Padding */
+	padding: var(--spacing-1) 0;
+	
+	/* Animation */
+	animation: menuFadeIn 100ms ease-out;
+}
+
+@keyframes menuFadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-4px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+	.menuBar {
+		border-width: 2px;
+	}
+	
+	.menuButton:hover:not(.menuButton--disabled),
+	.menuButton--open {
+		outline: 2px solid currentColor;
+		outline-offset: -2px;
+	}
+	
+	.dropdown {
+		border-width: 2px;
+	}
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	.menuButton {
+		transition: none;
+	}
+	
+	.dropdown {
+		animation: none;
+	}
+}

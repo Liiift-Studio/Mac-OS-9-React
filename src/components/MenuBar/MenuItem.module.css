@@ -1,0 +1,164 @@
+/* MenuItem Component Styles - Mac OS 9 */
+
+/* ========================================
+ * Menu Item
+ * ======================================== */
+
+.menuItem {
+	/* Base menu item styling */
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-2);
+	
+	/* Layout */
+	width: 100%;
+	padding: var(--spacing-1) var(--spacing-3);
+	min-height: 20px;
+	
+	/* Text styling */
+	font-family: var(--font-system);
+	font-size: var(--font-size-md);
+	font-weight: var(--font-weight-bold);
+	line-height: var(--line-height-snug);
+	text-align: left;
+	color: var(--color-text);
+	
+	/* Remove button defaults */
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	
+	/* Transitions */
+	transition: background-color 50ms ease;
+	
+	/* Prevent text selection */
+	user-select: none;
+}
+
+/* ========================================
+ * Menu Item States
+ * ======================================== */
+
+.menuItem:hover:not(.menuItem--disabled) {
+	/* Hover state - blue highlight like Mac OS 9 */
+	background-color: #0000BB;
+	color: var(--color-white);
+}
+
+.menuItem:focus-visible {
+	/* Focus state */
+	outline: 1px dotted var(--color-focus);
+	outline-offset: -1px;
+}
+
+.menuItem--selected {
+	/* Selected/active state */
+	background-color: #0000BB;
+	color: var(--color-white);
+}
+
+.menuItem--disabled {
+	/* Disabled state */
+	color: var(--color-gray-500);
+	cursor: not-allowed;
+}
+
+.menuItem--separator {
+	/* Item with separator - no additional styling needed */
+}
+
+/* ========================================
+ * Menu Item Elements
+ * ======================================== */
+
+.checkmark {
+	/* Checkmark area (for toggle items) */
+	width: 16px;
+	min-width: 16px;
+	text-align: center;
+	font-size: var(--font-size-md);
+}
+
+.icon {
+	/* Icon area */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 16px;
+	min-width: 16px;
+	height: 16px;
+}
+
+.label {
+	/* Label text */
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.shortcut {
+	/* Keyboard shortcut */
+	margin-left: auto;
+	font-size: var(--font-size-sm);
+	opacity: 0.8;
+	white-space: nowrap;
+}
+
+.submenuArrow {
+	/* Submenu indicator */
+	font-size: 8px;
+	margin-left: var(--spacing-1);
+}
+
+/* ========================================
+ * Separator Line
+ * ======================================== */
+
+.separatorLine {
+	/* Separator line after menu item */
+	height: 1px;
+	background-color: var(--color-gray-500);
+	margin: var(--spacing-1) var(--spacing-2);
+}
+
+/* ========================================
+ * Hover State Color Override
+ * ======================================== */
+
+/* When menu item is hovered, change text color of all children */
+.menuItem:hover:not(.menuItem--disabled) .checkmark,
+.menuItem:hover:not(.menuItem--disabled) .icon,
+.menuItem:hover:not(.menuItem--disabled) .label,
+.menuItem:hover:not(.menuItem--disabled) .shortcut,
+.menuItem:hover:not(.menuItem--disabled) .submenuArrow {
+	color: var(--color-white);
+}
+
+/* When menu item is selected, change text color of all children */
+.menuItem--selected .checkmark,
+.menuItem--selected .icon,
+.menuItem--selected .label,
+.menuItem--selected .shortcut,
+.menuItem--selected .submenuArrow {
+	color: var(--color-white);
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+	.menuItem:hover:not(.menuItem--disabled) {
+		outline: 2px solid currentColor;
+		outline-offset: -2px;
+	}
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	.menuItem {
+		transition: none;
+	}
+}
