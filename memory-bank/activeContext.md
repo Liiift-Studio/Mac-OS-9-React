@@ -57,9 +57,18 @@ Foundation and all core form/navigation components are now complete. Moving into
 #### Currently Working On
 - Phase 3: Visual refinements in progress
 - Applied pixelated corners to Window, Dialog (via Window), and Tabs components
+- Improved ListView hover states for better visibility
 - Next: Continue visual polish and testing improvements
 
 ## Recent Changes
+
+### 2026-01-14 14:15 - ListView Hover State Improvements
+- Fixed ListView row hover state visibility issue
+- Changed row hover from `var(--color-gray-200)` to `var(--color-gray-300)` (was invisible against background)
+- Updated selected row from `var(--color-gray-300)` to `var(--color-gray-400)` for clearer hierarchy
+- Added selected row hover state using `var(--color-gray-500)` for improved feedback
+- Visual hierarchy now: normal (gray-200) → hover (gray-300) → selected (gray-400) → selected+hover (gray-500)
+- Hover state now clearly visible across entire row as intended in Mac OS 9 style
 
 ### 2026-01-13 13:00 - Phase 3 Visual Refinements Started
 - Applied pixelated corners to Window component (4px stepped corners)
@@ -358,6 +367,7 @@ const handleKeyDown = (event: React.KeyboardEvent) => {
 - ✅ Tab trapezoid shape → Simplified to squares, deferred to Phase 2
 - ✅ Typography weight → Resolved with Charcoal Bold default
 - ✅ Corner pixelation → Resolved with utility class system
+- ✅ ListView hover visibility → Fixed with proper color hierarchy
 
 ### Potential Risks
 1. **Window Component Complexity**: May be most complex component yet

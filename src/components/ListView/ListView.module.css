@@ -113,12 +113,16 @@
 }
 
 .row:hover {
-	background: var(--color-gray-200);
+	background: var(--color-gray-300);
 }
 
 .row.selected {
-	background: var(--color-gray-300);
+	background: var(--color-gray-400);
 	color: var(--color-text);
+}
+
+.row.selected:hover {
+	background: var(--color-gray-500);
 }
 
 .cell {
