@@ -62,6 +62,13 @@ Foundation and all core form/navigation components are now complete. Moving into
 
 ## Recent Changes
 
+### 2026-01-14 14:25 - NPM Launch Preparation
+- Hidden TitleBar component from library exports (needs visual refinement)
+- Updated README.md to remove TitleBar references from examples
+- Tested build process - successful (ESM: 60KB, CJS: 63KB, CSS: 37KB)
+- Tested package creation - ready for NPM (148.2 KB compressed, 825.1 KB unpacked)
+- Package is now ready for NPM publishing
+
 ### 2026-01-14 14:15 - ListView Hover State Improvements
 - Fixed ListView row hover state visibility issue
 - Changed row hover from `var(--color-gray-200)` to `var(--color-gray-300)` (was invisible against background)

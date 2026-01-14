@@ -22,13 +22,12 @@ npm install mac-os9-ui
 ## Quick Start
 
 ```tsx
-import { Button, Window, TitleBar } from 'mac-os9-ui';
+import { Button, Window } from 'mac-os9-ui';
 import 'mac-os9-ui/styles';
 
 function App() {
 	return (
-		<Window>
-			<TitleBar title="My Application" />
+		<Window title="My Application">
 			<div style={{ padding: '16px' }}>
 				<Button variant="primary">Click Me</Button>
 			</div>
@@ -48,7 +47,6 @@ function App() {
 
 ### Layout & Chrome
 - **Window** - Classic Mac OS 9 window container
-- **TitleBar** - Window title bar with close/minimize/maximize buttons
 - **MenuBar** - Application menu bar with dropdown menus
 - **Tabs** - Tabbed navigation component
 - **Dialog** - Modal dialog windows
@@ -67,7 +65,7 @@ function App() {
 ### Creating a Window with Menu Bar
 
 ```tsx
-import { Window, TitleBar, MenuBar } from 'mac-os9-ui';
+import { Window, MenuBar } from 'mac-os9-ui';
 import 'mac-os9-ui/styles';
 
 function MyApp() {
@@ -92,9 +90,8 @@ function MyApp() {
 	];
 
 	return (
-		<Window>
+		<Window title="My Application">
 			<MenuBar items={menuItems} />
-			<TitleBar title="My Application" />
 			{/* Your content here */}
 		</Window>
 	);

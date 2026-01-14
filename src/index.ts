@@ -12,7 +12,7 @@ export { Select, type SelectProps, type SelectOption } from './components/Select
 export { Tabs, TabPanel, type TabsProps, type TabPanelProps } from './components/Tabs';
 export { Window, type WindowProps } from './components/Window';
 export { Dialog, type DialogProps } from './components/Dialog';
-export { TitleBar, type TitleBarProps } from './components/TitleBar';
+// export { TitleBar, type TitleBarProps } from './components/TitleBar'; // Hidden - needs visual refinement
 export { MenuBar, MenuItem, type MenuBarProps, type MenuItemProps, type Menu } from './components/MenuBar';
 export { Scrollbar, type ScrollbarProps } from './components/Scrollbar';
 export { ListView, type ListViewProps, type ListColumn, type ListItem } from './components/ListView';
