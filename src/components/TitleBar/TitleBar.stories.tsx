@@ -1,3 +1,13 @@
+/*
+ * TitleBar Stories - TEMPORARILY COMMENTED OUT
+ * 
+ * Reason: Component is unusable and looks bad, needs visual refinement
+ * Date: 2026-01-15
+ * 
+ * TODO: Uncomment and refine when ready to improve visual design
+ */
+
+/*
 // TitleBar component stories
 
 import type { Meta, StoryObj } from '@storybook/react';
@@ -46,18 +56,12 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/**
- * Default title bar with title only
- */
 export const Default: Story = {
 	args: {
 		title: 'Untitled',
 	},
 };
 
-/**
- * Title bar with close button
- */
 export const WithCloseButton: Story = {
 	args: {
 		title: 'Document',
@@ -65,9 +69,6 @@ export const WithCloseButton: Story = {
 	},
 };
 
-/**
- * Title bar with all controls
- */
 export const WithAllControls: Story = {
 	args: {
 		title: 'My Document',
@@ -77,9 +78,6 @@ export const WithAllControls: Story = {
 	},
 };
 
-/**
- * Title bar without controls
- */
 export const NoControls: Story = {
 	args: {
 		title: 'Alert',
@@ -87,9 +85,6 @@ export const NoControls: Story = {
 	},
 };
 
-/**
- * Inactive title bar (unfocused)
- */
 export const Inactive: Story = {
 	args: {
 		title: 'Background Window',
@@ -98,9 +93,6 @@ export const Inactive: Story = {
 	},
 };
 
-/**
- * Active vs Inactive comparison
- */
 export const ActiveVsInactive: Story = {
 	args: {
 		title: 'Window Title',
@@ -119,9 +111,6 @@ export const ActiveVsInactive: Story = {
 	),
 };
 
-/**
- * Title bar with only close button
- */
 export const OnlyCloseButton: Story = {
 	args: {
 		title: 'Alert Dialog',
@@ -131,9 +120,6 @@ export const OnlyCloseButton: Story = {
 	},
 };
 
-/**
- * Title bar with close and minimize only
- */
 export const CloseAndMinimize: Story = {
 	args: {
 		title: 'Utility Window',
@@ -143,9 +129,6 @@ export const CloseAndMinimize: Story = {
 	},
 };
 
-/**
- * Draggable title bar (with cursor styling)
- */
 export const Draggable: Story = {
 	args: {
 		title: 'Draggable Window',
@@ -155,9 +138,6 @@ export const Draggable: Story = {
 	},
 };
 
-/**
- * Title bar with double-click handler
- */
 export const WithDoubleClick: Story = {
 	args: {
 		title: 'Double-click to maximize',
@@ -166,9 +146,6 @@ export const WithDoubleClick: Story = {
 	},
 };
 
-/**
- * Long title (truncates with ellipsis)
- */
 export const LongTitle: Story = {
 	args: {
 		title: 'This is a very long window title that will be truncated with an ellipsis',
@@ -183,9 +160,6 @@ export const LongTitle: Story = {
 	],
 };
 
-/**
- * Short title
- */
 export const ShortTitle: Story = {
 	args: {
 		title: 'Hi',
@@ -200,9 +174,6 @@ export const ShortTitle: Story = {
 	],
 };
 
-/**
- * Title bar with right content
- */
 export const WithRightContent: Story = {
 	args: {
 		title: 'Document',
@@ -223,9 +194,6 @@ export const WithRightContent: Story = {
 	],
 };
 
-/**
- * Narrow title bar
- */
 export const Narrow: Story = {
 	args: {
 		title: 'Palette',
@@ -240,9 +208,6 @@ export const Narrow: Story = {
 	],
 };
 
-/**
- * Wide title bar
- */
 export const Wide: Story = {
 	args: {
 		title: 'Main Application Window',
@@ -259,9 +224,6 @@ export const Wide: Story = {
 	],
 };
 
-/**
- * Title bar variations showcase
- */
 export const Variations: Story = {
 	args: {
 		title: 'Window',
@@ -316,9 +278,6 @@ export const Variations: Story = {
 	),
 };
 
-/**
- * Standalone title bar (as header)
- */
 export const AsStandaloneHeader: Story = {
 	args: {
 		title: 'Application',
@@ -338,9 +297,6 @@ export const AsStandaloneHeader: Story = {
 	),
 };
 
-/**
- * Custom class names
- */
 export const CustomStyling: Story = {
 	args: {
 		title: 'Custom Styled',
@@ -368,3 +324,4 @@ export const CustomStyling: Story = {
 		),
 	],
 };
+*/

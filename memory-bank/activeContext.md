@@ -28,7 +28,7 @@ Foundation and all core form/navigation components are now complete. Moving into
 #### Phase 2 Container Components - COMPLETE ✅
 - ✅ Window (complete)
 - ✅ Dialog (complete)
-- ✅ TitleBar (complete)
+- ⏸️ TitleBar (completed but now fully commented out - pending redesign)
 - ✅ MenuBar + MenuItem (complete)
 
 #### Just Completed (2026-01-09 14:40)
@@ -53,6 +53,7 @@ Foundation and all core form/navigation components are now complete. Moving into
    - Right content area for additional elements
    - Comprehensive Storybook stories (16 examples)
    - Full TypeScript types and JSDoc
+   - **Update 2026-01-15**: Fully commented out pending visual redesign
 
 #### Currently Working On
 - Phase 3: Visual refinements in progress
@@ -61,6 +62,19 @@ Foundation and all core form/navigation components are now complete. Moving into
 - Next: Continue visual polish and testing improvements
 
 ## Recent Changes
+
+### 2026-01-15 12:52 - TitleBar Component Fully Commented Out
+- Commented out all TitleBar component files (component, styles, stories, exports)
+- Files affected:
+  - `src/components/TitleBar/TitleBar.tsx` - component implementation commented out
+  - `src/components/TitleBar/TitleBar.module.css` - styles removed (restore from git history when needed)
+  - `src/components/TitleBar/TitleBar.stories.tsx` - all 16 stories commented out (removed from Storybook)
+  - `src/components/TitleBar/index.ts` - exports commented out
+- Reason: Component is unusable and looks bad, needs complete visual refinement
+- Status: All files preserved with clear header comments indicating temporary status
+- Export from `src/index.ts` was already commented out on 2026-01-14
+- TitleBar can be restored from git history when ready for redesign
+- Component will not appear in Storybook or be available in package exports
 
 ### 2026-01-14 15:27 - React 18 and 19 Compatibility
 - Updated peerDependencies to support both React 18 and React 19
@@ -173,30 +187,26 @@ Foundation and all core form/navigation components are now complete. Moving into
 **Impact**: Every component includes ARIA attributes and keyboard handlers by default  
 **Date**: 2026-01-08 (initial)
 
+### 8. TitleBar: Comment Out for Redesign
+**Decision**: Fully comment out TitleBar component instead of shipping it  
+**Rationale**: Component is unusable and looks bad, better to not ship than ship poor quality  
+**Impact**: TitleBar removed from Storybook and package exports, preserved in codebase for future redesign  
+**Status**: Temporary, will be redesigned and uncommented when ready  
+**Date**: 2026-01-15
+
 ## Next Steps
 
 ### Immediate (Next Session)
-1. **Window Component**: Classic Mac OS 9 window container
-   - Titlebar with controls (close, minimize, maximize)
-   - Resizable borders
-   - Content area
-   - Proper z-index layering
-2. **TitleBar Component**: Standalone titlebar for windows
-   - Window title text
-   - Close/minimize/maximize buttons
-   - Drag handle behavior (optional)
+1. **TitleBar Redesign**: Complete visual refinement of TitleBar component
+   - Improve visual appearance to match Mac OS 9 authenticity
+   - Fix styling issues that made it unusable
+   - Uncomment all files when ready
+   - Re-enable in Storybook and package exports
 
 ### Short-term (This Week)
-1. **Dialog/Modal Component**: Modal dialogs
-   - Centered window-style dialog
-   - Backdrop/overlay
-   - Focus trapping
-   - Escape key to close
-2. **MenuBar Component**: Top menu bar
-   - Horizontal menu layout
-   - MenuItem components
-   - Keyboard navigation
-   - Click-to-open behavior
+1. **Visual Polish Pass**: Review all components against Figma
+2. **Icon System**: Expand icon library with more Mac OS 9 icons
+3. **Testing Improvements**: Increase test coverage
 
 ### Medium-term (Phase 2 Enhancements)
 1. **Pixelated Corners**: Apply to all remaining components
@@ -221,6 +231,11 @@ Foundation and all core form/navigation components are now complete. Moving into
 - ~~Corner Style~~: **RESOLVED** - Created pixelated-corners utility system
 
 #### Open Questions
+- **TitleBar Visual Design**: How to improve TitleBar appearance?
+  - *Current state*: Fully commented out, needs complete redesign
+  - *Status*: Pending redesign
+  - *Priority*: Medium - can ship without it, but should be addressed
+
 - **Tab Trapezoid Shape**: How to achieve pixel-perfect trapezoid tabs?
   - *Current state*: Simple squares with box shadows
   - *Deferred to*: Phase 2 refinement
@@ -366,35 +381,44 @@ const handleKeyDown = (event: React.KeyboardEvent) => {
 3. **Accessibility non-negotiable**: Build it in from start, no compromises
 4. **Documentation as code**: Keep memory-bank synchronized with implementation
 5. **Test as you go**: Write tests with components, not after
+6. **Quality over completeness**: Better to comment out poor components than ship them
 
 ### Component Implementation Insights
 - **Button sets the pattern**: First component establishes conventions for all others
 - **Composition over configuration**: Small, focused components that compose well
 - **Ref forwarding matters**: Consumers need access to underlying DOM nodes
 - **TypeScript strictness pays off**: Catches issues early, better DX
+- **Visual quality matters**: If a component looks bad, don't ship it - comment it out and fix later
 
 ## Blockers & Risks
 
 ### Current Blockers
-- None (all core components implemented)
+- None (all shipped components are functional)
 
 ### Resolved Issues
 - ✅ Tab trapezoid shape → Simplified to squares, deferred to Phase 2
 - ✅ Typography weight → Resolved with Charcoal Bold default
 - ✅ Corner pixelation → Resolved with utility class system
 - ✅ ListView hover visibility → Fixed with proper color hierarchy
+- ✅ TitleBar visual quality → Commented out pending redesign
 
 ### Potential Risks
-1. **Window Component Complexity**: May be most complex component yet
-   - *Mitigation*: Start simple, add features iteratively
-2. **MenuBar State Management**: Complex hover/click interactions
-   - *Mitigation*: Use controlled component pattern, let consumers manage state
-3. **Bundle Size**: Adding more components increases bundle
+1. **TitleBar Redesign Complexity**: May require significant effort to get right
+   - *Mitigation*: Can ship without it, redesign when resources available
+2. **Bundle Size**: Adding more components increases bundle
    - *Mitigation*: Monitor with each component, optimize before release
-4. **Browser Compatibility**: Some CSS effects may vary across browsers
+3. **Browser Compatibility**: Some CSS effects may vary across browsers
    - *Mitigation*: Test early on multiple browsers
 
 ## Questions to Resolve
+
+### For TitleBar Component
+1. What visual improvements are needed?
+   → **Need to investigate**: Review Mac OS 9 screenshots and Figma designs
+2. Should we use a different approach for the striped pattern?
+   → **Need to experiment**: Try different CSS techniques
+3. Are the window controls sized/styled correctly?
+   → **Need to verify**: Compare against authentic Mac OS 9
 
 ### For Window Component
 1. Should windows be draggable or just styled?
@@ -427,6 +451,7 @@ When resuming work:
 - Each component has comprehensive JSDoc
 - Follow pixelated-corners pattern for authentic Mac OS 9 look
 - Accessibility is non-negotiable - include ARIA and keyboard support
+- TitleBar component is fully commented out - do not reference or import it
 
 ### Memory Bank Synchronization
 - **activeContext.md** (this file): Daily updates, current work focus
