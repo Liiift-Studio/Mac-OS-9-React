@@ -1,5 +1,11 @@
 # mac-os9-ui
 
+## 0.1.1
+
+### Patch Changes
+
+- Add React 19 compatibility to peer dependencies
+
 ## 0.1.0
 
 ### Minor Changes
