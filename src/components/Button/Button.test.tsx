@@ -1,9 +1,10 @@
 // Button Component Tests
 
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Button } from './Button';
+import styles from './Button.module.css';
 
 describe('Button', () => {
 	// ========================================
@@ -18,19 +19,19 @@ describe('Button', () => {
 	it('renders with default variant', () => {
 		const { container } = render(<Button>Default</Button>);
 		const button = container.querySelector('button');
-		expect(button).toHaveClass('button--default');
+		expect(button).toHaveClass(styles['button--default']);
 	});
 
 	it('renders with primary variant', () => {
 		const { container } = render(<Button variant="primary">Primary</Button>);
 		const button = container.querySelector('button');
-		expect(button).toHaveClass('button--primary');
+		expect(button).toHaveClass(styles['button--primary']);
 	});
 
 	it('renders with danger variant', () => {
 		const { container } = render(<Button variant="danger">Danger</Button>);
 		const button = container.querySelector('button');
-		expect(button).toHaveClass('button--danger');
+		expect(button).toHaveClass(styles['button--danger']);
 	});
 
 	// ========================================
@@ -40,19 +41,19 @@ describe('Button', () => {
 	it('renders with small size', () => {
 		const { container } = render(<Button size="sm">Small</Button>);
 		const button = container.querySelector('button');
-		expect(button).toHaveClass('button--sm');
+		expect(button).toHaveClass(styles['button--sm']);
 	});
 
 	it('renders with medium size (default)', () => {
 		const { container } = render(<Button>Medium</Button>);
 		const button = container.querySelector('button');
-		expect(button).toHaveClass('button--md');
+		expect(button).toHaveClass(styles['button--md']);
 	});
 
 	it('renders with large size', () => {
 		const { container } = render(<Button size="lg">Large</Button>);
 		const button = container.querySelector('button');
-		expect(button).toHaveClass('button--lg');
+		expect(button).toHaveClass(styles['button--lg']);
 	});
 
 	// ========================================
@@ -69,7 +70,7 @@ describe('Button', () => {
 	it('renders with full width', () => {
 		const { container } = render(<Button fullWidth>Full Width</Button>);
 		const button = container.querySelector('button');
-		expect(button).toHaveClass('button--full-width');
+		expect(button).toHaveClass(styles['button--full-width']);
 	});
 
 	// ========================================
@@ -88,9 +89,8 @@ describe('Button', () => {
 		expect(handleClick).toHaveBeenCalledTimes(1);
 	});
 
-	it('does not call onClick when disabled', async () => {
+	it('does not call onClick when disabled', () => {
 		const handleClick = vi.fn();
-		const user = userEvent.setup();
 
 		render(
 			<Button disabled onClick={handleClick}>
@@ -99,7 +99,8 @@ describe('Button', () => {
 		);
 
 		const button = screen.getByRole('button');
-		await user.click(button);
+		// Use fireEvent instead of userEvent because disabled button has pointer-events: none
+		fireEvent.click(button);
 
 		expect(handleClick).not.toHaveBeenCalled();
 	});
@@ -242,10 +243,10 @@ describe('Button', () => {
 		);
 
 		const button = container.querySelector('button');
-		expect(button).toHaveClass('button--primary');
-		expect(button).toHaveClass('button--lg');
-		expect(button).toHaveClass('button--full-width');
-		expect(button).toHaveClass('button--disabled');
+		expect(button).toHaveClass(styles['button--primary']);
+		expect(button).toHaveClass(styles['button--lg']);
+		expect(button).toHaveClass(styles['button--full-width']);
+		expect(button).toHaveClass(styles['button--disabled']);
 		expect(button).toHaveClass('custom');
 		expect(button).toBeDisabled();
 	});
