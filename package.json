@@ -5,24 +5,21 @@
 	"private": false,
 	"sideEffects": false,
 	"type": "module",
-	"main": "./dist/cjs/index.js",
-	"module": "./dist/esm/index.js",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
 			"import": {
 				"types": "./dist/index.d.ts",
-				"default": "./dist/esm/index.js"
+				"default": "./dist/index.js"
 			},
 			"require": {
-				"types": "./dist/index.d.ts",
-				"default": "./dist/cjs/index.js"
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
 			}
 		},
-		"./styles": {
-			"import": "./dist/esm/styles/theme.css",
-			"require": "./dist/cjs/styles/theme.css"
-		}
+		"./styles": "./dist/index.css"
 	},
 	"files": [
 		"dist",
