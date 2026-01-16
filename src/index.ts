@@ -1,6 +1,9 @@
 // Mac OS 9 UI Component Library
 // Main export file for all components and utilities
 
+// Import theme CSS variables - this ensures styles are automatically included
+import './styles/theme.css';
+
 // Export components
 export { Button, type ButtonProps } from './components/Button';
 export { Icon, type IconProps } from './components/Icon';

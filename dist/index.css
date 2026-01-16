@@ -1,3 +1,198 @@
+/* src/styles/theme.css */
+:root {
+  --color-gray-100: #ffffff;
+  --color-gray-200: #eeeeee;
+  --color-gray-300: #dddddd;
+  --color-gray-400: #cccccc;
+  --color-gray-500: #999999;
+  --color-gray-600: #666666;
+  --color-gray-700: #4d4d4d;
+  --color-gray-800: #333333;
+  --color-gray-900: #262626;
+  --color-lavender: #ccccff;
+  --color-azul: #0066cc;
+  --color-link-red: #cc0000;
+  --color-background: var(--color-gray-200);
+  --color-foreground: var(--color-gray-900);
+  --color-border: var(--color-gray-900);
+  --color-text: var(--color-gray-900);
+  --color-text-inverse: var(--color-gray-100);
+  --color-surface: var(--color-gray-200);
+  --color-surface-inset: var(--color-gray-100);
+  --color-black: var(--color-gray-900);
+  --color-white: var(--color-gray-100);
+  --color-focus: #000080;
+  --color-error: #cc0000;
+  --color-success: #008000;
+  --color-warning: #ff8c00;
+  --font-system:
+    Charcoal,
+    "Charcoal CY",
+    Chicago,
+    "Chicago Classic",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Helvetica,
+    Arial,
+    sans-serif;
+  --font-body:
+    Geneva,
+    "Geneva CY",
+    "Lucida Grande",
+    "Lucida Sans Unicode",
+    sans-serif;
+  --font-display:
+    "Apple Garamond Light",
+    "Apple Garamond",
+    Garamond,
+    Georgia,
+    serif;
+  --font-chicago:
+    Chicago,
+    "Chicago Classic",
+    "Charcoal CY",
+    Charcoal,
+    monospace;
+  --font-mono:
+    Monaco,
+    "Monaco CY",
+    "SF Mono",
+    "Courier New",
+    Courier,
+    monospace;
+  --font-size-xs: 9px;
+  --font-size-sm: 10px;
+  --font-size-md: 12px;
+  --font-size-lg: 13px;
+  --font-size-xl: 14px;
+  --font-size-2xl: 16px;
+  --font-size-3xl: 18px;
+  --font-size-4xl: 20px;
+  --font-size-5xl: 24px;
+  --font-weight-normal: 700;
+  --font-weight-medium: 700;
+  --font-weight-semibold: 700;
+  --font-weight-bold: 700;
+  --font-weight-light: 400;
+  --line-height-tight: 1.2;
+  --line-height-snug: 1.3;
+  --line-height-normal: 1.4;
+  --line-height-relaxed: 1.5;
+  --line-height-loose: 1.6;
+  --letter-spacing-tighter: -0.02em;
+  --letter-spacing-tight: -0.01em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.01em;
+  --letter-spacing-wider: 0.02em;
+  --spacing-0: 0;
+  --spacing-px: 1px;
+  --spacing-0_5: 2px;
+  --spacing-1: 4px;
+  --spacing-1_5: 6px;
+  --spacing-2: 8px;
+  --spacing-2_5: 10px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-xs: 2px;
+  --spacing-sm: 4px;
+  --spacing-md: 8px;
+  --spacing-lg: 12px;
+  --spacing-xl: 16px;
+  --spacing-2xl: 24px;
+  --spacing-3xl: 32px;
+  --shadow-bevel:
+    inset 2px 2px 0 rgba(255, 255, 255, 0.6),
+    inset -2px -2px 0 rgba(38, 38, 38, 0.4),
+    2px 2px 0 rgba(38, 38, 38, 1);
+  --shadow-inset:
+    inset -2px -2px 0 rgba(255, 255, 255, 0.6),
+    inset 2px 2px 0 rgba(38, 38, 38, 0.4),
+    inset 0px 0px 0px rgba(38, 38, 38, 1);
+  --shadow-drop: 2px 2px 0 rgba(38, 38, 38, 1);
+  --shadow-highlight: inset 2px 2px 0 rgba(255, 255, 255, 0.6);
+  --shadow-dark: inset -2px -2px 0 rgba(38, 38, 38, 0.4);
+  --shadow-none: none;
+  --border-width-none: 0;
+  --border-width-thin: 1px;
+  --border-width-medium: 2px;
+  --border-width-thick: 3px;
+  --border-radius-none: 0;
+  --border-radius-sm: 0;
+  --border-radius-md: 0;
+  --border-radius-lg: 0;
+  --border-radius-full: 0;
+  --z-index-base: 0;
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1100;
+  --z-index-modal: 1200;
+  --z-index-popover: 1300;
+  --z-index-tooltip: 1400;
+  --transition-instant: 0ms;
+  --transition-fast: 100ms;
+  --transition-normal: 200ms;
+  --transition-slow: 300ms;
+  --transition-timing-linear: linear;
+  --transition-timing-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --transition-timing-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --transition-timing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-system);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-normal);
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
+.bevel {
+  box-shadow: var(--shadow-bevel);
+}
+.bevel-inset {
+  box-shadow: var(--shadow-inset);
+}
+.border {
+  border: var(--border-width-thin) solid var(--color-border);
+}
+.border-none {
+  border: none;
+}
+.surface {
+  background-color: var(--color-surface);
+}
+.surface-inset {
+  background-color: var(--color-surface-inset);
+}
+.text-inverse {
+  color: var(--color-text-inverse);
+}
+.focus-visible:focus-visible {
+  outline: 1px dotted var(--color-focus);
+  outline-offset: 2px;
+}
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* src/components/Button/Button.module.css */
 .button {
   position: relative;
