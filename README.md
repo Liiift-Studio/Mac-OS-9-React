@@ -16,14 +16,14 @@ A pixel-perfect Mac OS 9 UI component library for React and TypeScript. Bring au
 ## Installation
 
 ```bash
-npm install mac-os9-ui
+npm install @liiift-studio/mac-os9-ui
 ```
 
 ## Quick Start
 
 ```tsx
-import { Button, Window } from 'mac-os9-ui';
-import 'mac-os9-ui/styles';
+import { Button, Window } from '@liiift-studio/mac-os9-ui';
+import '@liiift-studio/mac-os9-ui/styles';
 
 function App() {
 	return (
@@ -65,8 +65,8 @@ function App() {
 ### Creating a Window with Menu Bar
 
 ```tsx
-import { Window, MenuBar } from 'mac-os9-ui';
-import 'mac-os9-ui/styles';
+import { Window, MenuBar } from '@liiift-studio/mac-os9-ui';
+import '@liiift-studio/mac-os9-ui/styles';
 
 function MyApp() {
 	const menuItems = [
@@ -101,7 +101,7 @@ function MyApp() {
 ### Using Form Controls
 
 ```tsx
-import { Button, Checkbox, TextField, Select } from 'mac-os9-ui';
+import { Button, Checkbox, TextField, Select } from '@liiift-studio/mac-os9-ui';
 import { useState } from 'react';
 
 function MyForm() {
@@ -145,7 +145,7 @@ function MyForm() {
 ### Creating a Dialog
 
 ```tsx
-import { Dialog, Button } from 'mac-os9-ui';
+import { Dialog, Button } from '@liiift-studio/mac-os9-ui';
 import { useState } from 'react';
 
 function MyComponent() {
@@ -178,7 +178,7 @@ function MyComponent() {
 The library includes CSS files that need to be imported in your application:
 
 ```tsx
-import 'mac-os9-ui/styles';
+import '@liiift-studio/mac-os9-ui/styles';
 ```
 
 This imports the theme variables and base styles. All components use CSS Modules internally, so styles are scoped and won't conflict with your application's CSS.
@@ -188,7 +188,7 @@ This imports the theme variables and base styles. All components use CSS Modules
 All components are written in TypeScript and include full type definitions. Import types as needed:
 
 ```tsx
-import type { ButtonProps, WindowProps } from 'mac-os9-ui';
+import type { ButtonProps, WindowProps } from '@liiift-studio/mac-os9-ui';
 ```
 
 ## Browser Support

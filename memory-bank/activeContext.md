@@ -63,6 +63,15 @@ Foundation and all core form/navigation components are now complete. Moving into
 
 ## Recent Changes
 
+### 2026-01-16 13:02 - README Package Name Update
+- Updated all README.md import examples to use scoped package name `@liiift-studio/mac-os9-ui`
+- Changed from `mac-os9-ui` to `@liiift-studio/mac-os9-ui` throughout documentation
+- Updated installation command: `npm install @liiift-studio/mac-os9-ui`
+- Updated all import statements in examples to use `@liiift-studio/mac-os9-ui`
+- Updated style import to `@liiift-studio/mac-os9-ui/styles`
+- Package.json already had correct scoped name, README now matches
+- No other files needed updates (search confirmed)
+
 ### 2026-01-15 12:52 - TitleBar Component Fully Commented Out
 - Commented out all TitleBar component files (component, styles, stories, exports)
 - Files affected:
