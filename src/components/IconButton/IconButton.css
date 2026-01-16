@@ -1,0 +1,207 @@
+/* IconButton Component Styles - Mac OS 9 */
+
+/* Import pixelated corners utility */
+@import '../../styles/pixelated-corners.css';
+
+/* ========================================
+ * Base IconButton Styles
+ * ======================================== */
+
+.mac-os9-iconButton {
+	/* Base styling */
+	font-family: var(--font-system);
+	font-weight: var(--font-weight-bold);
+	color: var(--color-text);
+	
+	/* Box styling */
+	background: var(--color-gray-400);
+	border: var(--border-width-thin) solid var(--color-border);
+	border-radius: var(--border-radius-none);
+	box-shadow: var(--shadow-raised);
+	
+	/* Layout */
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--spacing-2);
+	
+	/* Cursor */
+	cursor: pointer;
+	
+	/* Remove button defaults */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	
+	/* No transitions */
+	transition: none;
+	
+	/* Text */
+	white-space: nowrap;
+	user-select: none;
+	
+	/* Pixelated corners for authentic Mac OS 9 appearance */
+	clip-path: polygon(
+		/* Top-left pixelated corner */
+		4px 0,
+		3px 1px,
+		2px 2px,
+		1px 3px,
+		0 4px,
+		/* Left edge down */
+		0 calc(100% - 4px),
+		/* Bottom-left pixelated corner */
+		1px calc(100% - 3px),
+		2px calc(100% - 2px),
+		3px calc(100% - 1px),
+		4px 100%,
+		/* Bottom edge right */
+		calc(100% - 4px) 100%,
+		/* Bottom-right pixelated corner */
+		calc(100% - 3px) calc(100% - 1px),
+		calc(100% - 2px) calc(100% - 2px),
+		calc(100% - 1px) calc(100% - 3px),
+		100% calc(100% - 4px),
+		/* Right edge up */
+		100% 4px,
+		/* Top-right pixelated corner */
+		calc(100% - 1px) 3px,
+		calc(100% - 2px) 2px,
+		calc(100% - 3px) 1px,
+		calc(100% - 4px) 0
+	);
+}
+
+/* ========================================
+ * Icon and Label Layout
+ * ======================================== */
+
+.mac-os9-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.mac-os9-label {
+	display: inline-flex;
+	align-items: center;
+}
+
+/* Layout direction variants */
+.mac-os9-iconButton--label-top,
+.mac-os9-iconButton--label-bottom {
+	flex-direction: column;
+}
+
+.mac-os9-iconButton--label-left {
+	flex-direction: row-reverse;
+}
+
+.mac-os9-iconButton--label-right {
+	flex-direction: row;
+}
+
+/* ========================================
+ * Size Variants
+ * ======================================== */
+
+.mac-os9-iconButton--sm {
+	padding: var(--spacing-1);
+	font-size: var(--font-size-xs);
+	line-height: var(--line-height-tight);
+	min-width: 24px;
+	min-height: 24px;
+}
+
+.mac-os9-iconButton--sm.mac-os9-iconButton--with-label {
+	padding: var(--spacing-1) var(--spacing-2);
+}
+
+.mac-os9-iconButton--md {
+	padding: var(--spacing-1_5);
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-snug);
+	min-width: 32px;
+	min-height: 32px;
+}
+
+.mac-os9-iconButton--md.mac-os9-iconButton--with-label {
+	padding: var(--spacing-1_5) var(--spacing-3);
+}
+
+.mac-os9-iconButton--lg {
+	padding: var(--spacing-2);
+	font-size: var(--font-size-lg);
+	line-height: var(--line-height-normal);
+	min-width: 40px;
+	min-height: 40px;
+}
+
+.mac-os9-iconButton--lg.mac-os9-iconButton--with-label {
+	padding: var(--spacing-2) var(--spacing-4);
+}
+
+/* ========================================
+ * Variant Styles
+ * ======================================== */
+
+.mac-os9-iconButton--default {
+	background: var(--color-gray-400);
+}
+
+.mac-os9-iconButton--primary {
+	background: var(--color-gray-300);
+}
+
+.mac-os9-iconButton--danger {
+	background: var(--color-gray-400);
+	color: var(--color-text);
+}
+
+/* ========================================
+ * Interactive States
+ * ======================================== */
+
+/* Hover state */
+.mac-os9-iconButton:hover:not(:disabled) {
+	background: var(--color-gray-300);
+}
+
+/* Active/pressed state */
+.mac-os9-iconButton:active:not(:disabled) {
+	box-shadow: var(--shadow-inset);
+	background: var(--color-gray-500);
+}
+
+/* Focus state */
+.mac-os9-iconButton:focus-visible {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: -3px;
+}
+
+/* Disabled state */
+.mac-os9-iconButton--disabled,
+.mac-os9-iconButton:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	.mac-os9-iconButton {
+		transition: none;
+	}
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+	.mac-os9-iconButton {
+		border-width: 2px;
+	}
+}

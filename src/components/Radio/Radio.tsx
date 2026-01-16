@@ -145,27 +145,27 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
 		// Generate ID if not provided (for label association)
 		const radioId = id || React.useId();
 
-		// Build class names
-		const wrapperClassNames = [
-			styles.wrapper,
-			styles[`wrapper--${size}`],
-			styles[`wrapper--label-${labelPosition}`],
-			disabled && styles['wrapper--disabled'],
-			error && styles['wrapper--error'],
-			className,
-		]
-			.filter(Boolean)
-			.join(' ');
+	// Build class names
+	const wrapperClassNames = [
+		styles.wrapper,
+		styles[`wrapper--${size}`],
+		styles[`wrapper--label-${labelPosition}`],
+		disabled && styles['wrapper--disabled'],
+		error && styles['wrapper--error'],
+		className,
+	]
+		.filter(Boolean)
+		.join(' ');
 
-		const radioClassNames = [
-			styles.radio,
-			styles[`radio--${size}`],
-			error && styles['radio--error'],
-		]
-			.filter(Boolean)
-			.join(' ');
+	const radioClassNames = [
+		styles.radio,
+		styles[`radio--${size}`],
+		error && styles['radio--error'],
+	]
+		.filter(Boolean)
+		.join(' ');
 
-		const labelClassNames = [styles.label, styles[`label--${size}`]].filter(Boolean).join(' ');
+	const labelClassNames = [styles.label, styles[`label--${size}`]].filter(Boolean).join(' ');
 
 		// ARIA attributes
 		const ariaAttributes = {

@@ -1,0 +1,217 @@
+/* Radio Component Styles - Mac OS 9 */
+
+.mac-os9-wrapper {
+	/* Wrapper container for radio and label */
+	display: inline-flex;
+	align-items: center;
+	gap: var(--spacing-2);
+	position: relative;
+	cursor: pointer;
+}
+
+.mac-os9-wrapper--disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.mac-os9-wrapper--error {
+	/* Error state styling */
+}
+
+/* ========================================
+ * Label Positioning
+ * ======================================== */
+
+.mac-os9-wrapper--label-left {
+	flex-direction: row-reverse;
+}
+
+.mac-os9-wrapper--label-right {
+	flex-direction: row;
+}
+
+/* ========================================
+ * Radio Input
+ * ======================================== */
+
+.mac-os9-radio {
+	/* Hide native radio */
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	
+	/* Custom radio styling */
+	position: relative;
+	display: inline-block;
+	flex-shrink: 0;
+	margin: 0;
+	cursor: pointer;
+	
+	/* Mac OS 9 radio appearance - circular */
+	background-color: var(--color-surface);
+	border: var(--border-width-thin) solid var(--color-border);
+	border-radius: 50%; /* Circular */
+	box-shadow: var(--shadow-inset);
+	
+	/* Transition for smooth state changes */
+	transition: none; /* Mac OS 9 had no transitions */
+}
+
+.mac-os9-radio:disabled {
+	cursor: not-allowed;
+}
+
+/* ========================================
+ * Size Variants
+ * ======================================== */
+
+.mac-os9-radio--sm {
+	width: 14px;
+	height: 14px;
+}
+
+.mac-os9-radio--md {
+	width: 16px;
+	height: 16px;
+}
+
+.mac-os9-radio--lg {
+	width: 20px;
+	height: 20px;
+}
+
+/* ========================================
+ * Checked State
+ * ======================================== */
+
+.mac-os9-radio:checked {
+	/* Checked state uses same background */
+	background-color: var(--color-surface);
+}
+
+/* Radio dot using pseudo-element */
+.mac-os9-radio:checked::after {
+	content: '';
+	position: absolute;
+	display: block;
+	
+	/* Mac OS 9 style filled dot - centered */
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	
+	background-color: var(--color-text);
+	border-radius: 50%; /* Circular dot */
+	
+	/* Default size (md) */
+	width: 8px;
+	height: 8px;
+}
+
+.mac-os9-radio--sm:checked::after {
+	width: 6px;
+	height: 6px;
+}
+
+.mac-os9-radio--lg:checked::after {
+	width: 10px;
+	height: 10px;
+}
+
+/* ========================================
+ * Focus State
+ * ======================================== */
+
+.mac-os9-radio:focus-visible {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: 2px;
+}
+
+/* ========================================
+ * Error State
+ * ======================================== */
+
+.mac-os9-radio--error {
+	border-color: var(--color-error);
+}
+
+/* ========================================
+ * Label
+ * ======================================== */
+
+.mac-os9-label {
+	font-family: var(--font-system);
+	font-weight: var(--font-weight-normal);
+	color: var(--color-text);
+	cursor: pointer;
+	user-select: none;
+}
+
+.mac-os9-wrapper--disabled .mac-os9-label {
+	cursor: not-allowed;
+}
+
+.mac-os9-label--sm {
+	font-size: var(--font-size-xs);
+	line-height: var(--line-height-tight);
+}
+
+.mac-os9-label--md {
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-snug);
+}
+
+.mac-os9-label--lg {
+	font-size: var(--font-size-lg);
+	line-height: var(--line-height-normal);
+}
+
+/* ========================================
+ * Size Variants for Wrapper
+ * ======================================== */
+
+.mac-os9-wrapper--sm {
+	gap: var(--spacing-1);
+}
+
+.mac-os9-wrapper--md {
+	gap: var(--spacing-2);
+}
+
+.mac-os9-wrapper--lg {
+	gap: var(--spacing-2);
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+	.mac-os9-radio {
+		border-width: var(--border-width-medium);
+	}
+	
+	.mac-os9-radio:checked::after {
+		/* Increase dot size in high contrast */
+		width: 10px;
+		height: 10px;
+	}
+	
+	.mac-os9-radio--sm:checked::after {
+		width: 8px;
+		height: 8px;
+	}
+	
+	.mac-os9-radio--lg:checked::after {
+		width: 12px;
+		height: 12px;
+	}
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	.mac-os9-radio {
+		transition: none;
+	}
+}

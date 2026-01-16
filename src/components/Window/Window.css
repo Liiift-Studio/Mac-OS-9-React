@@ -1,0 +1,350 @@
+/* Window Component Styles - Mac OS 9 */
+
+/* Import pixelated corners utility */
+@import '../../styles/pixelated-corners.css';
+
+.mac-os9-window {
+	/* Base window styling */
+	display: flex;
+	flex-direction: column;
+	
+	/* Mac OS 9 window appearance */
+	background-color: var(--color-gray-300); /* #DDDDDD - authentic window background */
+	border: var(--border-width-thin) solid var(--color-black);
+	
+	/* Authentic Mac OS 9 drop shadow: sharp 2px offset, no blur */
+	filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.5));
+	
+	/* Layout */
+	position: relative;
+	overflow: hidden;
+	
+	/* Default dimensions */
+	width: auto;
+	height: auto;
+	min-width: 200px;
+	min-height: 100px;
+	
+}
+
+/* ========================================
+ * Window States
+ * ======================================== */
+
+.mac-os9-window--active {
+	/* Active window - standard appearance */
+	z-index: 10;
+}
+
+.mac-os9-window--inactive {
+	/* Inactive window - slightly dimmed */
+	opacity: 0.92;
+	z-index: 1;
+}
+
+/* ========================================
+ * Title Bar
+ * ======================================== */
+
+.mac-os9-titleBar {
+	/* Title bar container */
+	display: flex;
+	align-items: center;
+	
+	/* Styling - authentic Mac OS 9 header color */
+	background-color: #CBCBCB;
+	border-bottom: var(--border-width-thin) solid var(--color-black);
+	
+	/* Padding */
+	padding: var(--spacing-1_5) var(--spacing-2);
+	
+	/* Height */
+	min-height: 22px;
+	
+	/* Prevent selection */
+	user-select: none;
+	
+	/* Position for pseudo-elements */
+	position: relative;
+
+}
+.mac-os9-titleBar[data-numControls="3"] .mac-os9-titleCenter > :first-child{
+	width: calc(100% - (48px + var(--spacing-2)));
+	margin-left: calc(48px + var(--spacing-2));
+}
+.mac-os9-titleBar[data-numControls="2"] .mac-os9-titleCenter> :first-child {
+	width: calc(100% - (36px + var(--spacing-2)));
+	margin-left: calc(36px + var(--spacing-2));
+}
+.mac-os9-titleBar[data-numControls="1"] .mac-os9-titleCenter> :first-child {
+	width: calc(100% - (24px));
+	margin-left: calc(24px);
+	}
+
+.mac-os9-titleCenter{	
+	display: grid;
+	align-items: center;
+	width: 100%;
+	grid-template-columns: 1fr max-content 1fr;
+}
+.mac-os9-titleCenter svg{
+	width: 100%;
+}
+/* Header striped lines - left side */
+.mac-os9-titleBar::before {
+	content: '';
+	left: 60px;
+	top: 50%;
+	flex-grow: 1;	
+	/* Responsive width - fills from after controls to center, with padding for title */
+	height: 12px;
+	/* 6 horizontal lines pattern */
+	/* background: repeating-linear-gradient(
+		to bottom,
+		transparent 0px,
+		transparent 1px,
+		var(--color-gray-500) 1px,
+		var(--color-gray-500) 2px,
+		transparent 2px,
+		transparent 3px
+	); */
+	
+	/* Prevent interaction */
+	pointer-events: none;
+}
+
+/* Header striped lines - right side */
+.mac-os9-titleBar::after {
+	content: '';
+	right: 8px;
+	top: 50%;	
+	flex-grow: 1;
+	/* Responsive width - extends from right edge to center, with padding for title */
+	flex: 1;
+	/* max-width: 100px; */
+	height: 12px;
+	
+	/* 6 horizontal lines pattern */
+	/* background: repeating-linear-gradient(
+		to bottom,
+		transparent 0px,
+		transparent 1px,
+		var(--color-gray-500) 1px,
+		var(--color-gray-500) 2px,
+		transparent 2px,
+		transparent 3px
+	);
+	 */
+	/* Prevent interaction */
+	pointer-events: none;
+}
+
+/* ========================================
+ * Window Controls
+ * ======================================== */
+
+.mac-os9-controls {
+	/* Control buttons container */
+	display: flex;
+	gap: var(--spacing-1);
+	align-items: center;
+	
+	/* Ensure controls are above pseudo-elements */
+	position: absolute;
+	left: 12px;
+	z-index: 1;
+}
+
+.mac-os9-controlButton {
+	/* Base control button */
+	width: 12px;
+	height: 12px;
+	padding: 0;
+	margin: 0;
+	
+	/* Remove button defaults */
+	background: transparent;
+	border: var(--border-width-thin) solid var(--color-border);
+	cursor: pointer;
+	
+	/* Box shadow for depth */
+	box-shadow: var(--shadow-inset);
+	
+	/* Transitions */
+	transition: none;
+	
+	/* Ensure controls are clickable */
+	position: relative;
+	z-index: 2;
+}
+
+.mac-os9-controlButton:hover {
+	background-color: var(--color-gray-300);
+}
+
+.mac-os9-controlButton:active {
+	box-shadow: var(--shadow-pressed);
+}
+
+.mac-os9-controlButton:focus-visible {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: 1px;
+}
+
+/* Control button visual indicators */
+.mac-os9-closeBox,
+.mac-os9-minimizeBox,
+.mac-os9-maximizeBox {
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+/* Close button: X pattern */
+.mac-os9-closeBox::before,
+.mac-os9-closeBox::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 6px;
+	/* height: 1px;
+	background-color: var(--color-border); */
+}
+
+/* .mac-os9-closeBox::before {
+	transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.mac-os9-closeBox::after {
+	transform: translate(-50%, -50%) rotate(-45deg);
+} */
+
+/* Minimize button: dash */
+.mac-os9-minimizeBox::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 6px;
+	height: 1px;
+	background-color: var(--color-border);
+}
+
+/* Maximize button: small square */
+.mac-os9-maximizeBox::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 4px;
+	height: 4px;
+	border: 1px solid var(--color-border);
+}
+
+/* ========================================
+ * Title Text
+ * ======================================== */
+
+.mac-os9-titleText {
+	/* Title text styling */
+	font-family: var(--font-system);
+	font-size: var(--font-size-md);
+	font-weight: var(--font-weight-bold);
+	line-height: var(--line-height-snug);
+	color: var(--color-text);
+	
+	/* Absolute positioning for true centering regardless of controls */
+	
+	/* Max width to prevent overlap with lines - centered with padding */
+	/* max-width: calc(100% - 160px); */
+	padding: 0 var(--spacing-2);
+	
+	/* Truncate long titles */
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	
+	/* Ensure text is above pseudo-elements */
+	z-index: 1;
+}
+
+/* ========================================
+ * Content Area
+ * ======================================== */
+
+.mac-os9-content {
+	/* Content area */
+	flex: 1;
+	overflow: auto;
+	
+	/* Background - white content area like authentic Mac OS 9 */
+	background-color: var(--color-gray-100);
+	
+	/* Padding */
+	padding: var(--spacing-4);
+	
+	/* Position for scrolling */
+	position: relative;
+	
+	/* Authentic inset border */
+	margin: var(--spacing-2);
+	border: var(--border-width-thin) solid #555555;
+}
+
+/* ========================================
+ * Resize Handle
+ * ======================================== */
+
+.mac-os9-resizeHandle {
+	/* Resize handle in bottom-right corner */
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 12px;
+	height: 12px;
+	
+	/* Visual indicator (diagonal lines) */
+	background-image: linear-gradient(
+		135deg,
+		transparent 0%,
+		transparent 40%,
+		var(--color-border) 40%,
+		var(--color-border) 45%,
+		transparent 45%,
+		transparent 55%,
+		var(--color-border) 55%,
+		var(--color-border) 60%,
+		transparent 60%
+	);
+	
+	/* Cursor */
+	cursor: nwse-resize;
+	
+	/* Layering */
+	z-index: 5;
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+	.mac-os9-window {
+		border-width: 2px;
+	}
+	
+	.mac-os9-controlButton {
+		border-width: 2px;
+	}
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	.mac-os9-controlButton {
+		transition: none;
+	}
+}

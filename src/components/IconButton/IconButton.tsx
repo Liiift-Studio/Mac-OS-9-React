@@ -92,7 +92,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
 			styles.iconButton,
 			styles[`iconButton--${variant}`],
 			styles[`iconButton--${size}`],
-			label && styles[`iconButton--with-label`],
+			label && styles['iconButton--with-label'],
 			label && styles[`iconButton--label-${labelPosition}`],
 			disabled && styles['iconButton--disabled'],
 			className,
@@ -108,13 +108,13 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
 				disabled={disabled}
 				{...props}
 			>
-				{label && (labelPosition === 'left' || labelPosition === 'top') && (
-					<span className={styles.label}>{label}</span>
-				)}
-				<span className={styles.icon}>{icon}</span>
-				{label && (labelPosition === 'right' || labelPosition === 'bottom') && (
-					<span className={styles.label}>{label}</span>
-				)}
+		{label && (labelPosition === 'left' || labelPosition === 'top') && (
+			<span className={styles.label}>{label}</span>
+		)}
+		<span className={styles.icon}>{icon}</span>
+		{label && (labelPosition === 'right' || labelPosition === 'bottom') && (
+			<span className={styles.label}>{label}</span>
+		)}
 			</button>
 		);
 	}

@@ -155,38 +155,38 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 			.filter(Boolean)
 			.join(' ');
 
-		// Build class names
-		const wrapperClassNames = [
-			styles.wrapper,
-			styles[`wrapper--${size}`],
-			styles[`wrapper--label-${labelPosition}`],
-			fullWidth && styles['wrapper--full-width'],
-			disabled && styles['wrapper--disabled'],
-			wrapperClassName,
-		]
-			.filter(Boolean)
-			.join(' ');
+	// Build class names
+	const wrapperClassNames = [
+		styles.wrapper,
+		styles[`wrapper--${size}`],
+		styles[`wrapper--label-${labelPosition}`],
+		fullWidth && styles['wrapper--full-width'],
+		disabled && styles['wrapper--disabled'],
+		wrapperClassName,
+	]
+		.filter(Boolean)
+		.join(' ');
 
-		const inputWrapperClassNames = [
-			styles['input-wrapper'],
-			(leftIcon || rightIcon) && styles['input-wrapper--with-icon'],
-			leftIcon && styles['input-wrapper--with-left-icon'],
-			rightIcon && styles['input-wrapper--with-right-icon'],
-		]
-			.filter(Boolean)
-			.join(' ');
+	const inputWrapperClassNames = [
+		styles['input-wrapper'],
+		(leftIcon || rightIcon) && styles['input-wrapper--with-icon'],
+		leftIcon && styles['input-wrapper--with-left-icon'],
+		rightIcon && styles['input-wrapper--with-right-icon'],
+	]
+		.filter(Boolean)
+		.join(' ');
 
-		const inputClassNames = [
-			styles.input,
-			styles[`input--${size}`],
-			error && styles['input--error'],
-			fullWidth && styles['input--full-width'],
-			className,
-		]
-			.filter(Boolean)
-			.join(' ');
+	const inputClassNames = [
+		styles.input,
+		styles[`input--${size}`],
+		error && styles['input--error'],
+		fullWidth && styles['input--full-width'],
+		className,
+	]
+		.filter(Boolean)
+		.join(' ');
 
-		const labelClassNames = [styles.label, styles[`label--${size}`]].filter(Boolean).join(' ');
+	const labelClassNames = [styles.label, styles[`label--${size}`]].filter(Boolean).join(' ');
 
 		// ARIA attributes
 		const ariaAttributes = {
@@ -204,27 +204,27 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 				)}
 
 				<div className={inputWrapperClassNames}>
-					{leftIcon && (
-						<span className={styles['input-icon-left']} aria-hidden="true">
-							{leftIcon}
-						</span>
-					)}
+			{leftIcon && (
+				<span className={styles['input-icon-left']} aria-hidden="true">
+					{leftIcon}
+				</span>
+			)}
 
-					<input
-						ref={ref}
-						type={type}
-						id={inputId}
-						className={inputClassNames}
-						disabled={disabled}
-						{...ariaAttributes}
-						{...props}
-					/>
+			<input
+				ref={ref}
+				type={type}
+				id={inputId}
+				className={inputClassNames}
+				disabled={disabled}
+				{...ariaAttributes}
+				{...props}
+			/>
 
-					{rightIcon && (
-						<span className={styles['input-icon-right']} aria-hidden="true">
-							{rightIcon}
-						</span>
-					)}
+			{rightIcon && (
+				<span className={styles['input-icon-right']} aria-hidden="true">
+					{rightIcon}
+				</span>
+			)}
 				</div>
 
 				{label && labelPosition === 'right' && (
@@ -233,17 +233,17 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 					</label>
 				)}
 
-				{helperText && !error && (
-					<p id={helperId} className={styles['helper-text']}>
-						{helperText}
-					</p>
-				)}
+		{helperText && !error && (
+			<p id={helperId} className={styles['helper-text']}>
+				{helperText}
+			</p>
+		)}
 
-				{error && errorMessage && (
-					<p id={errorId} className={styles['error-message']}>
-						{errorMessage}
-					</p>
-				)}
+		{error && errorMessage && (
+			<p id={errorId} className={styles['error-message']}>
+				{errorMessage}
+			</p>
+		)}
 			</div>
 		);
 	}

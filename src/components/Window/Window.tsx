@@ -210,7 +210,7 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 							<rect y="7" width="131.268" height="1" fill="#999999"/>
 							<rect y="11" width="131.268" height="1" fill="#999999"/>
 						</svg>
-						<div className={styles.titleText}>{title}</div>
+					<div className={styles.titleText}>{title}</div>
 						<svg width="132" height="13" viewBox="0 0 132 13" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
 							<rect width="130.517" height="13" fill="#DDDDDD"/>
 							<rect width="1" height="13" fill="#EEEEEE"/>
@@ -235,7 +235,7 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 			<div ref={ref} className={windowClassNames} style={windowStyle}>
 				{renderTitleBar()}
 				<div className={contentClassNames}>{children}</div>
-				{resizable && <div className={styles.resizeHandle} aria-hidden="true" />}
+			{resizable && <div className={styles.resizeHandle} aria-hidden="true" />}
 			</div>
 		);
 	}

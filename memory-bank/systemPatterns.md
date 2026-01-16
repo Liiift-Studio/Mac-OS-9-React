@@ -4,7 +4,7 @@
 
 ### Package Structure
 ```
-mac-os9-ui/
+@liiift-studio/mac-os9-ui/
 ├── src/
 │   ├── components/        # React components
 │   │   ├── Button/
@@ -256,7 +256,7 @@ Tab-based navigation:
 - Versioning via Changesets
 
 ### With User Applications
-- Simple CSS import: `import 'mac-os9-ui/styles'`
-- Component import: `import { Button } from 'mac-os9-ui'`
+- Simple CSS import: `import '@liiift-studio/mac-os9-ui/styles'`
+- Component import: `import { Button } from '@liiift-studio/mac-os9-ui'`
 - TypeScript support automatic
 - Optional theme customization

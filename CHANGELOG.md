@@ -1,4 +1,4 @@
-# mac-os9-ui
+# @liiift-studio/mac-os9-ui
 
 ## 0.1.1
 
@@ -12,7 +12,7 @@
 
 - Initial release of Mac OS 9 UI Component Library
 
-This is the first public release of the mac-os9-ui component library, featuring pixel-perfect Mac OS 9 styled React components.
+This is the first public release of the @liiift-studio/mac-os9-ui component library, featuring pixel-perfect Mac OS 9 styled React components.
 
 #### Components Included
 

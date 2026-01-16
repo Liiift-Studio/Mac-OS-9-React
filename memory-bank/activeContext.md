@@ -63,6 +63,19 @@ Foundation and all core form/navigation components are now complete. Moving into
 
 ## Recent Changes
 
+### 2026-01-16 14:49 - CSS Modules Fix Across All Components
+- Fixed critical issue where 7 components were importing plain `.css` files instead of `.module.css`
+- Components affected: Button, Checkbox, Icon, IconButton, Radio, TextField, Window
+- **Problem**: Components were using hardcoded string class names (e.g., `'mac-os9-button'`) instead of CSS Module references
+- **Solution**: Changed imports from `import './Component.css'` to `import styles from './Component.module.css'`
+- **Impact**: 
+  - All class names now properly scoped via CSS Modules
+  - Prevents className collisions in consuming applications
+  - Enables proper tree-shaking and optimization
+  - Build verified successful (ESM: 60KB, CJS: 63KB, CSS: 41KB)
+- Updated all className usages to use `styles.className` and `styles['className--variant']` syntax
+- No visual changes - purely architectural improvement for reliability and maintainability
+
 ### 2026-01-16 13:02 - README Package Name Update
 - Updated all README.md import examples to use scoped package name `@liiift-studio/mac-os9-ui`
 - Changed from `mac-os9-ui` to `@liiift-studio/mac-os9-ui` throughout documentation

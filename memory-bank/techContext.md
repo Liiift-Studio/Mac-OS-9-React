@@ -319,7 +319,7 @@ dist/
 ### CSS Modules Limitation
 - Styles must be imported explicitly
 - No automatic style injection
-- Users must import `mac-os9-ui/styles` in their app
+- Users must import `@liiift-studio/mac-os9-ui/styles` in their app
 
 ### Browser Constraints
 - No IE11 support

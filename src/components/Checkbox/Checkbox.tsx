@@ -144,28 +144,28 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 		// Generate ID if not provided (for label association)
 		const checkboxId = id || React.useId();
 
-		// Build class names
-		const wrapperClassNames = [
-			styles.wrapper,
-			styles[`wrapper--${size}`],
-			styles[`wrapper--label-${labelPosition}`],
-			disabled && styles['wrapper--disabled'],
-			error && styles['wrapper--error'],
-			className,
-		]
-			.filter(Boolean)
-			.join(' ');
+	// Build class names
+	const wrapperClassNames = [
+		styles.wrapper,
+		styles[`wrapper--${size}`],
+		styles[`wrapper--label-${labelPosition}`],
+		disabled && styles['wrapper--disabled'],
+		error && styles['wrapper--error'],
+		className,
+	]
+		.filter(Boolean)
+		.join(' ');
 
-		const checkboxClassNames = [
-			styles.checkbox,
-			styles[`checkbox--${size}`],
-			indeterminate && styles['checkbox--indeterminate'],
-			error && styles['checkbox--error'],
-		]
-			.filter(Boolean)
-			.join(' ');
+	const checkboxClassNames = [
+		styles.checkbox,
+		styles[`checkbox--${size}`],
+		indeterminate && styles['checkbox--indeterminate'],
+		error && styles['checkbox--error'],
+	]
+		.filter(Boolean)
+		.join(' ');
 
-		const labelClassNames = [styles.label, styles[`label--${size}`]].filter(Boolean).join(' ');
+	const labelClassNames = [styles.label, styles[`label--${size}`]].filter(Boolean).join(' ');
 
 		// ARIA attributes
 		const ariaAttributes = {

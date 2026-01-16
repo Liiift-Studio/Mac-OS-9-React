@@ -1,0 +1,225 @@
+/* Button Component Styles - Mac OS 9 */
+
+.mac-os9-button {
+	/* Base styles */
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--spacing-1);
+	font-family: var(--font-system);
+	font-weight: var(--font-weight-normal);
+	text-align: center;
+	text-decoration: none;
+	white-space: nowrap;
+	user-select: none;
+	cursor: pointer;
+	transition: none; /* Mac OS 9 had no transitions */
+
+	/* Mac OS 9 button appearance */
+	background-color: var(--color-surface);
+	border: var(--border-width-thin) solid var(--color-border);
+	border-radius: var(--border-radius-none);
+	box-shadow: var(--shadow-bevel);
+	color: var(--color-text);
+
+	/* Pixelated corners - authentic Mac OS 9 chamfered effect */
+	clip-path: polygon(
+		/* Top edge with corners */
+		2px 0,
+		calc(100% - 2px) 0,
+		/* Top-right corner */
+		100% 2px,
+		/* Right edge */
+		100% calc(100% - 2px),
+		/* Bottom-right corner */
+		calc(100% - 2px) 100%,
+		/* Bottom edge */
+		2px 100%,
+		/* Bottom-left corner */
+		0 calc(100% - 2px),
+		/* Left edge */
+		0 2px
+	);
+
+	/* Remove default button styles */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+/* For links styled as buttons */
+.mac-os9-button[href] {
+	text-decoration: none;
+}
+
+.mac-os9-button[href]:visited {
+	color: var(--color-text);
+}
+
+/* ========================================
+ * Size Variants
+ * ======================================== */
+
+.mac-os9-button--sm {
+	min-height: 20px;
+	padding: var(--spacing-0_5) var(--spacing-2);
+	font-size: var(--font-size-xs);
+	line-height: var(--line-height-tight);
+}
+
+.mac-os9-button--md {
+	min-height: 24px;
+	padding: var(--spacing-1) var(--spacing-3);
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-snug);
+}
+
+.mac-os9-button--lg {
+	min-height: 32px;
+	padding: var(--spacing-2) var(--spacing-4);
+	font-size: var(--font-size-lg);
+	line-height: var(--line-height-normal);
+}
+
+/* ========================================
+ * Variant Styles
+ * ======================================== */
+
+.mac-os9-button--default {
+	/* Uses base styles */
+}
+
+.mac-os9-button--primary {
+	/* Slightly darker background for emphasis */
+	background-color: var(--color-gray-300);
+	font-weight: var(--font-weight-bold);
+}
+
+.mac-os9-button--danger {
+	/* Error state styling */
+	color: var(--color-error);
+	border-color: var(--color-error);
+}
+
+/* ========================================
+ * Interactive States
+ * ======================================== */
+
+/* Hover state - subtle highlight */
+.mac-os9-button:hover:not(:disabled) {
+	background-color: var(--color-gray-100);
+}
+
+/* Active/Pressed state - inverted bevel */
+.mac-os9-button:active:not(:disabled) {
+	box-shadow: var(--shadow-inset);
+	background-color: var(--color-gray-300);
+	/* Subtle visual feedback - button appears pressed */
+	transform: translate(1px, 1px);
+}
+
+/* Focus state - keyboard navigation */
+.mac-os9-button:focus-visible {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: 2px;
+}
+
+/* ========================================
+ * Disabled State
+ * ======================================== */
+
+.mac-os9-button--disabled,
+.mac-os9-button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
+/* ========================================
+ * Layout Modifiers
+ * ======================================== */
+
+.mac-os9-button--full-width {
+	width: 100%;
+}
+
+/* ========================================
+ * Loading States
+ * ======================================== */
+
+.mac-os9-button--loading {
+	position: relative;
+	pointer-events: none;
+}
+
+.mac-os9-button--loading:not(.mac-os9-button--cursor-loading) {
+	cursor: wait;
+}
+
+/* Mac OS 9 watch cursor during loading */
+.mac-os9-button--cursor-loading {
+	cursor: wait;
+}
+
+.mac-os9-button__loading-spinner {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: var(--font-size-md);
+}
+
+.mac-os9-button__text {
+	display: inline-flex;
+	align-items: center;
+}
+
+/* ========================================
+ * Icon Support
+ * ======================================== */
+
+.mac-os9-button__icon-left,
+.mac-os9-button__icon-right {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.mac-os9-button__icon-only {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* Icon-only buttons should be square */
+.mac-os9-button--icon-only {
+	padding: var(--spacing-1);
+	aspect-ratio: 1;
+}
+
+.mac-os9-button--icon-only.mac-os9-button--sm {
+	padding: var(--spacing-0_5);
+}
+
+.mac-os9-button--icon-only.mac-os9-button--lg {
+	padding: var(--spacing-2);
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+	.mac-os9-button {
+		border-width: var(--border-width-medium);
+	}
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	.mac-os9-button {
+		transition: none;
+	}
+}

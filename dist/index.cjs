@@ -165,7 +165,7 @@ var IconButton = React4.forwardRef(
       IconButton_default.iconButton,
       IconButton_default[`iconButton--${variant}`],
       IconButton_default[`iconButton--${size}`],
-      label && IconButton_default[`iconButton--with-label`],
+      label && IconButton_default["iconButton--with-label"],
       label && IconButton_default[`iconButton--label-${labelPosition}`],
       disabled && IconButton_default["iconButton--disabled"],
       className

@@ -46,9 +46,9 @@ export interface IconProps extends SVGAttributes<SVGElement> {
  */
 export const Icon = forwardRef<SVGSVGElement, IconProps>(
 	({ size = 'md', children, label, className = '', ...props }, ref) => {
-		const classNames = [styles.icon, styles[`icon--${size}`], className]
-			.filter(Boolean)
-			.join(' ');
+	const classNames = [styles.icon, styles[`icon--${size}`], className]
+		.filter(Boolean)
+		.join(' ');
 
 		return (
 			<svg
