@@ -71,6 +71,11 @@ export interface WindowProps {
 	onMaximize?: () => void;
 
 	/**
+	 * Callback when mouse enters the window
+	 */
+	onMouseEnter?: (event: React.MouseEvent<HTMLDivElement>) => void;
+
+	/**
 	 * Whether the window has a resize handle
 	 * @default false
 	 */
@@ -126,6 +131,7 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 			onClose,
 			onMinimize,
 			onMaximize,
+			onMouseEnter,
 			resizable = false,
 		},
 		ref
@@ -232,7 +238,12 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 		};
 
 		return (
-			<div ref={ref} className={windowClassNames} style={windowStyle}>
+			<div 
+				ref={ref} 
+				className={windowClassNames} 
+				style={windowStyle}
+				onMouseEnter={onMouseEnter}
+			>
 				{renderTitleBar()}
 				<div className={contentClassNames}>{children}</div>
 			{resizable && <div className={styles.resizeHandle} aria-hidden="true" />}
