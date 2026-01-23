@@ -36,6 +36,11 @@ export interface FolderListProps extends Omit<WindowProps, 'children'> {
 	onItemOpen?: (item: ListItem) => void;
 
 	/**
+	 * Callback when mouse enters an item
+	 */
+	onItemMouseEnter?: (item: ListItem) => void;
+
+	/**
 	 * Callback when column header is clicked for sorting
 	 */
 	onSort?: (columnKey: string, direction: 'asc' | 'desc') => void;
@@ -69,6 +74,7 @@ export interface FolderListProps extends Omit<WindowProps, 'children'> {
  *   selectedIds={['1']}
  *   onSelectionChange={(ids) => console.log('Selected:', ids)}
  *   onItemOpen={(item) => console.log('Open:', item.name)}
+ *   onItemMouseEnter={(item) => console.log('Hovering:', item.name)}
  *   onMouseEnter={(e) => console.log('Mouse entered folder list')}
  * />
  * ```
@@ -85,6 +91,7 @@ export const FolderList = forwardRef<HTMLDivElement, FolderListProps>(
 			selectedIds,
 			onSelectionChange,
 			onItemOpen,
+			onItemMouseEnter,
 			onSort,
 			onMouseEnter,
 			listHeight = 400,
@@ -106,6 +113,7 @@ export const FolderList = forwardRef<HTMLDivElement, FolderListProps>(
 					selectedIds={selectedIds}
 					onSelectionChange={onSelectionChange}
 					onItemOpen={onItemOpen}
+					onItemMouseEnter={onItemMouseEnter}
 					onSort={onSort}
 					height={listHeight}
 					className={styles.listView}

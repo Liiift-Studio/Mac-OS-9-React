@@ -74,6 +74,11 @@ export interface ListViewProps {
 	onItemOpen?: (item: ListItem) => void;
 
 	/**
+	 * Callback when mouse enters an item
+	 */
+	onItemMouseEnter?: (item: ListItem) => void;
+
+	/**
 	 * Callback when column is clicked for sorting
 	 */
 	onSort?: (columnKey: string, direction: 'asc' | 'desc') => void;
@@ -109,6 +114,7 @@ export interface ListViewProps {
  *   ]}
  *   selectedIds={['1']}
  *   onSelectionChange={(ids) => console.log('Selected:', ids)}
+ *   onItemMouseEnter={(item) => console.log('Hovering:', item.name)}
  * />
  * ```
  */
@@ -120,6 +126,7 @@ export const ListView = forwardRef<HTMLDivElement, ListViewProps>(
 			selectedIds = [],
 			onSelectionChange,
 			onItemOpen,
+			onItemMouseEnter,
 			onSort,
 			className = '',
 			height = 'auto',
@@ -187,6 +194,16 @@ export const ListView = forwardRef<HTMLDivElement, ListViewProps>(
 			[onItemOpen]
 		);
 
+		// Handle row mouse enter
+		const handleRowMouseEnter = useCallback(
+			(item: ListItem) => {
+				if (onItemMouseEnter) {
+					onItemMouseEnter(item);
+				}
+			},
+			[onItemMouseEnter]
+		);
+
 		// Container style
 		const containerStyle: React.CSSProperties = {};
 		if (height !== 'auto') {
@@ -232,6 +249,7 @@ export const ListView = forwardRef<HTMLDivElement, ListViewProps>(
 								className={`${styles.row} ${isSelected ? styles.selected : ''}`}
 								onClick={(e) => handleRowClick(item.id, e)}
 								onDoubleClick={() => handleRowDoubleClick(item)}
+								onMouseEnter={() => handleRowMouseEnter(item)}
 							>
 								{columns.map((column, index) => (
 									<div

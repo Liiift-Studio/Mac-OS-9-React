@@ -63,6 +63,24 @@ Foundation and all core form/navigation components are now complete. Moving into
 
 ## Recent Changes
 
+### 2026-01-23 15:08 - Added onItemMouseEnter Callback for List Items
+- **Enhancement**: Added `onItemMouseEnter` callback prop to ListView and FolderList components for individual item hover detection
+- **ListView Changes**:
+  - Added `onItemMouseEnter?: (item: ListItem) => void` to ListViewProps interface
+  - Created `handleRowMouseEnter` callback handler
+  - Wired handler to each row's `onMouseEnter` event
+  - Updated JSDoc with usage example
+- **FolderList Changes**:
+  - Added `onItemMouseEnter?: (item: ListItem) => void` to FolderListProps interface
+  - Passes callback through to underlying ListView component
+  - Updated JSDoc with usage example showing both window and item mouse enter callbacks
+- **Rationale**: User initially requested `onMouseEnter` for FolderList, but clarified they needed callback for individual list item hover, not the window itself
+- **Impact**: Developers can now detect when mouse enters individual list items, receiving the full item data in the callback - useful for previews, tooltips, or hover-based actions
+- **Files Modified**:
+  - `src/components/ListView/ListView.tsx`
+  - `src/components/FolderList/FolderList.tsx`
+- **Date**: 2026-01-23 15:08
+
 ### 2026-01-23 14:45 - Added onMouseEnter Callback Prop to FolderList and Window Components
 - **Enhancement**: Added `onMouseEnter` callback prop to both FolderList and Window components
 - **FolderList Changes**:
