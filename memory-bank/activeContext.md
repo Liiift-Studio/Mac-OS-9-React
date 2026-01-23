@@ -63,6 +63,28 @@ Foundation and all core form/navigation components are now complete. Moving into
 
 ## Recent Changes
 
+### 2026-01-23 14:01 - Removed Unused Plain CSS Files
+- **Problem**: Plain `.css` files were leftover artifacts from the CSS Modules migration on 2026-01-16
+- **Solution**: Deleted 7 unused plain CSS files that are no longer referenced
+- **Files Removed**:
+  - `src/components/Button/Button.css`
+  - `src/components/Checkbox/Checkbox.css`
+  - `src/components/Icon/Icon.css`
+  - `src/components/IconButton/IconButton.css`
+  - `src/components/Radio/Radio.css`
+  - `src/components/TextField/TextField.css`
+  - `src/components/Window/Window.css`
+- **Rationale**: All components now use CSS Modules (`.module.css`) exclusively
+  - Components import: `import styles from './Component.module.css'`
+  - Rollup's PostCSS with `autoModules: true` handles CSS Modules properly
+  - Plain `.css` files contained old hardcoded class names (e.g., `.mac-os9-button`) that are no longer used
+- **Impact**: 
+  - Cleaner codebase with no confusing duplicate CSS files
+  - Reduces maintenance burden
+  - Makes CSS Module migration complete
+  - No functional changes - removed files were never bundled
+- **Date**: 2026-01-23 14:01
+
 ### 2026-01-23 13:45 - Migrated Build System from tsup to Rollup (CRITICAL FIX)
 - **Problem**: CSS Modules were not working in published NPM package - components rendered with empty `class=""` attributes
 - **Root Cause**: tsup's esbuild `local-css` loader doesn't reliably handle CSS Modules for library distribution
