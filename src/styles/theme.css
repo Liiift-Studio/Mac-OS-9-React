@@ -73,16 +73,17 @@
 	/* ========================================
 	 * Typography - Font Sizes
 	 * Mac OS 9 used smaller text (9-12pt typical)
+	 * Using rem units to enable responsive scaling
 	 * ======================================== */
-	--font-size-xs: 9px;   /* 9pt - smallest UI text */
-	--font-size-sm: 10px;  /* 10pt - small labels */
-	--font-size-md: 12px;  /* 12pt - standard UI text (Mac OS 9 default) */
-	--font-size-lg: 13px;  /* 13pt - slightly larger */
-	--font-size-xl: 14px;  /* 14pt - large UI text */
-	--font-size-2xl: 16px; /* 16pt - headings */
-	--font-size-3xl: 18px; /* 18pt - large headings */
-	--font-size-4xl: 20px; /* 20pt - major headings */
-	--font-size-5xl: 24px; /* 24pt - display text */
+	--font-size-xs: 0.5625rem;   /* 9pt - smallest UI text (9px at 16px base) */
+	--font-size-sm: 0.625rem;    /* 10pt - small labels (10px at 16px base) */
+	--font-size-md: 0.75rem;     /* 12pt - standard UI text (12px at 16px base - Mac OS 9 default) */
+	--font-size-lg: 0.8125rem;   /* 13pt - slightly larger (13px at 16px base) */
+	--font-size-xl: 0.875rem;    /* 14pt - large UI text (14px at 16px base) */
+	--font-size-2xl: 1rem;       /* 16pt - headings (16px at 16px base) */
+	--font-size-3xl: 1.125rem;   /* 18pt - large headings (18px at 16px base) */
+	--font-size-4xl: 1.25rem;    /* 20pt - major headings (20px at 16px base) */
+	--font-size-5xl: 1.5rem;     /* 24pt - display text (24px at 16px base) */
 
 	/* ========================================
 	 * Typography - Font Weights

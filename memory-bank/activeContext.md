@@ -63,6 +63,35 @@ Foundation and all core form/navigation components are now complete. Moving into
 
 ## Recent Changes
 
+### 2026-01-23 15:54 - Converted Font Size Variables to rem Units for Responsive Typography
+- **Fix**: Converted all font size custom properties from fixed pixel values to rem units
+- **Problem**: Window titles and ListView text were not scaling responsively despite responsive typography media queries being in place
+- **Root Cause**: Font size CSS variables were defined in pixels (e.g., `--font-size-md: 12px`) which don't scale with viewport
+- **Solution**: Converted all 9 font size variables to rem units using 16px as base
+  - `--font-size-xs: 0.5625rem` (9px base → scales to 9-11.25px)
+  - `--font-size-sm: 0.625rem` (10px base → scales to 10-12.5px)
+  - `--font-size-md: 0.75rem` (12px base → scales to 12-15px)
+  - `--font-size-lg: 0.8125rem` (13px base → scales to 13-16.25px)
+  - `--font-size-xl: 0.875rem` (14px base → scales to 14-17.5px)
+  - `--font-size-2xl: 1rem` (16px base → scales to 16-20px)
+  - `--font-size-3xl: 1.125rem` (18px base → scales to 18-22.5px)
+  - `--font-size-4xl: 1.25rem` (20px base → scales to 20-25px)
+  - `--font-size-5xl: 1.5rem` (24px base → scales to 24-30px)
+- **Impact**: 
+  - All components now scale typography responsively across breakpoints
+  - Window titles scale from 12px (mobile) to 15px (XL screens)
+  - ListView text scales from 12px (mobile) to 15px (XL screens)
+  - Maintains Mac OS 9 aesthetic while improving readability on larger screens
+  - No component code changes needed - all components automatically benefit
+- **Responsive Scaling Behavior**:
+  - Mobile (16px base): 100% of original sizes
+  - Tablet (17px base, 768px+): 106.25% scaling
+  - Desktop (18px base, 1024px+): 112.5% scaling
+  - XL (20px base, 1440px+): 125% scaling
+- **Files Modified**:
+  - `src/styles/theme.css` - Converted font size variables to rem units
+- **Date**: 2026-01-23 15:54
+
 ### 2026-01-23 15:39 - Added Responsive Typography Scaling
 - **Enhancement**: Added responsive font size scaling based on screen size
 - **Implementation**: Media queries adjust the `html` base font-size at different breakpoints
