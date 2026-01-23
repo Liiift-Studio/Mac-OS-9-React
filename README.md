@@ -21,7 +21,11 @@ npm install @liiift-studio/mac-os9-ui
 
 ## Quick Start
 
+Import the styles once in your application's entry point, then use the components:
+
 ```tsx
+// In your app's main file (e.g., main.tsx, _app.tsx, index.tsx)
+import '@liiift-studio/mac-os9-ui/styles';
 import { Button, Window } from '@liiift-studio/mac-os9-ui';
 
 function App() {
@@ -173,16 +177,16 @@ function MyComponent() {
 
 ## Styling
 
-**Styles are automatically included** when you import any component from the library. No separate CSS import is required!
+Import the styles **once** in your application's entry point:
 
 ```tsx
-import { Button, Window } from '@liiift-studio/mac-os9-ui';
-// Styles are automatically included ✓
+// In your app's main file (e.g., main.tsx, _app.tsx, index.tsx)
+import '@liiift-studio/mac-os9-ui/styles';
 ```
 
-All components use CSS Modules internally, so styles are scoped and won't conflict with your application's CSS. The theme variables and base styles are bundled with the component imports for maximum convenience.
+This needs to be done only once at the root of your application. All components will then have the correct Mac OS 9 styles applied.
 
-> **Note:** For backwards compatibility, you can still explicitly import styles via `import '@liiift-studio/mac-os9-ui/styles'` if needed, but it's no longer necessary.
+All components use CSS Modules internally, so styles are scoped and won't conflict with your application's CSS. The theme variables and global styles are extracted to a separate CSS file for optimal caching and performance.
 
 ## TypeScript Support
 

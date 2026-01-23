@@ -63,6 +63,34 @@ Foundation and all core form/navigation components are now complete. Moving into
 
 ## Recent Changes
 
+### 2026-01-23 15:37 - Documented Style Import Pattern in README
+- **Documentation Update**: Clarified that styles must be imported once in app entry point
+- **Problem**: README claimed "Styles are automatically included" but this isn't accurate with current Rollup build
+- **Root Cause**: Rollup extracts CSS to separate `dist/index.css` file using `rollup-plugin-postcss` with `extract: 'index.css'`
+  - The `import './styles/theme.css'` in `src/index.ts` gets removed from JavaScript bundle during extraction
+  - CSS must be explicitly imported by users: `import '@liiift-studio/mac-os9-ui/styles'`
+- **Solution**: Updated README.md to document the required pattern
+  - Updated "Quick Start" section with proper import example
+  - Updated "Styling" section with clear instructions
+  - Removed misleading language about automatic inclusion
+- **src/index.ts Update**: Updated comment to clarify the CSS import is for internal use only
+  - Added note that users must import styles separately
+  - CSS import kept for Storybook and development builds
+- **Decision Rationale**: 
+  - Option 1 (CSS-in-JS): Against project preference for CSS Modules
+  - Option 2 (Auto-include wrapper): More complex build configuration
+  - Option 3 (Document pattern): Simplest, most reliable, standard pattern for UI libraries
+  - Chosen Option 3 as recommended approach
+- **Impact**:
+  - README now accurately reflects actual usage
+  - Users will no longer be confused about missing styles
+  - Follows common pattern used by Material-UI, Ant Design, etc.
+  - Better performance: CSS cached separately from JavaScript
+- **Files Modified**:
+  - `README.md` - Updated Quick Start and Styling sections
+  - `src/index.ts` - Updated comment to clarify CSS import purpose
+- **Date**: 2026-01-23 15:37
+
 ### 2026-01-23 15:08 - Added onItemMouseEnter Callback for List Items
 - **Enhancement**: Added `onItemMouseEnter` callback prop to ListView and FolderList components for individual item hover detection
 - **ListView Changes**:
