@@ -11,6 +11,10 @@ export default defineConfig({
 	minify: false,
 	external: ['react', 'react-dom'],
 	outDir: 'dist',
+	// Let esbuild handle CSS bundling without modules
+	loader: {
+		'.css': 'local-css',
+	},
 	esbuildOptions(options) {
 		options.banner = {
 			js: '"use client";',

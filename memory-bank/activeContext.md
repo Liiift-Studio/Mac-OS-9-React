@@ -63,6 +63,24 @@ Foundation and all core form/navigation components are now complete. Moving into
 
 ## Recent Changes
 
+### 2026-01-16 16:50 - CSS Modules Build Configuration Fix (CRITICAL)
+- **Problem**: After downloading the npm package, CSS classes were not appearing in HTML (empty `class=""` attributes)
+- **Root Cause**: tsup wasn't properly processing CSS Modules during the build - the CSS Module imports resulted in empty objects in the bundled JavaScript
+- **Solution**: Configured tsup to use esbuild's `local-css` loader for CSS Modules
+  - Updated `tsup.config.ts` with `loader: { '.css': 'local-css' }`
+  - This enables esbuild's built-in CSS Modules support
+- **Result**: CSS Modules now properly generate scoped class names and mappings
+  - JavaScript output includes proper class mappings: `{ button: "Button_button", "button--sm": "Button_button--sm", ... }`
+  - CSS output includes properly scoped classes: `.Button_button { ... }`
+  - Components now render with correct class names in consuming applications
+- **Package.json Update**: Changed `sideEffects` from `false` to `["*.css", "**/*.css"]` to prevent CSS tree-shaking
+- **Verification**: Tested build output - all CSS Module class names properly generated and mapped
+- **Impact**: 
+  - Package is now usable when installed via npm
+  - CSS classes properly applied to components in consumer applications
+  - No code changes needed in components themselves - purely build configuration
+- **Cleanup**: Removed experimental PostCSS dependencies that didn't work
+
 ### 2026-01-16 14:49 - CSS Modules Fix Across All Components
 - Fixed critical issue where 7 components were importing plain `.css` files instead of `.module.css`
 - Components affected: Button, Checkbox, Icon, IconButton, Radio, TextField, Window
