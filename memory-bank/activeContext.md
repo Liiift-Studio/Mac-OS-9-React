@@ -63,6 +63,26 @@ Foundation and all core form/navigation components are now complete. Moving into
 
 ## Recent Changes
 
+### 2026-01-23 15:39 - Added Responsive Typography Scaling
+- **Enhancement**: Added responsive font size scaling based on screen size
+- **Implementation**: Media queries adjust the `html` base font-size at different breakpoints
+  - Mobile/default: 16px base
+  - Tablet (768px+): 17px (+6.25% increase)
+  - Desktop (1024px+): 18px (+12.5% increase)
+  - Large Desktop/XL (1440px+): 20px (+25% increase)
+- **Impact**: 
+  - All components using pixel-based font sizes remain consistent
+  - Components can optionally use `rem` units to scale with viewport
+  - Improves readability on larger screens
+  - Maintains Mac OS 9 aesthetic while adapting to modern screen sizes
+- **Rationale**: 
+  - User requested responsive typography for mobile/tablet/desktop/xl sizes
+  - Scaling the root font-size allows flexible typography without changing component code
+  - Preserves existing pixel-based sizing while enabling rem-based responsive designs
+- **Files Modified**:
+  - `src/styles/theme.css` - Added responsive typography media queries
+- **Date**: 2026-01-23 15:39
+
 ### 2026-01-23 15:37 - Documented Style Import Pattern in README
 - **Documentation Update**: Clarified that styles must be imported once in app entry point
 - **Problem**: README claimed "Styles are automatically included" but this isn't accurate with current Rollup build

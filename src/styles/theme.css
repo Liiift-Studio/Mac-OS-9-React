@@ -219,9 +219,36 @@
 
 html {
 	/* Set base font size for rem calculations */
+	/* Mobile/default: 16px base */
 	font-size: 16px;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+ * Responsive Typography
+ * Scale base font size at different breakpoints
+ * ======================================== */
+
+/* Tablet: 768px+ */
+@media (min-width: 768px) {
+	html {
+		font-size: 17px;
+	}
+}
+
+/* Desktop: 1024px+ */
+@media (min-width: 1024px) {
+	html {
+		font-size: 18px;
+	}
+}
+
+/* Large Desktop/XL: 1440px+ */
+@media (min-width: 1440px) {
+	html {
+		font-size: 20px;
+	}
 }
 
 body {
