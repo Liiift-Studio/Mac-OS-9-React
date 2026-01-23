@@ -1,1898 +1,3079 @@
-/* src/styles/theme.css */
+/**
+ * Mac OS 9 Theme
+ * CSS Custom Properties for design tokens
+ * Extracted from Figma file: vy2T5MCXFz7QWf4Ba86eqN
+ * Reference: docs/figma-map.md
+ */
+
 :root {
-  --color-gray-100: #ffffff;
-  --color-gray-200: #eeeeee;
-  --color-gray-300: #dddddd;
-  --color-gray-400: #cccccc;
-  --color-gray-500: #999999;
-  --color-gray-600: #666666;
-  --color-gray-700: #4d4d4d;
-  --color-gray-800: #333333;
-  --color-gray-900: #262626;
-  --color-lavender: #ccccff;
-  --color-azul: #0066cc;
-  --color-link-red: #cc0000;
-  --color-background: var(--color-gray-200);
-  --color-foreground: var(--color-gray-900);
-  --color-border: var(--color-gray-900);
-  --color-text: var(--color-gray-900);
-  --color-text-inverse: var(--color-gray-100);
-  --color-surface: var(--color-gray-200);
-  --color-surface-inset: var(--color-gray-100);
-  --color-black: var(--color-gray-900);
-  --color-white: var(--color-gray-100);
-  --color-focus: #000080;
-  --color-error: #cc0000;
-  --color-success: #008000;
-  --color-warning: #ff8c00;
-  --font-system:
-    Charcoal,
-    "Charcoal CY",
-    Chicago,
-    "Chicago Classic",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Helvetica,
-    Arial,
-    sans-serif;
-  --font-body:
-    Geneva,
-    "Geneva CY",
-    "Lucida Grande",
-    "Lucida Sans Unicode",
-    sans-serif;
-  --font-display:
-    "Apple Garamond Light",
-    "Apple Garamond",
-    Garamond,
-    Georgia,
-    serif;
-  --font-chicago:
-    Chicago,
-    "Chicago Classic",
-    "Charcoal CY",
-    Charcoal,
-    monospace;
-  --font-mono:
-    Monaco,
-    "Monaco CY",
-    "SF Mono",
-    "Courier New",
-    Courier,
-    monospace;
-  --font-size-xs: 9px;
-  --font-size-sm: 10px;
-  --font-size-md: 12px;
-  --font-size-lg: 13px;
-  --font-size-xl: 14px;
-  --font-size-2xl: 16px;
-  --font-size-3xl: 18px;
-  --font-size-4xl: 20px;
-  --font-size-5xl: 24px;
-  --font-weight-normal: 700;
-  --font-weight-medium: 700;
-  --font-weight-semibold: 700;
-  --font-weight-bold: 700;
-  --font-weight-light: 400;
-  --line-height-tight: 1.2;
-  --line-height-snug: 1.3;
-  --line-height-normal: 1.4;
-  --line-height-relaxed: 1.5;
-  --line-height-loose: 1.6;
-  --letter-spacing-tighter: -0.02em;
-  --letter-spacing-tight: -0.01em;
-  --letter-spacing-normal: 0;
-  --letter-spacing-wide: 0.01em;
-  --letter-spacing-wider: 0.02em;
-  --spacing-0: 0;
-  --spacing-px: 1px;
-  --spacing-0_5: 2px;
-  --spacing-1: 4px;
-  --spacing-1_5: 6px;
-  --spacing-2: 8px;
-  --spacing-2_5: 10px;
-  --spacing-3: 12px;
-  --spacing-4: 16px;
-  --spacing-5: 20px;
-  --spacing-6: 24px;
-  --spacing-8: 32px;
-  --spacing-10: 40px;
-  --spacing-12: 48px;
-  --spacing-16: 64px;
-  --spacing-xs: 2px;
-  --spacing-sm: 4px;
-  --spacing-md: 8px;
-  --spacing-lg: 12px;
-  --spacing-xl: 16px;
-  --spacing-2xl: 24px;
-  --spacing-3xl: 32px;
-  --shadow-bevel:
-    inset 2px 2px 0 rgba(255, 255, 255, 0.6),
-    inset -2px -2px 0 rgba(38, 38, 38, 0.4),
-    2px 2px 0 rgba(38, 38, 38, 1);
-  --shadow-inset:
-    inset -2px -2px 0 rgba(255, 255, 255, 0.6),
-    inset 2px 2px 0 rgba(38, 38, 38, 0.4),
-    inset 0px 0px 0px rgba(38, 38, 38, 1);
-  --shadow-drop: 2px 2px 0 rgba(38, 38, 38, 1);
-  --shadow-highlight: inset 2px 2px 0 rgba(255, 255, 255, 0.6);
-  --shadow-dark: inset -2px -2px 0 rgba(38, 38, 38, 0.4);
-  --shadow-none: none;
-  --border-width-none: 0;
-  --border-width-thin: 1px;
-  --border-width-medium: 2px;
-  --border-width-thick: 3px;
-  --border-radius-none: 0;
-  --border-radius-sm: 0;
-  --border-radius-md: 0;
-  --border-radius-lg: 0;
-  --border-radius-full: 0;
-  --z-index-base: 0;
-  --z-index-dropdown: 1000;
-  --z-index-sticky: 1100;
-  --z-index-modal: 1200;
-  --z-index-popover: 1300;
-  --z-index-tooltip: 1400;
-  --transition-instant: 0ms;
-  --transition-fast: 100ms;
-  --transition-normal: 200ms;
-  --transition-slow: 300ms;
-  --transition-timing-linear: linear;
-  --transition-timing-ease-in: cubic-bezier(0.4, 0, 1, 1);
-  --transition-timing-ease-out: cubic-bezier(0, 0, 0.2, 1);
-  --transition-timing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+	/* ========================================
+	 * Colors - Grayscale Palette
+	 * ======================================== */
+	--color-gray-100: #ffffff;
+	--color-gray-200: #eeeeee;
+	--color-gray-300: #dddddd;
+	--color-gray-400: #cccccc;
+	--color-gray-500: #999999;
+	--color-gray-600: #666666;
+	--color-gray-700: #4d4d4d;
+	--color-gray-800: #333333;
+	--color-gray-900: #262626;
+
+	/* ========================================
+	 * Colors - Accent Colors
+	 * ======================================== */
+	--color-lavender: #ccccff;
+	--color-azul: #0066cc;
+	--color-link-red: #cc0000;
+
+	/* ========================================
+	 * Colors - Semantic Tokens
+	 * ======================================== */
+	--color-background: var(--color-gray-200);
+	--color-foreground: var(--color-gray-900);
+	--color-border: var(--color-gray-900);
+	--color-text: var(--color-gray-900);
+	--color-text-inverse: var(--color-gray-100);
+	--color-surface: var(--color-gray-200);
+	--color-surface-inset: var(--color-gray-100);
+
+	/* Legacy names for compatibility */
+	--color-black: var(--color-gray-900);
+	--color-white: var(--color-gray-100);
+
+	/* ========================================
+	 * Colors - Status Colors
+	 * ======================================== */
+	--color-focus: #000080;
+	--color-error: #cc0000;
+	--color-success: #008000;
+	--color-warning: #ff8c00;
+
+	/* ========================================
+	 * Typography - Font Families
+	 * Authentic Mac OS 9 system fonts
+	 * ======================================== */
+	
+	/* Charcoal - Primary system UI font (menus, buttons, dialogs) */
+	--font-system: Charcoal, 'Charcoal CY', Chicago, 'Chicago Classic', -apple-system,
+		BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+	
+	/* Geneva - Body text and secondary UI elements */
+	--font-body: Geneva, 'Geneva CY', 'Lucida Grande', 'Lucida Sans Unicode', sans-serif;
+	
+	/* Apple Garamond Light - Headlines and editorial content */
+	--font-display: 'Apple Garamond Light', 'Apple Garamond', Garamond, Georgia, serif;
+	
+	/* Chicago - Classic Mac OS system font (menu bar) */
+	--font-chicago: Chicago, 'Chicago Classic', 'Charcoal CY', Charcoal, monospace;
+	
+	/* Monaco - Mac OS 9 monospace font */
+	--font-mono: Monaco, 'Monaco CY', 'SF Mono', 'Courier New', Courier, monospace;
+
+	/* ========================================
+	 * Typography - Font Sizes
+	 * Mac OS 9 used smaller text (9-12pt typical)
+	 * ======================================== */
+	--font-size-xs: 9px;   /* 9pt - smallest UI text */
+	--font-size-sm: 10px;  /* 10pt - small labels */
+	--font-size-md: 12px;  /* 12pt - standard UI text (Mac OS 9 default) */
+	--font-size-lg: 13px;  /* 13pt - slightly larger */
+	--font-size-xl: 14px;  /* 14pt - large UI text */
+	--font-size-2xl: 16px; /* 16pt - headings */
+	--font-size-3xl: 18px; /* 18pt - large headings */
+	--font-size-4xl: 20px; /* 20pt - major headings */
+	--font-size-5xl: 24px; /* 24pt - display text */
+
+	/* ========================================
+	 * Typography - Font Weights
+	 * Charcoal Bold is the Mac OS 9 default
+	 * ======================================== */
+	--font-weight-normal: 700;   /* Charcoal Bold - Mac OS 9 default */
+	--font-weight-medium: 700;   /* Medium (same as bold) */
+	--font-weight-semibold: 700; /* Semibold (same as bold) */
+	--font-weight-bold: 700;     /* Bold weight */
+	--font-weight-light: 400;    /* Light (regular Charcoal) */
+
+	/* ========================================
+	 * Typography - Line Heights
+	 * Mac OS 9 used tighter line heights
+	 * ======================================== */
+	--line-height-tight: 1.2;   /* Tight leading (Mac OS 9 style) */
+	--line-height-snug: 1.3;    /* Snug */
+	--line-height-normal: 1.4;  /* Normal (Mac OS 9 default) */
+	--line-height-relaxed: 1.5; /* Relaxed */
+	--line-height-loose: 1.6;   /* Loose */
+
+	/* ========================================
+	 * Typography - Letter Spacing
+	 * ======================================== */
+	--letter-spacing-tighter: -0.02em; /* Slightly tighter */
+	--letter-spacing-tight: -0.01em;   /* Tight */
+	--letter-spacing-normal: 0;        /* Normal - Mac OS 9 default */
+	--letter-spacing-wide: 0.01em;     /* Wide */
+	--letter-spacing-wider: 0.02em;    /* Wider */
+
+	/* ========================================
+	 * Spacing - Scale (2px base unit)
+	 * ======================================== */
+	--spacing-0: 0;
+	--spacing-px: 1px;
+	--spacing-0_5: 2px;
+	--spacing-1: 4px;
+	--spacing-1_5: 6px;
+	--spacing-2: 8px;
+	--spacing-2_5: 10px;
+	--spacing-3: 12px;
+	--spacing-4: 16px;
+	--spacing-5: 20px;
+	--spacing-6: 24px;
+	--spacing-8: 32px;
+	--spacing-10: 40px;
+	--spacing-12: 48px;
+	--spacing-16: 64px;
+
+	/* Legacy spacing names */
+	--spacing-xs: 2px;
+	--spacing-sm: 4px;
+	--spacing-md: 8px;
+	--spacing-lg: 12px;
+	--spacing-xl: 16px;
+	--spacing-2xl: 24px;
+	--spacing-3xl: 32px;
+
+	/* ========================================
+	 * Shadows - Mac OS 9 Bevel Effects
+	 * Exact values from Figma (67:95038)
+	 * ======================================== */
+
+	/* Standard raised bevel (default button state)
+	 * 3-layer composition:
+	 * 1. Top-left highlight (light inner shadow)
+	 * 2. Bottom-right shadow (dark inner shadow)
+	 * 3. Hard drop shadow (creates depth)
+	 */
+	--shadow-bevel: inset 2px 2px 0 rgba(255, 255, 255, 0.6),
+		inset -2px -2px 0 rgba(38, 38, 38, 0.4), 2px 2px 0 rgba(38, 38, 38, 1);
+
+	/* Inverted bevel for pressed/inset states */
+	--shadow-inset: inset -2px -2px 0 rgba(255, 255, 255, 0.6),
+		inset 2px 2px 0 rgba(38, 38, 38, 0.4), inset 0px 0px 0px rgba(38, 38, 38, 1);
+
+	/* Individual shadow layers for custom composition */
+	--shadow-drop: 2px 2px 0 rgba(38, 38, 38, 1);
+	--shadow-highlight: inset 2px 2px 0 rgba(255, 255, 255, 0.6);
+	--shadow-dark: inset -2px -2px 0 rgba(38, 38, 38, 0.4);
+
+	/* No shadow */
+	--shadow-none: none;
+
+	/* ========================================
+	 * Borders
+	 * ======================================== */
+	--border-width-none: 0;
+	--border-width-thin: 1px;
+	--border-width-medium: 2px;
+	--border-width-thick: 3px;
+
+	/* Border radius (Mac OS 9 used square corners) */
+	--border-radius-none: 0;
+	--border-radius-sm: 0;
+	--border-radius-md: 0;
+	--border-radius-lg: 0;
+	--border-radius-full: 0;
+
+	/* ========================================
+	 * Z-Index Scale
+	 * ======================================== */
+	--z-index-base: 0;
+	--z-index-dropdown: 1000;
+	--z-index-sticky: 1100;
+	--z-index-modal: 1200;
+	--z-index-popover: 1300;
+	--z-index-tooltip: 1400;
+
+	/* ========================================
+	 * Transitions
+	 * Mac OS 9 had minimal animations
+	 * ======================================== */
+	--transition-instant: 0ms;
+	--transition-fast: 100ms;
+	--transition-normal: 200ms;
+	--transition-slow: 300ms;
+
+	--transition-timing-linear: linear;
+	--transition-timing-ease-in: cubic-bezier(0.4, 0, 1, 1);
+	--transition-timing-ease-out: cubic-bezier(0, 0, 0.2, 1);
+	--transition-timing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* ========================================
+ * Base Styles
+ * ======================================== */
+
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
+
 html {
-  font-size: 16px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	/* Set base font size for rem calculations */
+	font-size: 16px;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
+
 body {
-  margin: 0;
-  padding: 0;
-  font-family: var(--font-system);
-  font-size: var(--font-size-md);
-  line-height: var(--line-height-normal);
-  color: var(--color-text);
-  background-color: var(--color-background);
-}
-.theme_bevel {
-  box-shadow: var(--shadow-bevel);
-}
-.theme_bevel-inset {
-  box-shadow: var(--shadow-inset);
-}
-.theme_border {
-  border: var(--border-width-thin) solid var(--color-border);
-}
-.theme_border-none {
-  border: none;
-}
-.theme_surface {
-  background-color: var(--color-surface);
-}
-.theme_surface-inset {
-  background-color: var(--color-surface-inset);
-}
-.theme_text-inverse {
-  color: var(--color-text-inverse);
-}
-.theme_focus-visible:focus-visible {
-  outline: 1px dotted var(--color-focus);
-  outline-offset: 2px;
-}
-.theme_disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
+	margin: 0;
+	padding: 0;
+	font-family: var(--font-system);
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-normal);
+	color: var(--color-text);
+	background-color: var(--color-background);
 }
 
-/* src/components/Button/Button.module.css */
-.Button_button {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-1);
-  font-family: var(--font-system);
-  font-weight: var(--font-weight-normal);
-  text-align: center;
-  text-decoration: none;
-  white-space: nowrap;
-  user-select: none;
-  cursor: pointer;
-  transition: none;
-  background-color: var(--color-surface);
-  border: var(--border-width-thin) solid var(--color-border);
-  border-radius: var(--border-radius-none);
-  box-shadow: var(--shadow-bevel);
-  color: var(--color-text);
-  clip-path: polygon(2px 0, calc(100% - 2px) 0, 100% 2px, 100% calc(100% - 2px), calc(100% - 2px) 100%, 2px 100%, 0 calc(100% - 2px), 0 2px);
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+/* ========================================
+ * Utility Classes
+ * ======================================== */
+
+/* Bevel effects */
+.bevel {
+	box-shadow: var(--shadow-bevel);
 }
-.Button_button[href] {
-  text-decoration: none;
+
+.bevel-inset {
+	box-shadow: var(--shadow-inset);
 }
-.Button_button[href]:visited {
-  color: var(--color-text);
+
+/* Border utilities */
+.border {
+	border: var(--border-width-thin) solid var(--color-border);
 }
-.Button_button--sm {
-  min-height: 20px;
-  padding: var(--spacing-0_5) var(--spacing-2);
-  font-size: var(--font-size-xs);
-  line-height: var(--line-height-tight);
+
+.border-none {
+	border: none;
 }
-.Button_button--md {
-  min-height: 24px;
-  padding: var(--spacing-1) var(--spacing-3);
-  font-size: var(--font-size-md);
-  line-height: var(--line-height-snug);
+
+/* Surface styles */
+.surface {
+	background-color: var(--color-surface);
 }
-.Button_button--lg {
-  min-height: 32px;
-  padding: var(--spacing-2) var(--spacing-4);
-  font-size: var(--font-size-lg);
-  line-height: var(--line-height-normal);
+
+.surface-inset {
+	background-color: var(--color-surface-inset);
 }
-.Button_button--default {
+
+/* Text utilities */
+.text-inverse {
+	color: var(--color-text-inverse);
 }
-.Button_button--primary {
-  background-color: var(--color-gray-300);
-  font-weight: var(--font-weight-bold);
+
+/* Focus styles for keyboard navigation */
+.focus-visible:focus-visible {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: 2px;
 }
-.Button_button--danger {
-  color: var(--color-error);
-  border-color: var(--color-error);
+
+/* Disabled state */
+.disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	pointer-events: none;
 }
-.Button_button:hover:not(:disabled) {
-  background-color: var(--color-gray-100);
+/* Button Component Styles - Mac OS 9 */
+
+.Button-module_button {
+	/* Base styles */
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--spacing-1);
+	font-family: var(--font-system);
+	font-weight: var(--font-weight-normal);
+	text-align: center;
+	text-decoration: none;
+	white-space: nowrap;
+	user-select: none;
+	cursor: pointer;
+	transition: none; /* Mac OS 9 had no transitions */
+
+	/* Mac OS 9 button appearance */
+	background-color: var(--color-surface);
+	border: var(--border-width-thin) solid var(--color-border);
+	border-radius: var(--border-radius-none);
+	box-shadow: var(--shadow-bevel);
+	color: var(--color-text);
+
+	/* Pixelated corners - authentic Mac OS 9 chamfered effect */
+	clip-path: polygon(
+		/* Top edge with corners */
+		2px 0,
+		calc(100% - 2px) 0,
+		/* Top-right corner */
+		100% 2px,
+		/* Right edge */
+		100% calc(100% - 2px),
+		/* Bottom-right corner */
+		calc(100% - 2px) 100%,
+		/* Bottom edge */
+		2px 100%,
+		/* Bottom-left corner */
+		0 calc(100% - 2px),
+		/* Left edge */
+		0 2px
+	);
+
+	/* Remove default button styles */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
 }
-.Button_button:active:not(:disabled) {
-  box-shadow: var(--shadow-inset);
-  background-color: var(--color-gray-300);
-  transform: translate(1px, 1px);
+
+/* For links styled as buttons */
+.Button-module_button[href] {
+	text-decoration: none;
 }
-.Button_button:focus-visible {
-  outline: 1px dotted var(--color-focus);
-  outline-offset: 2px;
+
+.Button-module_button[href]:visited {
+	color: var(--color-text);
 }
-.Button_button--disabled,
-.Button_button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
+
+/* ========================================
+ * Size Variants
+ * ======================================== */
+
+.Button-module_button--sm {
+	min-height: 20px;
+	padding: var(--spacing-0_5) var(--spacing-2);
+	font-size: var(--font-size-xs);
+	line-height: var(--line-height-tight);
 }
-.Button_button--full-width {
-  width: 100%;
+
+.Button-module_button--md {
+	min-height: 24px;
+	padding: var(--spacing-1) var(--spacing-3);
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-snug);
 }
-.Button_button--loading {
-  position: relative;
-  pointer-events: none;
+
+.Button-module_button--lg {
+	min-height: 32px;
+	padding: var(--spacing-2) var(--spacing-4);
+	font-size: var(--font-size-lg);
+	line-height: var(--line-height-normal);
 }
-.Button_button--loading:not(.Button_button--cursor-loading) {
-  cursor: wait;
+
+/* ========================================
+ * Variant Styles
+ * ======================================== */
+
+.Button-module_button--default {
+	/* Uses base styles */
 }
-.Button_button--cursor-loading {
-  cursor: wait;
+
+.Button-module_button--primary {
+	/* Slightly darker background for emphasis */
+	background-color: var(--color-gray-300);
+	font-weight: var(--font-weight-bold);
 }
-.Button_button__loading-spinner {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--font-size-md);
+
+.Button-module_button--danger {
+	/* Error state styling */
+	color: var(--color-error);
+	border-color: var(--color-error);
 }
-.Button_button__text {
-  display: inline-flex;
-  align-items: center;
+
+/* ========================================
+ * Interactive States
+ * ======================================== */
+
+/* Hover state - subtle highlight */
+.Button-module_button:hover:not(:disabled) {
+	background-color: var(--color-gray-100);
 }
-.Button_button__icon-left,
-.Button_button__icon-right {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+
+/* Active/Pressed state - inverted bevel */
+.Button-module_button:active:not(:disabled) {
+	box-shadow: var(--shadow-inset);
+	background-color: var(--color-gray-300);
+	/* Subtle visual feedback - button appears pressed */
+	transform: translate(1px, 1px);
 }
-.Button_button__icon-only {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+
+/* Focus state - keyboard navigation */
+.Button-module_button:focus-visible {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: 2px;
 }
-.Button_button--icon-only {
-  padding: var(--spacing-1);
-  aspect-ratio: 1;
+
+/* ========================================
+ * Disabled State
+ * ======================================== */
+
+.Button-module_button--disabled,
+.Button-module_button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	pointer-events: none;
 }
-.Button_button--icon-only.Button_button--sm {
-  padding: var(--spacing-0_5);
+
+/* ========================================
+ * Layout Modifiers
+ * ======================================== */
+
+.Button-module_button--full-width {
+	width: 100%;
 }
-.Button_button--icon-only.Button_button--lg {
-  padding: var(--spacing-2);
+
+/* ========================================
+ * Loading States
+ * ======================================== */
+
+.Button-module_button--loading {
+	position: relative;
+	pointer-events: none;
 }
+
+.Button-module_button--loading:not(.Button-module_button--cursor-loading) {
+	cursor: wait;
+}
+
+/* Mac OS 9 watch cursor during loading */
+.Button-module_button--cursor-loading {
+	cursor: wait;
+}
+
+.Button-module_button__loading-spinner {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: var(--font-size-md);
+}
+
+.Button-module_button__text {
+	display: inline-flex;
+	align-items: center;
+}
+
+/* ========================================
+ * Icon Support
+ * ======================================== */
+
+.Button-module_button__icon-left,
+.Button-module_button__icon-right {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.Button-module_button__icon-only {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* Icon-only buttons should be square */
+.Button-module_button--icon-only {
+	padding: var(--spacing-1);
+	aspect-ratio: 1;
+}
+
+.Button-module_button--icon-only.Button-module_button--sm {
+	padding: var(--spacing-0_5);
+}
+
+.Button-module_button--icon-only.Button-module_button--lg {
+	padding: var(--spacing-2);
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* High contrast mode support */
 @media (prefers-contrast: high) {
-  .Button_button {
-    border-width: var(--border-width-medium);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .Button_button {
-    transition: none;
-  }
+	.Button-module_button {
+		border-width: var(--border-width-medium);
+	}
 }
 
-/* src/components/Icon/Icon.module.css */
-.Icon_icon {
-  display: inline-block;
-  flex-shrink: 0;
-  line-height: 1;
-  color: currentColor;
-  vertical-align: middle;
-}
-.Icon_icon--xs {
-  width: 12px;
-  height: 12px;
-}
-.Icon_icon--sm {
-  width: 14px;
-  height: 14px;
-}
-.Icon_icon--md {
-  width: 16px;
-  height: 16px;
-}
-.Icon_icon--lg {
-  width: 20px;
-  height: 20px;
-}
-.Icon_icon--xl {
-  width: 24px;
-  height: 24px;
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	.Button-module_button {
+		transition: none;
+	}
 }
 
-/* src/components/IconButton/IconButton.module.css */
-.IconButton_iconButton {
-  font-family: var(--font-system);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text);
-  background: var(--color-gray-400);
-  border: var(--border-width-thin) solid var(--color-border);
-  border-radius: var(--border-radius-none);
-  box-shadow: var(--shadow-raised);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-2);
-  cursor: pointer;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  transition: none;
-  white-space: nowrap;
-  user-select: none;
-  clip-path: polygon(4px 0, 3px 1px, 2px 2px, 1px 3px, 0 4px, 0 calc(100% - 4px), 1px calc(100% - 3px), 2px calc(100% - 2px), 3px calc(100% - 1px), 4px 100%, calc(100% - 4px) 100%, calc(100% - 3px) calc(100% - 1px), calc(100% - 2px) calc(100% - 2px), calc(100% - 1px) calc(100% - 3px), 100% calc(100% - 4px), 100% 4px, calc(100% - 1px) 3px, calc(100% - 2px) 2px, calc(100% - 3px) 1px, calc(100% - 4px) 0);
+/* Icon Component Styles - Mac OS 9 */
+
+.Icon-module_icon {
+	/* Base styles */
+	display: inline-block;
+	flex-shrink: 0;
+	line-height: 1;
+	color: currentColor;
+	vertical-align: middle;
 }
-.IconButton_icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+
+/* ========================================
+ * Size Variants
+ * ======================================== */
+
+.Icon-module_icon--xs {
+	width: 12px;
+	height: 12px;
 }
-.IconButton_label {
-  display: inline-flex;
-  align-items: center;
+
+.Icon-module_icon--sm {
+	width: 14px;
+	height: 14px;
 }
-.IconButton_iconButton--label-top,
-.IconButton_iconButton--label-bottom {
-  flex-direction: column;
+
+.Icon-module_icon--md {
+	width: 16px;
+	height: 16px;
 }
-.IconButton_iconButton--label-left {
-  flex-direction: row-reverse;
+
+.Icon-module_icon--lg {
+	width: 20px;
+	height: 20px;
 }
-.IconButton_iconButton--label-right {
-  flex-direction: row;
+
+.Icon-module_icon--xl {
+	width: 24px;
+	height: 24px;
 }
-.IconButton_iconButton--sm {
-  padding: var(--spacing-1);
-  font-size: var(--font-size-xs);
-  line-height: var(--line-height-tight);
-  min-width: 24px;
-  min-height: 24px;
+/* IconButton Component Styles - Mac OS 9 */
+
+/* Import pixelated corners utility */
+@import '../../styles/pixelated-corners.css';
+
+/* ========================================
+ * Base IconButton Styles
+ * ======================================== */
+
+.IconButton-module_iconButton {
+	/* Base styling */
+	font-family: var(--font-system);
+	font-weight: var(--font-weight-bold);
+	color: var(--color-text);
+	
+	/* Box styling */
+	background: var(--color-gray-400);
+	border: var(--border-width-thin) solid var(--color-border);
+	border-radius: var(--border-radius-none);
+	box-shadow: var(--shadow-raised);
+	
+	/* Layout */
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--spacing-2);
+	
+	/* Cursor */
+	cursor: pointer;
+	
+	/* Remove button defaults */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	
+	/* No transitions */
+	transition: none;
+	
+	/* Text */
+	white-space: nowrap;
+	user-select: none;
+	
+	/* Pixelated corners for authentic Mac OS 9 appearance */
+	clip-path: polygon(
+		/* Top-left pixelated corner */
+		4px 0,
+		3px 1px,
+		2px 2px,
+		1px 3px,
+		0 4px,
+		/* Left edge down */
+		0 calc(100% - 4px),
+		/* Bottom-left pixelated corner */
+		1px calc(100% - 3px),
+		2px calc(100% - 2px),
+		3px calc(100% - 1px),
+		4px 100%,
+		/* Bottom edge right */
+		calc(100% - 4px) 100%,
+		/* Bottom-right pixelated corner */
+		calc(100% - 3px) calc(100% - 1px),
+		calc(100% - 2px) calc(100% - 2px),
+		calc(100% - 1px) calc(100% - 3px),
+		100% calc(100% - 4px),
+		/* Right edge up */
+		100% 4px,
+		/* Top-right pixelated corner */
+		calc(100% - 1px) 3px,
+		calc(100% - 2px) 2px,
+		calc(100% - 3px) 1px,
+		calc(100% - 4px) 0
+	);
 }
-.IconButton_iconButton--sm.IconButton_iconButton--with-label {
-  padding: var(--spacing-1) var(--spacing-2);
+
+/* ========================================
+ * Icon and Label Layout
+ * ======================================== */
+
+.IconButton-module_icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
 }
-.IconButton_iconButton--md {
-  padding: var(--spacing-1_5);
-  font-size: var(--font-size-md);
-  line-height: var(--line-height-snug);
-  min-width: 32px;
-  min-height: 32px;
+
+.IconButton-module_label {
+	display: inline-flex;
+	align-items: center;
 }
-.IconButton_iconButton--md.IconButton_iconButton--with-label {
-  padding: var(--spacing-1_5) var(--spacing-3);
+
+/* Layout direction variants */
+.IconButton-module_iconButton--label-top,
+.IconButton-module_iconButton--label-bottom {
+	flex-direction: column;
 }
-.IconButton_iconButton--lg {
-  padding: var(--spacing-2);
-  font-size: var(--font-size-lg);
-  line-height: var(--line-height-normal);
-  min-width: 40px;
-  min-height: 40px;
+
+.IconButton-module_iconButton--label-left {
+	flex-direction: row-reverse;
 }
-.IconButton_iconButton--lg.IconButton_iconButton--with-label {
-  padding: var(--spacing-2) var(--spacing-4);
+
+.IconButton-module_iconButton--label-right {
+	flex-direction: row;
 }
-.IconButton_iconButton--default {
-  background: var(--color-gray-400);
+
+/* ========================================
+ * Size Variants
+ * ======================================== */
+
+.IconButton-module_iconButton--sm {
+	padding: var(--spacing-1);
+	font-size: var(--font-size-xs);
+	line-height: var(--line-height-tight);
+	min-width: 24px;
+	min-height: 24px;
 }
-.IconButton_iconButton--primary {
-  background: var(--color-gray-300);
+
+.IconButton-module_iconButton--sm.IconButton-module_iconButton--with-label {
+	padding: var(--spacing-1) var(--spacing-2);
 }
-.IconButton_iconButton--danger {
-  background: var(--color-gray-400);
-  color: var(--color-text);
+
+.IconButton-module_iconButton--md {
+	padding: var(--spacing-1_5);
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-snug);
+	min-width: 32px;
+	min-height: 32px;
 }
-.IconButton_iconButton:hover:not(:disabled) {
-  background: var(--color-gray-300);
+
+.IconButton-module_iconButton--md.IconButton-module_iconButton--with-label {
+	padding: var(--spacing-1_5) var(--spacing-3);
 }
-.IconButton_iconButton:active:not(:disabled) {
-  box-shadow: var(--shadow-inset);
-  background: var(--color-gray-500);
+
+.IconButton-module_iconButton--lg {
+	padding: var(--spacing-2);
+	font-size: var(--font-size-lg);
+	line-height: var(--line-height-normal);
+	min-width: 40px;
+	min-height: 40px;
 }
-.IconButton_iconButton:focus-visible {
-  outline: 1px dotted var(--color-focus);
-  outline-offset: -3px;
+
+.IconButton-module_iconButton--lg.IconButton-module_iconButton--with-label {
+	padding: var(--spacing-2) var(--spacing-4);
 }
-.IconButton_iconButton--disabled,
-.IconButton_iconButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
+
+/* ========================================
+ * Variant Styles
+ * ======================================== */
+
+.IconButton-module_iconButton--default {
+	background: var(--color-gray-400);
 }
+
+.IconButton-module_iconButton--primary {
+	background: var(--color-gray-300);
+}
+
+.IconButton-module_iconButton--danger {
+	background: var(--color-gray-400);
+	color: var(--color-text);
+}
+
+/* ========================================
+ * Interactive States
+ * ======================================== */
+
+/* Hover state */
+.IconButton-module_iconButton:hover:not(:disabled) {
+	background: var(--color-gray-300);
+}
+
+/* Active/pressed state */
+.IconButton-module_iconButton:active:not(:disabled) {
+	box-shadow: var(--shadow-inset);
+	background: var(--color-gray-500);
+}
+
+/* Focus state */
+.IconButton-module_iconButton:focus-visible {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: -3px;
+}
+
+/* Disabled state */
+.IconButton-module_iconButton--disabled,
+.IconButton-module_iconButton:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-  .IconButton_iconButton {
-    transition: none;
-  }
+	.IconButton-module_iconButton {
+		transition: none;
+	}
 }
+
+/* High contrast mode support */
 @media (prefers-contrast: high) {
-  .IconButton_iconButton {
-    border-width: 2px;
-  }
+	.IconButton-module_iconButton {
+		border-width: 2px;
+	}
 }
 
-/* src/components/Checkbox/Checkbox.module.css */
-.Checkbox_wrapper {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-2);
-  position: relative;
-  cursor: pointer;
+/* Checkbox Component Styles - Mac OS 9 */
+
+.Checkbox-module_wrapper {
+	/* Wrapper container for checkbox and label */
+	display: inline-flex;
+	align-items: center;
+	gap: var(--spacing-2);
+	position: relative;
+	cursor: pointer;
 }
-.Checkbox_wrapper--disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+
+.Checkbox-module_wrapper--disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
 }
-.Checkbox_wrapper--error {
+
+.Checkbox-module_wrapper--error {
+	/* Error state styling */
 }
-.Checkbox_wrapper--label-left {
-  flex-direction: row-reverse;
+
+/* ========================================
+ * Label Positioning
+ * ======================================== */
+
+.Checkbox-module_wrapper--label-left {
+	flex-direction: row-reverse;
 }
-.Checkbox_wrapper--label-right {
-  flex-direction: row;
+
+.Checkbox-module_wrapper--label-right {
+	flex-direction: row;
 }
-.Checkbox_checkbox {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  position: relative;
-  display: inline-block;
-  flex-shrink: 0;
-  margin: 0;
-  cursor: pointer;
-  background-color: var(--color-surface);
-  border: var(--border-width-thin) solid var(--color-border);
-  border-radius: var(--border-radius-none);
-  box-shadow: var(--shadow-inset);
-  transition: none;
+
+/* ========================================
+ * Checkbox Input
+ * ======================================== */
+
+.Checkbox-module_checkbox {
+	/* Hide native checkbox */
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	
+	/* Custom checkbox styling */
+	position: relative;
+	display: inline-block;
+	flex-shrink: 0;
+	margin: 0;
+	cursor: pointer;
+	
+	/* Mac OS 9 checkbox appearance */
+	background-color: var(--color-surface);
+	border: var(--border-width-thin) solid var(--color-border);
+	border-radius: var(--border-radius-none);
+	box-shadow: var(--shadow-inset);
+	
+	/* Transition for smooth state changes */
+	transition: none; /* Mac OS 9 had no transitions */
 }
-.Checkbox_checkbox:disabled {
-  cursor: not-allowed;
+
+.Checkbox-module_checkbox:disabled {
+	cursor: not-allowed;
 }
-.Checkbox_checkbox--sm {
-  width: 14px;
-  height: 14px;
+
+/* ========================================
+ * Size Variants
+ * ======================================== */
+
+.Checkbox-module_checkbox--sm {
+	width: 14px;
+	height: 14px;
 }
-.Checkbox_checkbox--md {
-  width: 16px;
-  height: 16px;
+
+.Checkbox-module_checkbox--md {
+	width: 16px;
+	height: 16px;
 }
-.Checkbox_checkbox--lg {
-  width: 20px;
-  height: 20px;
+
+.Checkbox-module_checkbox--lg {
+	width: 20px;
+	height: 20px;
 }
-.Checkbox_checkbox:checked {
-  background-color: var(--color-surface);
+
+/* ========================================
+ * Checked State
+ * ======================================== */
+
+.Checkbox-module_checkbox:checked {
+	/* Checked state uses same background */
+	background-color: var(--color-surface);
 }
-.Checkbox_checkbox:checked::after {
-  content: "";
-  position: absolute;
-  display: block;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%) rotate(45deg);
-  width: 4px;
-  height: 8px;
-  border: solid var(--color-text);
-  border-width: 0 2px 2px 0;
+
+/* Checkmark using pseudo-element */
+.Checkbox-module_checkbox:checked::after {
+	content: '';
+	position: absolute;
+	display: block;
+	
+	/* Mac OS 9 style checkmark */
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%) rotate(45deg);
+	
+	/* Default size (md) */
+	width: 4px;
+	height: 8px;
+	
+	border: solid var(--color-text);
+	border-width: 0 2px 2px 0;
 }
-.Checkbox_checkbox--sm:checked::after {
-  width: 3px;
-  height: 6px;
-  border-width: 0 1.5px 1.5px 0;
+
+.Checkbox-module_checkbox--sm:checked::after {
+	width: 3px;
+	height: 6px;
+	border-width: 0 1.5px 1.5px 0;
 }
-.Checkbox_checkbox--lg:checked::after {
-  width: 5px;
-  height: 10px;
-  border-width: 0 2.5px 2.5px 0;
+
+.Checkbox-module_checkbox--lg:checked::after {
+	width: 5px;
+	height: 10px;
+	border-width: 0 2.5px 2.5px 0;
 }
-.Checkbox_checkbox--indeterminate::after {
-  content: "";
-  position: absolute;
-  display: block;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background-color: var(--color-text);
-  width: 8px;
-  height: 2px;
+
+/* ========================================
+ * Indeterminate State
+ * ======================================== */
+
+.Checkbox-module_checkbox--indeterminate::after {
+	content: '';
+	position: absolute;
+	display: block;
+	
+	/* Horizontal line for indeterminate */
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	
+	background-color: var(--color-text);
+	
+	/* Default size (md) */
+	width: 8px;
+	height: 2px;
 }
-.Checkbox_checkbox--sm.Checkbox_checkbox--indeterminate::after {
-  width: 6px;
-  height: 1.5px;
+
+.Checkbox-module_checkbox--sm.Checkbox-module_checkbox--indeterminate::after {
+	width: 6px;
+	height: 1.5px;
 }
-.Checkbox_checkbox--lg.Checkbox_checkbox--indeterminate::after {
-  width: 10px;
-  height: 2.5px;
+
+.Checkbox-module_checkbox--lg.Checkbox-module_checkbox--indeterminate::after {
+	width: 10px;
+	height: 2.5px;
 }
-.Checkbox_checkbox:focus-visible {
-  outline: 1px dotted var(--color-focus);
-  outline-offset: 2px;
+
+/* ========================================
+ * Focus State
+ * ======================================== */
+
+.Checkbox-module_checkbox:focus-visible {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: 2px;
 }
-.Checkbox_checkbox--error {
-  border-color: var(--color-error);
+
+/* ========================================
+ * Error State
+ * ======================================== */
+
+.Checkbox-module_checkbox--error {
+	border-color: var(--color-error);
 }
-.Checkbox_label {
-  font-family: var(--font-system);
-  font-weight: var(--font-weight-normal);
-  color: var(--color-text);
-  cursor: pointer;
-  user-select: none;
+
+/* ========================================
+ * Label
+ * ======================================== */
+
+.Checkbox-module_label {
+	font-family: var(--font-system);
+	font-weight: var(--font-weight-normal);
+	color: var(--color-text);
+	cursor: pointer;
+	user-select: none;
 }
-.Checkbox_wrapper--disabled .Checkbox_label {
-  cursor: not-allowed;
+
+.Checkbox-module_wrapper--disabled .Checkbox-module_label {
+	cursor: not-allowed;
 }
-.Checkbox_label--sm {
-  font-size: var(--font-size-xs);
-  line-height: var(--line-height-tight);
+
+.Checkbox-module_label--sm {
+	font-size: var(--font-size-xs);
+	line-height: var(--line-height-tight);
 }
-.Checkbox_label--md {
-  font-size: var(--font-size-md);
-  line-height: var(--line-height-snug);
+
+.Checkbox-module_label--md {
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-snug);
 }
-.Checkbox_label--lg {
-  font-size: var(--font-size-lg);
-  line-height: var(--line-height-normal);
+
+.Checkbox-module_label--lg {
+	font-size: var(--font-size-lg);
+	line-height: var(--line-height-normal);
 }
-.Checkbox_wrapper--sm {
-  gap: var(--spacing-1);
+
+/* ========================================
+ * Size Variants for Wrapper
+ * ======================================== */
+
+.Checkbox-module_wrapper--sm {
+	gap: var(--spacing-1);
 }
-.Checkbox_wrapper--md {
-  gap: var(--spacing-2);
+
+.Checkbox-module_wrapper--md {
+	gap: var(--spacing-2);
 }
-.Checkbox_wrapper--lg {
-  gap: var(--spacing-2);
+
+.Checkbox-module_wrapper--lg {
+	gap: var(--spacing-2);
 }
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* High contrast mode support */
 @media (prefers-contrast: high) {
-  .Checkbox_checkbox {
-    border-width: var(--border-width-medium);
-  }
-  .Checkbox_checkbox:checked::after,
-  .Checkbox_checkbox--indeterminate::after {
-    border-width: 0 3px 3px 0;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .Checkbox_checkbox {
-    transition: none;
-  }
+	.Checkbox-module_checkbox {
+		border-width: var(--border-width-medium);
+	}
+	
+	.Checkbox-module_checkbox:checked::after,
+	.Checkbox-module_checkbox--indeterminate::after {
+		border-width: 0 3px 3px 0;
+	}
 }
 
-/* src/components/Radio/Radio.module.css */
-.Radio_wrapper {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-2);
-  position: relative;
-  cursor: pointer;
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	.Checkbox-module_checkbox {
+		transition: none;
+	}
 }
-.Radio_wrapper--disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+/* Radio Component Styles - Mac OS 9 */
+
+.Radio-module_wrapper {
+	/* Wrapper container for radio and label */
+	display: inline-flex;
+	align-items: center;
+	gap: var(--spacing-2);
+	position: relative;
+	cursor: pointer;
 }
-.Radio_wrapper--error {
+
+.Radio-module_wrapper--disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
 }
-.Radio_wrapper--label-left {
-  flex-direction: row-reverse;
+
+.Radio-module_wrapper--error {
+	/* Error state styling */
 }
-.Radio_wrapper--label-right {
-  flex-direction: row;
+
+/* ========================================
+ * Label Positioning
+ * ======================================== */
+
+.Radio-module_wrapper--label-left {
+	flex-direction: row-reverse;
 }
-.Radio_radio {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  position: relative;
-  display: inline-block;
-  flex-shrink: 0;
-  margin: 0;
-  cursor: pointer;
-  background-color: var(--color-surface);
-  border: var(--border-width-thin) solid var(--color-border);
-  border-radius: 50%;
-  box-shadow: var(--shadow-inset);
-  transition: none;
+
+.Radio-module_wrapper--label-right {
+	flex-direction: row;
 }
-.Radio_radio:disabled {
-  cursor: not-allowed;
+
+/* ========================================
+ * Radio Input
+ * ======================================== */
+
+.Radio-module_radio {
+	/* Hide native radio */
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	
+	/* Custom radio styling */
+	position: relative;
+	display: inline-block;
+	flex-shrink: 0;
+	margin: 0;
+	cursor: pointer;
+	
+	/* Mac OS 9 radio appearance - circular */
+	background-color: var(--color-surface);
+	border: var(--border-width-thin) solid var(--color-border);
+	border-radius: 50%; /* Circular */
+	box-shadow: var(--shadow-inset);
+	
+	/* Transition for smooth state changes */
+	transition: none; /* Mac OS 9 had no transitions */
 }
-.Radio_radio--sm {
-  width: 14px;
-  height: 14px;
+
+.Radio-module_radio:disabled {
+	cursor: not-allowed;
 }
-.Radio_radio--md {
-  width: 16px;
-  height: 16px;
+
+/* ========================================
+ * Size Variants
+ * ======================================== */
+
+.Radio-module_radio--sm {
+	width: 14px;
+	height: 14px;
 }
-.Radio_radio--lg {
-  width: 20px;
-  height: 20px;
+
+.Radio-module_radio--md {
+	width: 16px;
+	height: 16px;
 }
-.Radio_radio:checked {
-  background-color: var(--color-surface);
+
+.Radio-module_radio--lg {
+	width: 20px;
+	height: 20px;
 }
-.Radio_radio:checked::after {
-  content: "";
-  position: absolute;
-  display: block;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background-color: var(--color-text);
-  border-radius: 50%;
-  width: 8px;
-  height: 8px;
+
+/* ========================================
+ * Checked State
+ * ======================================== */
+
+.Radio-module_radio:checked {
+	/* Checked state uses same background */
+	background-color: var(--color-surface);
 }
-.Radio_radio--sm:checked::after {
-  width: 6px;
-  height: 6px;
+
+/* Radio dot using pseudo-element */
+.Radio-module_radio:checked::after {
+	content: '';
+	position: absolute;
+	display: block;
+	
+	/* Mac OS 9 style filled dot - centered */
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	
+	background-color: var(--color-text);
+	border-radius: 50%; /* Circular dot */
+	
+	/* Default size (md) */
+	width: 8px;
+	height: 8px;
 }
-.Radio_radio--lg:checked::after {
-  width: 10px;
-  height: 10px;
+
+.Radio-module_radio--sm:checked::after {
+	width: 6px;
+	height: 6px;
 }
-.Radio_radio:focus-visible {
-  outline: 1px dotted var(--color-focus);
-  outline-offset: 2px;
+
+.Radio-module_radio--lg:checked::after {
+	width: 10px;
+	height: 10px;
 }
-.Radio_radio--error {
-  border-color: var(--color-error);
+
+/* ========================================
+ * Focus State
+ * ======================================== */
+
+.Radio-module_radio:focus-visible {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: 2px;
 }
-.Radio_label {
-  font-family: var(--font-system);
-  font-weight: var(--font-weight-normal);
-  color: var(--color-text);
-  cursor: pointer;
-  user-select: none;
+
+/* ========================================
+ * Error State
+ * ======================================== */
+
+.Radio-module_radio--error {
+	border-color: var(--color-error);
 }
-.Radio_wrapper--disabled .Radio_label {
-  cursor: not-allowed;
+
+/* ========================================
+ * Label
+ * ======================================== */
+
+.Radio-module_label {
+	font-family: var(--font-system);
+	font-weight: var(--font-weight-normal);
+	color: var(--color-text);
+	cursor: pointer;
+	user-select: none;
 }
-.Radio_label--sm {
-  font-size: var(--font-size-xs);
-  line-height: var(--line-height-tight);
+
+.Radio-module_wrapper--disabled .Radio-module_label {
+	cursor: not-allowed;
 }
-.Radio_label--md {
-  font-size: var(--font-size-md);
-  line-height: var(--line-height-snug);
+
+.Radio-module_label--sm {
+	font-size: var(--font-size-xs);
+	line-height: var(--line-height-tight);
 }
-.Radio_label--lg {
-  font-size: var(--font-size-lg);
-  line-height: var(--line-height-normal);
+
+.Radio-module_label--md {
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-snug);
 }
-.Radio_wrapper--sm {
-  gap: var(--spacing-1);
+
+.Radio-module_label--lg {
+	font-size: var(--font-size-lg);
+	line-height: var(--line-height-normal);
 }
-.Radio_wrapper--md {
-  gap: var(--spacing-2);
+
+/* ========================================
+ * Size Variants for Wrapper
+ * ======================================== */
+
+.Radio-module_wrapper--sm {
+	gap: var(--spacing-1);
 }
-.Radio_wrapper--lg {
-  gap: var(--spacing-2);
+
+.Radio-module_wrapper--md {
+	gap: var(--spacing-2);
 }
+
+.Radio-module_wrapper--lg {
+	gap: var(--spacing-2);
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* High contrast mode support */
 @media (prefers-contrast: high) {
-  .Radio_radio {
-    border-width: var(--border-width-medium);
-  }
-  .Radio_radio:checked::after {
-    width: 10px;
-    height: 10px;
-  }
-  .Radio_radio--sm:checked::after {
-    width: 8px;
-    height: 8px;
-  }
-  .Radio_radio--lg:checked::after {
-    width: 12px;
-    height: 12px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .Radio_radio {
-    transition: none;
-  }
+	.Radio-module_radio {
+		border-width: var(--border-width-medium);
+	}
+	
+	.Radio-module_radio:checked::after {
+		/* Increase dot size in high contrast */
+		width: 10px;
+		height: 10px;
+	}
+	
+	.Radio-module_radio--sm:checked::after {
+		width: 8px;
+		height: 8px;
+	}
+	
+	.Radio-module_radio--lg:checked::after {
+		width: 12px;
+		height: 12px;
+	}
 }
 
-/* src/components/TextField/TextField.module.css */
-.TextField_wrapper {
-  display: inline-flex;
-  flex-direction: column;
-  gap: var(--spacing-1);
-  position: relative;
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	.Radio-module_radio {
+		transition: none;
+	}
 }
-.TextField_wrapper--full-width {
-  width: 100%;
+/* TextField Component Styles - Mac OS 9 */
+
+.TextField-module_wrapper {
+	/* Wrapper container for text field, label, and helper text */
+	display: inline-flex;
+	flex-direction: column;
+	gap: var(--spacing-1);
+	position: relative;
 }
-.TextField_wrapper--disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+
+.TextField-module_wrapper--full-width {
+	width: 100%;
 }
-.TextField_wrapper--label-top {
-  flex-direction: column;
+
+.TextField-module_wrapper--disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
 }
-.TextField_wrapper--label-left {
-  flex-direction: row;
-  align-items: center;
-  gap: var(--spacing-2);
+
+/* ========================================
+ * Label Positioning
+ * ======================================== */
+
+.TextField-module_wrapper--label-top {
+	flex-direction: column;
 }
-.TextField_wrapper--label-right {
-  flex-direction: row-reverse;
-  align-items: center;
-  gap: var(--spacing-2);
+
+.TextField-module_wrapper--label-left {
+	flex-direction: row;
+	align-items: center;
+	gap: var(--spacing-2);
 }
-.TextField_label {
-  font-family: var(--font-system);
-  font-weight: var(--font-weight-normal);
-  color: var(--color-text);
-  user-select: none;
+
+.TextField-module_wrapper--label-right {
+	flex-direction: row-reverse;
+	align-items: center;
+	gap: var(--spacing-2);
 }
-.TextField_wrapper--disabled .TextField_label {
-  cursor: not-allowed;
+
+/* ========================================
+ * Label
+ * ======================================== */
+
+.TextField-module_label {
+	font-family: var(--font-system);
+	font-weight: var(--font-weight-normal);
+	color: var(--color-text);
+	user-select: none;
 }
-.TextField_label--sm {
-  font-size: var(--font-size-xs);
-  line-height: var(--line-height-tight);
+
+.TextField-module_wrapper--disabled .TextField-module_label {
+	cursor: not-allowed;
 }
-.TextField_label--md {
-  font-size: var(--font-size-md);
-  line-height: var(--line-height-snug);
+
+.TextField-module_label--sm {
+	font-size: var(--font-size-xs);
+	line-height: var(--line-height-tight);
 }
-.TextField_label--lg {
-  font-size: var(--font-size-lg);
-  line-height: var(--line-height-normal);
+
+.TextField-module_label--md {
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-snug);
 }
-.TextField_input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
+
+.TextField-module_label--lg {
+	font-size: var(--font-size-lg);
+	line-height: var(--line-height-normal);
 }
-.TextField_wrapper--full-width .TextField_input-wrapper {
-  width: 100%;
+
+/* ========================================
+ * Input Wrapper (for icon positioning)
+ * ======================================== */
+
+.TextField-module_input-wrapper {
+	position: relative;
+	display: flex;
+	align-items: center;
 }
-.TextField_input {
-  font-family: var(--font-system);
-  font-weight: var(--font-weight-normal);
-  color: var(--color-text);
-  background-color: var(--color-surface);
-  border: var(--border-width-thin) solid var(--color-border);
-  border-radius: var(--border-radius-none);
-  box-shadow: var(--shadow-inset);
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  transition: none;
+
+.TextField-module_wrapper--full-width .TextField-module_input-wrapper {
+	width: 100%;
 }
-.TextField_input::placeholder {
-  color: var(--color-gray-600);
-  opacity: 1;
+
+/* ========================================
+ * Input Field
+ * ======================================== */
+
+.TextField-module_input {
+	/* Base styling */
+	font-family: var(--font-system);
+	font-weight: var(--font-weight-normal);
+	color: var(--color-text);
+	
+	/* Mac OS 9 text field appearance - inset */
+	background-color: var(--color-surface);
+	border: var(--border-width-thin) solid var(--color-border);
+	border-radius: var(--border-radius-none);
+	box-shadow: var(--shadow-inset);
+	
+	/* Remove default input styles */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	
+	/* Transition */
+	transition: none; /* Mac OS 9 had no transitions */
 }
-.TextField_input:disabled {
-  cursor: not-allowed;
-  background-color: var(--color-gray-200);
+
+.TextField-module_input::placeholder {
+	color: var(--color-gray-600);
+	opacity: 1;
 }
-.TextField_input--sm {
-  min-height: 20px;
-  padding: var(--spacing-0_5) var(--spacing-2);
-  font-size: var(--font-size-xs);
-  line-height: var(--line-height-tight);
+
+.TextField-module_input:disabled {
+	cursor: not-allowed;
+	background-color: var(--color-gray-200);
 }
-.TextField_input--md {
-  min-height: 24px;
-  padding: var(--spacing-1) var(--spacing-2);
-  font-size: var(--font-size-md);
-  line-height: var(--line-height-snug);
+
+/* ========================================
+ * Size Variants
+ * ======================================== */
+
+.TextField-module_input--sm {
+	min-height: 20px;
+	padding: var(--spacing-0_5) var(--spacing-2);
+	font-size: var(--font-size-xs);
+	line-height: var(--line-height-tight);
 }
-.TextField_input--lg {
-  min-height: 32px;
-  padding: var(--spacing-2) var(--spacing-3);
-  font-size: var(--font-size-lg);
-  line-height: var(--line-height-normal);
+
+.TextField-module_input--md {
+	min-height: 24px;
+	padding: var(--spacing-1) var(--spacing-2);
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-snug);
 }
-.TextField_input--full-width {
-  width: 100%;
+
+.TextField-module_input--lg {
+	min-height: 32px;
+	padding: var(--spacing-2) var(--spacing-3);
+	font-size: var(--font-size-lg);
+	line-height: var(--line-height-normal);
 }
-.TextField_input-icon-left,
-.TextField_input-icon-right {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  color: var(--color-gray-700);
+
+.TextField-module_input--full-width {
+	width: 100%;
 }
-.TextField_input-icon-left {
-  left: var(--spacing-2);
+
+/* ========================================
+ * Icon Support
+ * ======================================== */
+
+.TextField-module_input-icon-left,
+.TextField-module_input-icon-right {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	pointer-events: none;
+	color: var(--color-gray-700);
 }
-.TextField_input-icon-right {
-  right: var(--spacing-2);
+
+.TextField-module_input-icon-left {
+	left: var(--spacing-2);
 }
-.TextField_input-wrapper--with-left-icon .TextField_input {
-  padding-left: calc(var(--spacing-6) + var(--spacing-2));
+
+.TextField-module_input-icon-right {
+	right: var(--spacing-2);
 }
-.TextField_input-wrapper--with-right-icon .TextField_input {
-  padding-right: calc(var(--spacing-6) + var(--spacing-2));
+
+/* Adjust input padding when icons are present */
+.TextField-module_input-wrapper--with-left-icon .TextField-module_input {
+	padding-left: calc(var(--spacing-6) + var(--spacing-2));
 }
-.TextField_input:focus {
-  outline: 1px dotted var(--color-focus);
-  outline-offset: 2px;
+
+.TextField-module_input-wrapper--with-right-icon .TextField-module_input {
+	padding-right: calc(var(--spacing-6) + var(--spacing-2));
 }
-.TextField_input--error {
-  border-color: var(--color-error);
+
+/* ========================================
+ * Focus State
+ * ======================================== */
+
+.TextField-module_input:focus {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: 2px;
 }
-.TextField_input--error:focus {
-  outline-color: var(--color-error);
+
+/* ========================================
+ * Error State
+ * ======================================== */
+
+.TextField-module_input--error {
+	border-color: var(--color-error);
 }
-.TextField_helper-text,
-.TextField_error-message {
-  margin: 0;
-  font-family: var(--font-system);
-  font-size: var(--font-size-xs);
-  line-height: var(--line-height-tight);
+
+.TextField-module_input--error:focus {
+	outline-color: var(--color-error);
 }
-.TextField_helper-text {
-  color: var(--color-gray-700);
+
+/* ========================================
+ * Helper Text & Error Message
+ * ======================================== */
+
+.TextField-module_helper-text,
+.TextField-module_error-message {
+	margin: 0;
+	font-family: var(--font-system);
+	font-size: var(--font-size-xs);
+	line-height: var(--line-height-tight);
 }
-.TextField_error-message {
-  color: var(--color-error);
+
+.TextField-module_helper-text {
+	color: var(--color-gray-700);
 }
-.TextField_wrapper--sm {
-  gap: var(--spacing-0_5);
+
+.TextField-module_error-message {
+	color: var(--color-error);
 }
-.TextField_wrapper--md {
-  gap: var(--spacing-1);
+
+/* ========================================
+ * Wrapper Size Variants
+ * ======================================== */
+
+.TextField-module_wrapper--sm {
+	gap: var(--spacing-0_5);
 }
-.TextField_wrapper--lg {
-  gap: var(--spacing-1);
+
+.TextField-module_wrapper--md {
+	gap: var(--spacing-1);
 }
-.TextField_input[type=number]::-webkit-inner-spin-button,
-.TextField_input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+
+.TextField-module_wrapper--lg {
+	gap: var(--spacing-1);
 }
-.TextField_input[type=number] {
-  -moz-appearance: textfield;
+
+/* ========================================
+ * Input Types - Special Styling
+ * ======================================== */
+
+/* Number input - remove spinner */
+.TextField-module_input[type='number']::-webkit-inner-spin-button,
+.TextField-module_input[type='number']::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
 }
-.TextField_input[type=search]::-webkit-search-decoration,
-.TextField_input[type=search]::-webkit-search-cancel-button,
-.TextField_input[type=search]::-webkit-search-results-button,
-.TextField_input[type=search]::-webkit-search-results-decoration {
-  -webkit-appearance: none;
+
+.TextField-module_input[type='number'] {
+	-moz-appearance: textfield;
 }
-.TextField_input[type=password] {
-  font-family: monospace;
+
+/* Search input */
+.TextField-module_input[type='search']::-webkit-search-decoration,
+.TextField-module_input[type='search']::-webkit-search-cancel-button,
+.TextField-module_input[type='search']::-webkit-search-results-button,
+.TextField-module_input[type='search']::-webkit-search-results-decoration {
+	-webkit-appearance: none;
 }
+
+/* Password input */
+.TextField-module_input[type='password'] {
+	font-family: monospace;
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* High contrast mode support */
 @media (prefers-contrast: high) {
-  .TextField_input {
-    border-width: var(--border-width-medium);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .TextField_input {
-    transition: none;
-  }
+	.TextField-module_input {
+		border-width: var(--border-width-medium);
+	}
 }
 
-/* src/components/Select/Select.module.css */
-.Select_wrapper {
-  display: inline-flex;
-  flex-direction: column;
-  gap: var(--spacing-1);
-  position: relative;
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	.TextField-module_input {
+		transition: none;
+	}
 }
-.Select_wrapper--full-width {
-  width: 100%;
+/* Select Component Styles - Mac OS 9 */
+
+.Select-module_wrapper {
+	/* Wrapper container for select, label, and helper text */
+	display: inline-flex;
+	flex-direction: column;
+	gap: var(--spacing-1);
+	position: relative;
 }
-.Select_wrapper--disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+
+.Select-module_wrapper--full-width {
+	width: 100%;
 }
-.Select_wrapper--label-top {
-  flex-direction: column;
+
+.Select-module_wrapper--disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
 }
-.Select_wrapper--label-left {
-  flex-direction: row;
-  align-items: center;
-  gap: var(--spacing-2);
+
+/* ========================================
+ * Label Positioning
+ * ======================================== */
+
+.Select-module_wrapper--label-top {
+	flex-direction: column;
 }
-.Select_wrapper--label-right {
-  flex-direction: row-reverse;
-  align-items: center;
-  gap: var(--spacing-2);
+
+.Select-module_wrapper--label-left {
+	flex-direction: row;
+	align-items: center;
+	gap: var(--spacing-2);
 }
-.Select_label {
-  font-family: var(--font-system);
-  font-weight: var(--font-weight-normal);
-  color: var(--color-text);
-  user-select: none;
+
+.Select-module_wrapper--label-right {
+	flex-direction: row-reverse;
+	align-items: center;
+	gap: var(--spacing-2);
 }
-.Select_wrapper--disabled .Select_label {
-  cursor: not-allowed;
+
+/* ========================================
+ * Label
+ * ======================================== */
+
+.Select-module_label {
+	font-family: var(--font-system);
+	font-weight: var(--font-weight-normal);
+	color: var(--color-text);
+	user-select: none;
 }
-.Select_label--sm {
-  font-size: var(--font-size-xs);
-  line-height: var(--line-height-tight);
+
+.Select-module_wrapper--disabled .Select-module_label {
+	cursor: not-allowed;
 }
-.Select_label--md {
-  font-size: var(--font-size-md);
-  line-height: var(--line-height-snug);
+
+.Select-module_label--sm {
+	font-size: var(--font-size-xs);
+	line-height: var(--line-height-tight);
 }
-.Select_label--lg {
-  font-size: var(--font-size-lg);
-  line-height: var(--line-height-normal);
+
+.Select-module_label--md {
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-snug);
 }
-.Select_select {
-  font-family: var(--font-system);
-  font-weight: var(--font-weight-normal);
-  color: var(--color-text);
-  background-color: var(--color-surface);
-  border: var(--border-width-thin) solid var(--color-border);
-  border-radius: var(--border-radius-none);
-  box-shadow: var(--shadow-bevel);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23000000' d='M2 4l4 4 4-4z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right var(--spacing-1) center;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  cursor: pointer;
-  transition: none;
+
+.Select-module_label--lg {
+	font-size: var(--font-size-lg);
+	line-height: var(--line-height-normal);
 }
-.Select_select:disabled {
-  cursor: not-allowed;
-  background-color: var(--color-gray-200);
+
+/* ========================================
+ * Select Field
+ * ======================================== */
+
+.Select-module_select {
+	/* Base styling */
+	font-family: var(--font-system);
+	font-weight: var(--font-weight-normal);
+	color: var(--color-text);
+	
+	/* Mac OS 9 popup menu appearance - raised bevel with dropdown arrow */
+	background-color: var(--color-surface);
+	border: var(--border-width-thin) solid var(--color-border);
+	border-radius: var(--border-radius-none);
+	box-shadow: var(--shadow-bevel);
+	
+	/* Add arrow indicator */
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23000000' d='M2 4l4 4 4-4z'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right var(--spacing-1) center;
+	
+	/* Remove default select styles */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	
+	/* Cursor */
+	cursor: pointer;
+	
+	/* Transition */
+	transition: none; /* Mac OS 9 had no transitions */
 }
-.Select_select--sm {
-  min-height: 20px;
-  padding: var(--spacing-0_5) var(--spacing-6) var(--spacing-0_5) var(--spacing-2);
-  font-size: var(--font-size-xs);
-  line-height: var(--line-height-tight);
+
+.Select-module_select:disabled {
+	cursor: not-allowed;
+	background-color: var(--color-gray-200);
 }
-.Select_select--md {
-  min-height: 24px;
-  padding: var(--spacing-1) var(--spacing-6) var(--spacing-1) var(--spacing-2);
-  font-size: var(--font-size-md);
-  line-height: var(--line-height-snug);
+
+/* ========================================
+ * Size Variants
+ * ======================================== */
+
+.Select-module_select--sm {
+	min-height: 20px;
+	padding: var(--spacing-0_5) var(--spacing-6) var(--spacing-0_5) var(--spacing-2);
+	font-size: var(--font-size-xs);
+	line-height: var(--line-height-tight);
 }
-.Select_select--lg {
-  min-height: 32px;
-  padding: var(--spacing-2) var(--spacing-8) var(--spacing-2) var(--spacing-3);
-  font-size: var(--font-size-lg);
-  line-height: var(--line-height-normal);
+
+.Select-module_select--md {
+	min-height: 24px;
+	padding: var(--spacing-1) var(--spacing-6) var(--spacing-1) var(--spacing-2);
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-snug);
 }
-.Select_select--full-width {
-  width: 100%;
+
+.Select-module_select--lg {
+	min-height: 32px;
+	padding: var(--spacing-2) var(--spacing-8) var(--spacing-2) var(--spacing-3);
+	font-size: var(--font-size-lg);
+	line-height: var(--line-height-normal);
 }
-.Select_select:focus {
-  outline: 1px dotted var(--color-focus);
-  outline-offset: 2px;
+
+.Select-module_select--full-width {
+	width: 100%;
 }
-.Select_select--error {
-  border-color: var(--color-error);
+
+/* ========================================
+ * Focus State
+ * ======================================== */
+
+.Select-module_select:focus {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: 2px;
 }
-.Select_select--error:focus {
-  outline-color: var(--color-error);
+
+/* ========================================
+ * Error State
+ * ======================================== */
+
+.Select-module_select--error {
+	border-color: var(--color-error);
 }
-.Select_helper-text,
-.Select_error-message {
-  margin: 0;
-  font-family: var(--font-system);
-  font-size: var(--font-size-xs);
-  line-height: var(--line-height-tight);
+
+.Select-module_select--error:focus {
+	outline-color: var(--color-error);
 }
-.Select_helper-text {
-  color: var(--color-gray-700);
+
+/* ========================================
+ * Helper Text & Error Message
+ * ======================================== */
+
+.Select-module_helper-text,
+.Select-module_error-message {
+	margin: 0;
+	font-family: var(--font-system);
+	font-size: var(--font-size-xs);
+	line-height: var(--line-height-tight);
 }
-.Select_error-message {
-  color: var(--color-error);
+
+.Select-module_helper-text {
+	color: var(--color-gray-700);
 }
-.Select_wrapper--sm {
-  gap: var(--spacing-0_5);
+
+.Select-module_error-message {
+	color: var(--color-error);
 }
-.Select_wrapper--md {
-  gap: var(--spacing-1);
+
+/* ========================================
+ * Wrapper Size Variants
+ * ======================================== */
+
+.Select-module_wrapper--sm {
+	gap: var(--spacing-0_5);
 }
-.Select_wrapper--lg {
-  gap: var(--spacing-1);
+
+.Select-module_wrapper--md {
+	gap: var(--spacing-1);
 }
-.Select_select option {
-  font-family: var(--font-system);
-  padding: var(--spacing-1);
-  background-color: var(--color-surface);
-  color: var(--color-text);
+
+.Select-module_wrapper--lg {
+	gap: var(--spacing-1);
 }
-.Select_select option:disabled {
-  color: var(--color-gray-600);
+
+/* ========================================
+ * Option Styling (in dropdown)
+ * ======================================== */
+
+.Select-module_select option {
+	font-family: var(--font-system);
+	padding: var(--spacing-1);
+	background-color: var(--color-surface);
+	color: var(--color-text);
 }
+
+.Select-module_select option:disabled {
+	color: var(--color-gray-600);
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* High contrast mode support */
 @media (prefers-contrast: high) {
-  .Select_select {
-    border-width: var(--border-width-medium);
-  }
+	.Select-module_select {
+		border-width: var(--border-width-medium);
+	}
 }
+
+/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-  .Select_select {
-    transition: none;
-  }
+	.Select-module_select {
+		transition: none;
+	}
+}
+/* Tabs Component Styles - Mac OS 9 */
+
+/* Import pixelated corners utility */
+@import '../../styles/pixelated-corners.css';
+
+.Tabs-module_container {
+	/* Container for tabs and panels */
+	display: flex;
+	flex-direction: column;
+	width: 100%;
 }
 
-/* src/components/Tabs/Tabs.module.css */
-.Tabs_container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+/* ========================================
+ * Tab List (Row of tabs)
+ * ======================================== */
+
+.Tabs-module_tabList {
+	display: flex;
+	gap: var(--spacing-1);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	margin-bottom: -1px; /* Overlap with panel border */
 }
-.Tabs_tabList {
-  display: flex;
-  gap: var(--spacing-1);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  margin-bottom: -1px;
+
+.Tabs-module_tabList--full-width {
+	width: 100%;
 }
-.Tabs_tabList--full-width {
-  width: 100%;
+
+/* ========================================
+ * Individual Tab
+ * ======================================== */
+
+.Tabs-module_tab {
+	/* Base styling */
+	font-family: var(--font-system);
+	font-weight: var(--font-weight-normal);
+	color: var(--color-text);
+	
+	/* Box styling */
+	background: var(--color-gray-400);
+	border: var(--border-width-thin) solid var(--color-border);
+	border-radius: var(--border-radius-none);
+	box-shadow: var(--shadow-raised);
+	
+	/* Padding */
+	padding: var(--spacing-1_5) var(--spacing-4);
+	
+	/* Positioning */
+	position: relative;
+	
+	/* Cursor */
+	cursor: pointer;
+	
+	/* Remove button defaults */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	
+	/* No transitions */
+	transition: none;
+	
+	/* Text */
+	white-space: nowrap;
+	user-select: none;
+	
+	/* Pixelated top corners for authentic Mac OS 9 tab appearance */
+	clip-path: polygon(
+		/* Top-left pixelated corner */
+		3px 0,
+		2px 1px,
+		1px 2px,
+		0 3px,
+		/* Left edge down */
+		0 100%,
+		/* Bottom edge (flat) */
+		100% 100%,
+		/* Right edge up */
+		100% 3px,
+		/* Top-right pixelated corner */
+		calc(100% - 1px) 2px,
+		calc(100% - 2px) 1px,
+		calc(100% - 3px) 0
+	);
 }
-.Tabs_tab {
-  font-family: var(--font-system);
-  font-weight: var(--font-weight-normal);
-  color: var(--color-text);
-  background: var(--color-gray-400);
-  border: var(--border-width-thin) solid var(--color-border);
-  border-radius: var(--border-radius-none);
-  box-shadow: var(--shadow-raised);
-  padding: var(--spacing-1_5) var(--spacing-4);
-  position: relative;
-  cursor: pointer;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  transition: none;
-  white-space: nowrap;
-  user-select: none;
-  clip-path: polygon(3px 0, 2px 1px, 1px 2px, 0 3px, 0 100%, 100% 100%, 100% 3px, calc(100% - 1px) 2px, calc(100% - 2px) 1px, calc(100% - 3px) 0);
+
+/* Active tab - raised above panel */
+.Tabs-module_tab--active {
+	background: var(--color-surface);
+	z-index: 1;
+	border-bottom-color: var(--color-surface); /* Hide bottom border */
 }
-.Tabs_tab--active {
-  background: var(--color-surface);
-  z-index: 1;
-  border-bottom-color: var(--color-surface);
+
+/* Disabled tab */
+.Tabs-module_tab--disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+	pointer-events: none;
 }
-.Tabs_tab--disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
+
+/* ========================================
+ * Tab Size Variants
+ * ======================================== */
+
+.Tabs-module_tab--sm {
+	padding: var(--spacing-1) var(--spacing-3);
+	font-size: var(--font-size-xs);
+	line-height: var(--line-height-tight);
 }
-.Tabs_tab--sm {
-  padding: var(--spacing-1) var(--spacing-3);
-  font-size: var(--font-size-xs);
-  line-height: var(--line-height-tight);
+
+.Tabs-module_tab--md {
+	padding: var(--spacing-1_5) var(--spacing-4);
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-snug);
 }
-.Tabs_tab--md {
-  padding: var(--spacing-1_5) var(--spacing-4);
-  font-size: var(--font-size-md);
-  line-height: var(--line-height-snug);
+
+.Tabs-module_tab--lg {
+	padding: var(--spacing-2) var(--spacing-5);
+	font-size: var(--font-size-lg);
+	line-height: var(--line-height-normal);
 }
-.Tabs_tab--lg {
-  padding: var(--spacing-2) var(--spacing-5);
-  font-size: var(--font-size-lg);
-  line-height: var(--line-height-normal);
+
+.Tabs-module_tab--full-width {
+	flex: 1;
 }
-.Tabs_tab--full-width {
-  flex: 1;
+
+/* ========================================
+ * Tab Icon
+ * ======================================== */
+
+.Tabs-module_tabIcon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin-right: var(--spacing-1);
 }
-.Tabs_tabIcon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: var(--spacing-1);
+
+/* ========================================
+ * Tab Focus State
+ * ======================================== */
+
+.Tabs-module_tab:focus-visible {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: -3px;
 }
-.Tabs_tab:focus-visible {
-  outline: 1px dotted var(--color-focus);
-  outline-offset: -3px;
+
+/* ========================================
+ * Tab Hover State (subtle)
+ * ======================================== */
+
+.Tabs-module_tab:not(.Tabs-module_tab--active):not(.Tabs-module_tab--disabled):hover {
+	background: var(--color-gray-300);
 }
-.Tabs_tab:not(.Tabs_tab--active):not(.Tabs_tab--disabled):hover {
-  background: var(--color-gray-300);
+
+/* ========================================
+ * Panel Container
+ * ======================================== */
+
+.Tabs-module_panelContainer {
+	/* Mac OS 9 inset panel appearance */
+	background-color: var(--color-surface);
+	border: var(--border-width-thin) solid var(--color-border);
+	box-shadow: var(--shadow-inset);
+	
+	/* Layout */
+	position: relative;
+	width: 100%;
 }
-.Tabs_panelContainer {
-  background-color: var(--color-surface);
-  border: var(--border-width-thin) solid var(--color-border);
-  box-shadow: var(--shadow-inset);
-  position: relative;
-  width: 100%;
+
+.Tabs-module_panelContainer--sm {
+	padding: var(--spacing-3);
 }
-.Tabs_panelContainer--sm {
-  padding: var(--spacing-3);
+
+.Tabs-module_panelContainer--md {
+	padding: var(--spacing-4);
 }
-.Tabs_panelContainer--md {
-  padding: var(--spacing-4);
+
+.Tabs-module_panelContainer--lg {
+	padding: var(--spacing-5);
 }
-.Tabs_panelContainer--lg {
-  padding: var(--spacing-5);
-}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-  .Tabs_tab {
-    transition: none;
-  }
+	.Tabs-module_tab {
+		transition: none;
+	}
 }
 
-/* src/styles/pixelated-corners.css */
-.pixelated_corners_pixelated-corner-sm {
-  clip-path: polygon(2px 0, 0 2px, 0 100%, 0 100%, 100% 100%, 100% 100%, 100% 2px, calc(100% - 2px) 0);
-}
-.pixelated_corners_pixelated-corner-md {
-  clip-path: polygon(4px 0, 3px 1px, 2px 2px, 1px 3px, 0 4px, 0 calc(100% - 4px), 1px calc(100% - 3px), 2px calc(100% - 2px), 3px calc(100% - 1px), 4px 100%, calc(100% - 4px) 100%, calc(100% - 3px) calc(100% - 1px), calc(100% - 2px) calc(100% - 2px), calc(100% - 1px) calc(100% - 3px), 100% calc(100% - 4px), 100% 4px, calc(100% - 1px) 3px, calc(100% - 2px) 2px, calc(100% - 3px) 1px, calc(100% - 4px) 0);
-}
-.pixelated_corners_pixelated-corner-pseudo::before,
-.pixelated_corners_pixelated-corner-pseudo::after {
-  content: "";
-  position: absolute;
-  background-color: inherit;
-}
-.pixelated_corners_pixelated-corner-pseudo::before {
-  top: 0;
-  left: 2px;
-  right: 2px;
-  height: 1px;
-  box-shadow: -1px 1px 0 0 currentColor, calc(100% + 1px) 1px 0 0 currentColor;
-}
-.pixelated_corners_pixelated-corner-pseudo::after {
-  bottom: 0;
-  left: 2px;
-  right: 2px;
-  height: 1px;
-  box-shadow: -1px -1px 0 0 currentColor, calc(100% + 1px) -1px 0 0 currentColor;
-}
-.pixelated_corners_mac-corner {
-  position: relative;
-  background-clip: padding-box;
-}
-.pixelated_corners_mac-corner::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 2px;
-  height: 2px;
-  background: transparent;
-  box-shadow: 0 0 0 1px var(--color-background, #eeeeee), 1px 1px 0 0 var(--color-border, #262626);
-}
-.pixelated_corners_mac-corner::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 2px;
-  height: 2px;
-  background: transparent;
-  box-shadow: 0 0 0 1px var(--color-background, #eeeeee), -1px 1px 0 0 var(--color-border, #262626);
-}
-.pixelated_corners_chamfered-sm {
-  clip-path: polygon(2px 0, calc(100% - 2px) 0, 100% 2px, 100% calc(100% - 2px), calc(100% - 2px) 100%, 2px 100%, 0 calc(100% - 2px), 0 2px);
-}
-.pixelated_corners_chamfered-md {
-  clip-path: polygon(3px 0, calc(100% - 3px) 0, 100% 3px, 100% calc(100% - 3px), calc(100% - 3px) 100%, 3px 100%, 0 calc(100% - 3px), 0 3px);
-}
-.pixelated_corners_tab-corner {
-  position: relative;
-  clip-path: polygon(3px 0, 2px 1px, 1px 2px, 0 3px, 0 100%, 100% 100%, 100% 3px, calc(100% - 1px) 2px, calc(100% - 2px) 1px, calc(100% - 3px) 0);
-}
-.pixelated_corners_button-corner {
-  clip-path: polygon(2px 0, calc(100% - 2px) 0, 100% 2px, 100% calc(100% - 2px), calc(100% - 2px) 100%, 2px 100%, 0 calc(100% - 2px), 0 2px);
-}
-.pixelated_corners_window-corner {
-  clip-path: polygon(4px 0, 3px 1px, 2px 2px, 1px 3px, 0 4px, 0 calc(100% - 4px), 1px calc(100% - 3px), 2px calc(100% - 2px), 3px calc(100% - 1px), 4px 100%, calc(100% - 4px) 100%, calc(100% - 3px) calc(100% - 1px), calc(100% - 2px) calc(100% - 2px), calc(100% - 1px) calc(100% - 3px), 100% calc(100% - 4px), 100% 4px, calc(100% - 1px) 3px, calc(100% - 2px) 2px, calc(100% - 3px) 1px, calc(100% - 4px) 0);
+/* Window Component Styles - Mac OS 9 */
+
+/* Import pixelated corners utility */
+@import '../../styles/pixelated-corners.css';
+
+.Window-module_window {
+	/* Base window styling */
+	display: flex;
+	flex-direction: column;
+	
+	/* Mac OS 9 window appearance */
+	background-color: var(--color-gray-300); /* #DDDDDD - authentic window background */
+	border: var(--border-width-thin) solid var(--color-black);
+	
+	/* Authentic Mac OS 9 drop shadow: sharp 2px offset, no blur */
+	filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.5));
+	
+	/* Layout */
+	position: relative;
+	overflow: hidden;
+	
+	/* Default dimensions */
+	width: auto;
+	height: auto;
+	min-width: 200px;
+	min-height: 100px;
+	
 }
 
-/* src/components/Window/Window.module.css */
-.Window_window {
-  display: flex;
-  flex-direction: column;
-  background-color: var(--color-gray-300);
-  border: var(--border-width-thin) solid var(--color-black);
-  filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.5));
-  position: relative;
-  overflow: hidden;
-  width: auto;
-  height: auto;
-  min-width: 200px;
-  min-height: 100px;
+/* ========================================
+ * Window States
+ * ======================================== */
+
+.Window-module_window--active {
+	/* Active window - standard appearance */
+	z-index: 10;
 }
-.Window_window--active {
-  z-index: 10;
+
+.Window-module_window--inactive {
+	/* Inactive window - slightly dimmed */
+	opacity: 0.92;
+	z-index: 1;
 }
-.Window_window--inactive {
-  opacity: 0.92;
-  z-index: 1;
+
+/* ========================================
+ * Title Bar
+ * ======================================== */
+
+.Window-module_titleBar {
+	/* Title bar container */
+	display: flex;
+	align-items: center;
+	
+	/* Styling - authentic Mac OS 9 header color */
+	background-color: #CBCBCB;
+	border-bottom: var(--border-width-thin) solid var(--color-black);
+	
+	/* Padding */
+	padding: var(--spacing-1_5) var(--spacing-2);
+	
+	/* Height */
+	min-height: 22px;
+	
+	/* Prevent selection */
+	user-select: none;
+	
+	/* Position for pseudo-elements */
+	position: relative;
+
 }
-.Window_titleBar {
-  display: flex;
-  align-items: center;
-  background-color: #CBCBCB;
-  border-bottom: var(--border-width-thin) solid var(--color-black);
-  padding: var(--spacing-1_5) var(--spacing-2);
-  min-height: 22px;
-  user-select: none;
-  position: relative;
+.Window-module_titleBar[data-numControls="3"] .Window-module_titleCenter > :first-child{
+	width: calc(100% - (48px + var(--spacing-2)));
+	margin-left: calc(48px + var(--spacing-2));
 }
-.Window_titleBar[data-numControls="3"] .Window_titleCenter > :first-child {
-  width: calc(100% - (48px + var(--spacing-2)));
-  margin-left: calc(48px + var(--spacing-2));
+.Window-module_titleBar[data-numControls="2"] .Window-module_titleCenter> :first-child {
+	width: calc(100% - (36px + var(--spacing-2)));
+	margin-left: calc(36px + var(--spacing-2));
 }
-.Window_titleBar[data-numControls="2"] .Window_titleCenter > :first-child {
-  width: calc(100% - (36px + var(--spacing-2)));
-  margin-left: calc(36px + var(--spacing-2));
+.Window-module_titleBar[data-numControls="1"] .Window-module_titleCenter> :first-child {
+	width: calc(100% - (24px));
+	margin-left: calc(24px);
+	}
+
+.Window-module_titleCenter{	
+	display: grid;
+	align-items: center;
+	width: 100%;
+	grid-template-columns: 1fr max-content 1fr;
 }
-.Window_titleBar[data-numControls="1"] .Window_titleCenter > :first-child {
-  width: calc(100% - (24px));
-  margin-left: calc(24px);
+.Window-module_titleCenter svg{
+	width: 100%;
 }
-.Window_titleCenter {
-  display: grid;
-  align-items: center;
-  width: 100%;
-  grid-template-columns: 1fr max-content 1fr;
+/* Header striped lines - left side */
+.Window-module_titleBar::before {
+	content: '';
+	left: 60px;
+	top: 50%;
+	flex-grow: 1;	
+	/* Responsive width - fills from after controls to center, with padding for title */
+	height: 12px;
+	/* 6 horizontal lines pattern */
+	/* background: repeating-linear-gradient(
+		to bottom,
+		transparent 0px,
+		transparent 1px,
+		var(--color-gray-500) 1px,
+		var(--color-gray-500) 2px,
+		transparent 2px,
+		transparent 3px
+	); */
+	
+	/* Prevent interaction */
+	pointer-events: none;
 }
-.Window_titleCenter svg {
-  width: 100%;
+
+/* Header striped lines - right side */
+.Window-module_titleBar::after {
+	content: '';
+	right: 8px;
+	top: 50%;	
+	flex-grow: 1;
+	/* Responsive width - extends from right edge to center, with padding for title */
+	flex: 1;
+	/* max-width: 100px; */
+	height: 12px;
+	
+	/* 6 horizontal lines pattern */
+	/* background: repeating-linear-gradient(
+		to bottom,
+		transparent 0px,
+		transparent 1px,
+		var(--color-gray-500) 1px,
+		var(--color-gray-500) 2px,
+		transparent 2px,
+		transparent 3px
+	);
+	 */
+	/* Prevent interaction */
+	pointer-events: none;
 }
-.Window_titleBar::before {
-  content: "";
-  left: 60px;
-  top: 50%;
-  flex-grow: 1;
-  height: 12px;
-  pointer-events: none;
+
+/* ========================================
+ * Window Controls
+ * ======================================== */
+
+.Window-module_controls {
+	/* Control buttons container */
+	display: flex;
+	gap: var(--spacing-1);
+	align-items: center;
+	
+	/* Ensure controls are above pseudo-elements */
+	position: absolute;
+	left: 12px;
+	z-index: 1;
 }
-.Window_titleBar::after {
-  content: "";
-  right: 8px;
-  top: 50%;
-  flex-grow: 1;
-  flex: 1;
-  height: 12px;
-  pointer-events: none;
+
+.Window-module_controlButton {
+	/* Base control button */
+	width: 12px;
+	height: 12px;
+	padding: 0;
+	margin: 0;
+	
+	/* Remove button defaults */
+	background: transparent;
+	border: var(--border-width-thin) solid var(--color-border);
+	cursor: pointer;
+	
+	/* Box shadow for depth */
+	box-shadow: var(--shadow-inset);
+	
+	/* Transitions */
+	transition: none;
+	
+	/* Ensure controls are clickable */
+	position: relative;
+	z-index: 2;
 }
-.Window_controls {
-  display: flex;
-  gap: var(--spacing-1);
-  align-items: center;
-  position: absolute;
-  left: 12px;
-  z-index: 1;
+
+.Window-module_controlButton:hover {
+	background-color: var(--color-gray-300);
 }
-.Window_controlButton {
-  width: 12px;
-  height: 12px;
-  padding: 0;
-  margin: 0;
-  background: transparent;
-  border: var(--border-width-thin) solid var(--color-border);
-  cursor: pointer;
-  box-shadow: var(--shadow-inset);
-  transition: none;
-  position: relative;
-  z-index: 2;
+
+.Window-module_controlButton:active {
+	box-shadow: var(--shadow-pressed);
 }
-.Window_controlButton:hover {
-  background-color: var(--color-gray-300);
+
+.Window-module_controlButton:focus-visible {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: 1px;
 }
-.Window_controlButton:active {
-  box-shadow: var(--shadow-pressed);
+
+/* Control button visual indicators */
+.Window-module_closeBox,
+.Window-module_minimizeBox,
+.Window-module_maximizeBox {
+	width: 100%;
+	height: 100%;
+	position: relative;
 }
-.Window_controlButton:focus-visible {
-  outline: 1px dotted var(--color-focus);
-  outline-offset: 1px;
+
+/* Close button: X pattern */
+.Window-module_closeBox::before,
+.Window-module_closeBox::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 6px;
+	/* height: 1px;
+	background-color: var(--color-border); */
 }
-.Window_closeBox,
-.Window_minimizeBox,
-.Window_maximizeBox {
-  width: 100%;
-  height: 100%;
-  position: relative;
+
+/* .closeBox::before {
+	transform: translate(-50%, -50%) rotate(45deg);
 }
-.Window_closeBox::before,
-.Window_closeBox::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 6px;
+
+.closeBox::after {
+	transform: translate(-50%, -50%) rotate(-45deg);
+} */
+
+/* Minimize button: dash */
+.Window-module_minimizeBox::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 6px;
+	height: 1px;
+	background-color: var(--color-border);
 }
-.Window_minimizeBox::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 6px;
-  height: 1px;
-  background-color: var(--color-border);
+
+/* Maximize button: small square */
+.Window-module_maximizeBox::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 4px;
+	height: 4px;
+	border: 1px solid var(--color-border);
 }
-.Window_maximizeBox::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 4px;
-  height: 4px;
-  border: 1px solid var(--color-border);
+
+/* ========================================
+ * Title Text
+ * ======================================== */
+
+.Window-module_titleText {
+	/* Title text styling */
+	font-family: var(--font-system);
+	font-size: var(--font-size-md);
+	font-weight: var(--font-weight-bold);
+	line-height: var(--line-height-snug);
+	color: var(--color-text);
+	
+	/* Absolute positioning for true centering regardless of controls */
+	
+	/* Max width to prevent overlap with lines - centered with padding */
+	/* max-width: calc(100% - 160px); */
+	padding: 0 var(--spacing-2);
+	
+	/* Truncate long titles */
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	
+	/* Ensure text is above pseudo-elements */
+	z-index: 1;
 }
-.Window_titleText {
-  font-family: var(--font-system);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-snug);
-  color: var(--color-text);
-  padding: 0 var(--spacing-2);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  z-index: 1;
+
+/* ========================================
+ * Content Area
+ * ======================================== */
+
+.Window-module_content {
+	/* Content area */
+	flex: 1;
+	overflow: auto;
+	
+	/* Background - white content area like authentic Mac OS 9 */
+	background-color: var(--color-gray-100);
+	
+	/* Padding */
+	padding: var(--spacing-4);
+	
+	/* Position for scrolling */
+	position: relative;
+	
+	/* Authentic inset border */
+	margin: var(--spacing-2);
+	border: var(--border-width-thin) solid #555555;
 }
-.Window_content {
-  flex: 1;
-  overflow: auto;
-  background-color: var(--color-gray-100);
-  padding: var(--spacing-4);
-  position: relative;
-  margin: var(--spacing-2);
-  border: var(--border-width-thin) solid #555555;
+
+/* ========================================
+ * Resize Handle
+ * ======================================== */
+
+.Window-module_resizeHandle {
+	/* Resize handle in bottom-right corner */
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 12px;
+	height: 12px;
+	
+	/* Visual indicator (diagonal lines) */
+	background-image: linear-gradient(
+		135deg,
+		transparent 0%,
+		transparent 40%,
+		var(--color-border) 40%,
+		var(--color-border) 45%,
+		transparent 45%,
+		transparent 55%,
+		var(--color-border) 55%,
+		var(--color-border) 60%,
+		transparent 60%
+	);
+	
+	/* Cursor */
+	cursor: nwse-resize;
+	
+	/* Layering */
+	z-index: 5;
 }
-.Window_resizeHandle {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 12px;
-  height: 12px;
-  background-image:
-    linear-gradient(
-      135deg,
-      transparent 0%,
-      transparent 40%,
-      var(--color-border) 40%,
-      var(--color-border) 45%,
-      transparent 45%,
-      transparent 55%,
-      var(--color-border) 55%,
-      var(--color-border) 60%,
-      transparent 60%);
-  cursor: nwse-resize;
-  z-index: 5;
-}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* High contrast mode */
 @media (prefers-contrast: high) {
-  .Window_window {
-    border-width: 2px;
-  }
-  .Window_controlButton {
-    border-width: 2px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .Window_controlButton {
-    transition: none;
-  }
+	.Window-module_window {
+		border-width: 2px;
+	}
+	
+	.Window-module_controlButton {
+		border-width: 2px;
+	}
 }
 
-/* src/components/Dialog/Dialog.module.css */
-.Dialog_backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1000;
-  background-color: rgba(0, 0, 0, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: none;
-}
-.Dialog_dialogContainer {
-  position: relative;
-  pointer-events: auto;
-  animation: Dialog_dialogFadeIn 0.15s ease-out;
-}
-@keyframes Dialog_dialogFadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .Dialog_dialogContainer {
-    animation: none;
-  }
+	.Window-module_controlButton {
+		transition: none;
+	}
 }
 
-/* src/components/MenuBar/MenuBar.module.css */
-.MenuBar_menuBar {
-  display: flex;
-  align-items: stretch;
-  background-color: var(--color-gray-100);
-  border-bottom: var(--border-width-thin) solid var(--color-black);
-  width: 100%;
-  min-height: 24px;
-  position: relative;
-  user-select: none;
+/* Dialog Component Styles - Mac OS 9 */
+
+.Dialog-module_backdrop {
+	/* Full screen backdrop */
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1000;
+	
+	/* Background overlay */
+	background-color: rgba(0, 0, 0, 0.3);
+	
+	/* Center dialog */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+	/* Prevent interaction with content behind */
+	backdrop-filter: none;
 }
-.MenuBar_menuContainer {
-  position: relative;
-  display: flex;
-  align-items: stretch;
+
+.Dialog-module_dialogContainer {
+	/* Container for the window */
+	position: relative;
+	
+	/* Prevent backdrop click from closing when clicking dialog */
+	pointer-events: auto;
+	
+	/* Animation */
+	animation: Dialog-module_dialogFadeIn 0.15s ease-out;
 }
-.MenuBar_menuButton {
-  padding: var(--spacing-1) var(--spacing-3);
-  font-family: var(--font-system);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-snug);
-  color: var(--color-text);
-  text-align: center;
-  white-space: nowrap;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  transition: background-color 50ms ease;
-  user-select: none;
+
+/* ========================================
+ * Animations
+ * ======================================== */
+
+@keyframes Dialog-module_dialogFadeIn {
+	from {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
 }
-.MenuBar_menuButton:hover:not(.MenuBar_menuButton--disabled) {
-  background-color: #0000BB;
-  color: var(--color-white);
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	.Dialog-module_dialogContainer {
+		animation: none;
+	}
 }
-.MenuBar_menuButton:focus-visible {
-  outline: 1px dotted var(--color-focus);
-  outline-offset: -1px;
+
+/* MenuBar Component Styles - Mac OS 9 */
+
+/* ========================================
+ * Menu Bar Container
+ * ======================================== */
+
+.MenuBar-module_menuBar {
+	/* Base menu bar styling */
+	display: flex;
+	align-items: stretch;
+	
+	/* Mac OS 9 menu bar appearance */
+	background-color: var(--color-gray-100); /* Light gray like Mac OS 9 */
+	border-bottom: var(--border-width-thin) solid var(--color-black);
+	
+	/* Layout */
+	width: 100%;
+	min-height: 24px;
+	
+	/* Position */
+	position: relative;
+	
+	/* Prevent selection */
+	user-select: none;
 }
-.MenuBar_menuButton--open {
-  background-color: #0000BB;
-  color: var(--color-white);
+
+/* ========================================
+ * Menu Container
+ * ======================================== */
+
+.MenuBar-module_menuContainer {
+	/* Container for each menu button and dropdown */
+	position: relative;
+	display: flex;
+	align-items: stretch;
 }
-.MenuBar_menuButton--disabled {
-  color: var(--color-gray-500);
-  cursor: not-allowed;
+
+/* ========================================
+ * Menu Button
+ * ======================================== */
+
+.MenuBar-module_menuButton {
+	/* Base menu button styling */
+	padding: var(--spacing-1) var(--spacing-3);
+	
+	/* Text styling */
+	font-family: var(--font-system);
+	font-size: var(--font-size-md);
+	font-weight: var(--font-weight-bold);
+	line-height: var(--line-height-snug);
+	color: var(--color-text);
+	text-align: center;
+	white-space: nowrap;
+	
+	/* Remove button defaults */
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	
+	/* Transitions */
+	transition: background-color 50ms ease;
+	
+	/* Prevent text selection */
+	user-select: none;
 }
-.MenuBar_dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: 1000;
-  background-color: var(--color-gray-100);
-  border: var(--border-width-thin) solid var(--color-black);
-  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
-  min-width: 200px;
-  padding: var(--spacing-1) 0;
-  animation: MenuBar_menuFadeIn 100ms ease-out;
+
+/* ========================================
+ * Menu Button States
+ * ======================================== */
+
+.MenuBar-module_menuButton:hover:not(.MenuBar-module_menuButton--disabled) {
+	/* Hover state - blue highlight like Mac OS 9 */
+	background-color: #0000BB;
+	color: var(--color-white);
 }
-@keyframes MenuBar_menuFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+
+.MenuBar-module_menuButton:focus-visible {
+	/* Focus state */
+	outline: 1px dotted var(--color-focus);
+	outline-offset: -1px;
 }
+
+.MenuBar-module_menuButton--open {
+	/* Open state - highlighted */
+	background-color: #0000BB;
+	color: var(--color-white);
+}
+
+.MenuBar-module_menuButton--disabled {
+	/* Disabled state */
+	color: var(--color-gray-500);
+	cursor: not-allowed;
+}
+
+/* ========================================
+ * Dropdown Menu
+ * ======================================== */
+
+.MenuBar-module_dropdown {
+	/* Dropdown container */
+	position: absolute;
+	top: 100%;
+	left: 0;
+	z-index: 1000;
+	
+	/* Mac OS 9 menu appearance */
+	background-color: var(--color-gray-100);
+	border: var(--border-width-thin) solid var(--color-black);
+	
+	/* Drop shadow */
+	box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+	
+	/* Sizing */
+	min-width: 200px;
+	
+	/* Padding */
+	padding: var(--spacing-1) 0;
+	
+	/* Animation */
+	animation: MenuBar-module_menuFadeIn 100ms ease-out;
+}
+
+@keyframes MenuBar-module_menuFadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-4px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* High contrast mode */
 @media (prefers-contrast: high) {
-  .MenuBar_menuBar {
-    border-width: 2px;
-  }
-  .MenuBar_menuButton:hover:not(.MenuBar_menuButton--disabled),
-  .MenuBar_menuButton--open {
-    outline: 2px solid currentColor;
-    outline-offset: -2px;
-  }
-  .MenuBar_dropdown {
-    border-width: 2px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .MenuBar_menuButton {
-    transition: none;
-  }
-  .MenuBar_dropdown {
-    animation: none;
-  }
+	.MenuBar-module_menuBar {
+		border-width: 2px;
+	}
+	
+	.MenuBar-module_menuButton:hover:not(.MenuBar-module_menuButton--disabled),
+	.MenuBar-module_menuButton--open {
+		outline: 2px solid currentColor;
+		outline-offset: -2px;
+	}
+	
+	.MenuBar-module_dropdown {
+		border-width: 2px;
+	}
 }
 
-/* src/components/MenuBar/MenuItem.module.css */
-.MenuItem_menuItem {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
-  width: 100%;
-  padding: var(--spacing-1) var(--spacing-3);
-  min-height: 20px;
-  font-family: var(--font-system);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-snug);
-  text-align: left;
-  color: var(--color-text);
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  transition: background-color 50ms ease;
-  user-select: none;
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	.MenuBar-module_menuButton {
+		transition: none;
+	}
+	
+	.MenuBar-module_dropdown {
+		animation: none;
+	}
 }
-.MenuItem_menuItem:hover:not(.MenuItem_menuItem--disabled) {
-  background-color: #0000BB;
-  color: var(--color-white);
+/* MenuItem Component Styles - Mac OS 9 */
+
+/* ========================================
+ * Menu Item
+ * ======================================== */
+
+.MenuItem-module_menuItem {
+	/* Base menu item styling */
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-2);
+	
+	/* Layout */
+	width: 100%;
+	padding: var(--spacing-1) var(--spacing-3);
+	min-height: 20px;
+	
+	/* Text styling */
+	font-family: var(--font-system);
+	font-size: var(--font-size-md);
+	font-weight: var(--font-weight-bold);
+	line-height: var(--line-height-snug);
+	text-align: left;
+	color: var(--color-text);
+	
+	/* Remove button defaults */
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	
+	/* Transitions */
+	transition: background-color 50ms ease;
+	
+	/* Prevent text selection */
+	user-select: none;
 }
-.MenuItem_menuItem:focus-visible {
-  outline: 1px dotted var(--color-focus);
-  outline-offset: -1px;
+
+/* ========================================
+ * Menu Item States
+ * ======================================== */
+
+.MenuItem-module_menuItem:hover:not(.MenuItem-module_menuItem--disabled) {
+	/* Hover state - blue highlight like Mac OS 9 */
+	background-color: #0000BB;
+	color: var(--color-white);
 }
-.MenuItem_menuItem--selected {
-  background-color: #0000BB;
-  color: var(--color-white);
+
+.MenuItem-module_menuItem:focus-visible {
+	/* Focus state */
+	outline: 1px dotted var(--color-focus);
+	outline-offset: -1px;
 }
-.MenuItem_menuItem--disabled {
-  color: var(--color-gray-500);
-  cursor: not-allowed;
+
+.MenuItem-module_menuItem--selected {
+	/* Selected/active state */
+	background-color: #0000BB;
+	color: var(--color-white);
 }
-.MenuItem_menuItem--separator {
+
+.MenuItem-module_menuItem--disabled {
+	/* Disabled state */
+	color: var(--color-gray-500);
+	cursor: not-allowed;
 }
-.MenuItem_checkmark {
-  width: 16px;
-  min-width: 16px;
-  text-align: center;
-  font-size: var(--font-size-md);
+
+.MenuItem-module_menuItem--separator {
+	/* Item with separator - no additional styling needed */
 }
-.MenuItem_icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 16px;
-  min-width: 16px;
-  height: 16px;
+
+/* ========================================
+ * Menu Item Elements
+ * ======================================== */
+
+.MenuItem-module_checkmark {
+	/* Checkmark area (for toggle items) */
+	width: 16px;
+	min-width: 16px;
+	text-align: center;
+	font-size: var(--font-size-md);
 }
-.MenuItem_label {
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+
+.MenuItem-module_icon {
+	/* Icon area */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 16px;
+	min-width: 16px;
+	height: 16px;
 }
-.MenuItem_shortcut {
-  margin-left: auto;
-  font-size: var(--font-size-sm);
-  opacity: 0.8;
-  white-space: nowrap;
+
+.MenuItem-module_label {
+	/* Label text */
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
-.MenuItem_submenuArrow {
-  font-size: 8px;
-  margin-left: var(--spacing-1);
+
+.MenuItem-module_shortcut {
+	/* Keyboard shortcut */
+	margin-left: auto;
+	font-size: var(--font-size-sm);
+	opacity: 0.8;
+	white-space: nowrap;
 }
-.MenuItem_separatorLine {
-  height: 1px;
-  background-color: var(--color-gray-500);
-  margin: var(--spacing-1) var(--spacing-2);
+
+.MenuItem-module_submenuArrow {
+	/* Submenu indicator */
+	font-size: 8px;
+	margin-left: var(--spacing-1);
 }
-.MenuItem_menuItem:hover:not(.MenuItem_menuItem--disabled) .MenuItem_checkmark,
-.MenuItem_menuItem:hover:not(.MenuItem_menuItem--disabled) .MenuItem_icon,
-.MenuItem_menuItem:hover:not(.MenuItem_menuItem--disabled) .MenuItem_label,
-.MenuItem_menuItem:hover:not(.MenuItem_menuItem--disabled) .MenuItem_shortcut,
-.MenuItem_menuItem:hover:not(.MenuItem_menuItem--disabled) .MenuItem_submenuArrow {
-  color: var(--color-white);
+
+/* ========================================
+ * Separator Line
+ * ======================================== */
+
+.MenuItem-module_separatorLine {
+	/* Separator line after menu item */
+	height: 1px;
+	background-color: var(--color-gray-500);
+	margin: var(--spacing-1) var(--spacing-2);
 }
-.MenuItem_menuItem--selected .MenuItem_checkmark,
-.MenuItem_menuItem--selected .MenuItem_icon,
-.MenuItem_menuItem--selected .MenuItem_label,
-.MenuItem_menuItem--selected .MenuItem_shortcut,
-.MenuItem_menuItem--selected .MenuItem_submenuArrow {
-  color: var(--color-white);
+
+/* ========================================
+ * Hover State Color Override
+ * ======================================== */
+
+/* When menu item is hovered, change text color of all children */
+.MenuItem-module_menuItem:hover:not(.MenuItem-module_menuItem--disabled) .MenuItem-module_checkmark,
+.MenuItem-module_menuItem:hover:not(.MenuItem-module_menuItem--disabled) .MenuItem-module_icon,
+.MenuItem-module_menuItem:hover:not(.MenuItem-module_menuItem--disabled) .MenuItem-module_label,
+.MenuItem-module_menuItem:hover:not(.MenuItem-module_menuItem--disabled) .MenuItem-module_shortcut,
+.MenuItem-module_menuItem:hover:not(.MenuItem-module_menuItem--disabled) .MenuItem-module_submenuArrow {
+	color: var(--color-white);
 }
+
+/* When menu item is selected, change text color of all children */
+.MenuItem-module_menuItem--selected .MenuItem-module_checkmark,
+.MenuItem-module_menuItem--selected .MenuItem-module_icon,
+.MenuItem-module_menuItem--selected .MenuItem-module_label,
+.MenuItem-module_menuItem--selected .MenuItem-module_shortcut,
+.MenuItem-module_menuItem--selected .MenuItem-module_submenuArrow {
+	color: var(--color-white);
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* High contrast mode */
 @media (prefers-contrast: high) {
-  .MenuItem_menuItem:hover:not(.MenuItem_menuItem--disabled) {
-    outline: 2px solid currentColor;
-    outline-offset: -2px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .MenuItem_menuItem {
-    transition: none;
-  }
+	.MenuItem-module_menuItem:hover:not(.MenuItem-module_menuItem--disabled) {
+		outline: 2px solid currentColor;
+		outline-offset: -2px;
+	}
 }
 
-/* src/components/Scrollbar/Scrollbar.module.css */
-.Scrollbar_scrollbar {
-  display: flex;
-  background: var(--color-surface);
-  border: var(--border-width-thin) solid var(--color-border);
-  position: relative;
-  user-select: none;
-}
-.Scrollbar_scrollbar--vertical {
-  flex-direction: column;
-  width: 16px;
-  min-height: 60px;
-}
-.Scrollbar_scrollbar--horizontal {
-  flex-direction: row;
-  height: 16px;
-  min-width: 60px;
-}
-.Scrollbar_scrollbar--disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.Scrollbar_arrow {
-  background: var(--color-gray-400);
-  border: none;
-  box-shadow: var(--shadow-raised);
-  flex-shrink: 0;
-  width: 16px;
-  height: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  transition: none;
-  position: relative;
-}
-.Scrollbar_arrow:hover:not(:disabled) {
-  background: var(--color-gray-300);
-}
-.Scrollbar_arrow:active:not(:disabled) {
-  box-shadow: var(--shadow-inset);
-  background: var(--color-gray-500);
-}
-.Scrollbar_arrow:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.Scrollbar_arrowIcon {
-  width: 0;
-  height: 0;
-  border-style: solid;
-}
-.Scrollbar_scrollbar--vertical .Scrollbar_arrow--start .Scrollbar_arrowIcon {
-  border-width: 0 3px 4px 3px;
-  border-color: transparent transparent var(--color-text) transparent;
-}
-.Scrollbar_scrollbar--vertical .Scrollbar_arrow--end .Scrollbar_arrowIcon {
-  border-width: 4px 3px 0 3px;
-  border-color: var(--color-text) transparent transparent transparent;
-}
-.Scrollbar_scrollbar--horizontal .Scrollbar_arrow--start .Scrollbar_arrowIcon {
-  border-width: 3px 4px 3px 0;
-  border-color: transparent var(--color-text) transparent transparent;
-}
-.Scrollbar_scrollbar--horizontal .Scrollbar_arrow--end .Scrollbar_arrowIcon {
-  border-width: 3px 0 3px 4px;
-  border-color: transparent transparent transparent var(--color-text);
-}
-.Scrollbar_track {
-  background: var(--color-gray-200);
-  flex: 1;
-  position: relative;
-  cursor: pointer;
-  background-image:
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 1px,
-      rgba(0, 0, 0, 0.03) 1px,
-      rgba(0, 0, 0, 0.03) 2px);
-}
-.Scrollbar_thumb {
-  background: var(--color-gray-400);
-  border: var(--border-width-thin) solid var(--color-border);
-  box-shadow: var(--shadow-raised);
-  position: absolute;
-  cursor: grab;
-  transition: none;
-}
-.Scrollbar_thumb:active {
-  cursor: grabbing;
-  background: var(--color-gray-300);
-}
-.Scrollbar_scrollbar--vertical .Scrollbar_thumb {
-  left: 0;
-  right: 0;
-  min-height: 16px;
-}
-.Scrollbar_scrollbar--horizontal .Scrollbar_thumb {
-  top: 0;
-  bottom: 0;
-  min-width: 16px;
-}
-.Scrollbar_arrow:focus-visible {
-  outline: 1px dotted var(--color-focus);
-  outline-offset: -2px;
-}
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .Scrollbar_thumb {
-    transition: none;
-  }
+	.MenuItem-module_menuItem {
+		transition: none;
+	}
 }
+/* Scrollbar Component Styles - Mac OS 9 */
+
+/* ========================================
+ * Base Scrollbar Container
+ * ======================================== */
+
+.Scrollbar-module_scrollbar {
+	/* Base styling */
+	display: flex;
+	background: var(--color-surface);
+	border: var(--border-width-thin) solid var(--color-border);
+	
+	/* Position */
+	position: relative;
+	
+	/* No user select */
+	user-select: none;
+}
+
+.Scrollbar-module_scrollbar--vertical {
+	flex-direction: column;
+	width: 16px;
+	min-height: 60px;
+}
+
+.Scrollbar-module_scrollbar--horizontal {
+	flex-direction: row;
+	height: 16px;
+	min-width: 60px;
+}
+
+/* Disabled state */
+.Scrollbar-module_scrollbar--disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+/* ========================================
+ * Arrow Buttons
+ * ======================================== */
+
+.Scrollbar-module_arrow {
+	/* Base styling */
+	background: var(--color-gray-400);
+	border: none;
+	box-shadow: var(--shadow-raised);
+	
+	/* Size */
+	flex-shrink: 0;
+	width: 16px;
+	height: 16px;
+	
+	/* Layout */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+	/* Cursor */
+	cursor: pointer;
+	
+	/* Remove button defaults */
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	
+	/* No transitions */
+	transition: none;
+	
+	/* Position */
+	position: relative;
+}
+
+/* Arrow states */
+.Scrollbar-module_arrow:hover:not(:disabled) {
+	background: var(--color-gray-300);
+}
+
+.Scrollbar-module_arrow:active:not(:disabled) {
+	box-shadow: var(--shadow-inset);
+	background: var(--color-gray-500);
+}
+
+.Scrollbar-module_arrow:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+/* Arrow icons */
+.Scrollbar-module_arrowIcon {
+	width: 0;
+	height: 0;
+	border-style: solid;
+}
+
+/* Vertical scrollbar arrows */
+.Scrollbar-module_scrollbar--vertical .Scrollbar-module_arrow--start .Scrollbar-module_arrowIcon {
+	/* Up arrow */
+	border-width: 0 3px 4px 3px;
+	border-color: transparent transparent var(--color-text) transparent;
+}
+
+.Scrollbar-module_scrollbar--vertical .Scrollbar-module_arrow--end .Scrollbar-module_arrowIcon {
+	/* Down arrow */
+	border-width: 4px 3px 0 3px;
+	border-color: var(--color-text) transparent transparent transparent;
+}
+
+/* Horizontal scrollbar arrows */
+.Scrollbar-module_scrollbar--horizontal .Scrollbar-module_arrow--start .Scrollbar-module_arrowIcon {
+	/* Left arrow */
+	border-width: 3px 4px 3px 0;
+	border-color: transparent var(--color-text) transparent transparent;
+}
+
+.Scrollbar-module_scrollbar--horizontal .Scrollbar-module_arrow--end .Scrollbar-module_arrowIcon {
+	/* Right arrow */
+	border-width: 3px 0 3px 4px;
+	border-color: transparent transparent transparent var(--color-text);
+}
+
+/* ========================================
+ * Track (scrollable area)
+ * ======================================== */
+
+.Scrollbar-module_track {
+	/* Base styling */
+	background: var(--color-gray-200);
+	
+	/* Layout */
+	flex: 1;
+	position: relative;
+	
+	/* Cursor */
+	cursor: pointer;
+	
+	/* Pattern background for Mac OS 9 look */
+	background-image: repeating-linear-gradient(
+		0deg,
+		transparent,
+		transparent 1px,
+		rgba(0, 0, 0, 0.03) 1px,
+		rgba(0, 0, 0, 0.03) 2px
+	);
+}
+
+/* ========================================
+ * Thumb (draggable handle)
+ * ======================================== */
+
+.Scrollbar-module_thumb {
+	/* Base styling */
+	background: var(--color-gray-400);
+	border: var(--border-width-thin) solid var(--color-border);
+	box-shadow: var(--shadow-raised);
+	
+	/* Position */
+	position: absolute;
+	
+	/* Cursor */
+	cursor: grab;
+	
+	/* No transitions for instant response */
+	transition: none;
+}
+
+.Scrollbar-module_thumb:active {
+	cursor: grabbing;
+	background: var(--color-gray-300);
+}
+
+/* Vertical thumb */
+.Scrollbar-module_scrollbar--vertical .Scrollbar-module_thumb {
+	left: 0;
+	right: 0;
+	min-height: 16px;
+}
+
+/* Horizontal thumb */
+.Scrollbar-module_scrollbar--horizontal .Scrollbar-module_thumb {
+	top: 0;
+	bottom: 0;
+	min-width: 16px;
+}
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* Keyboard focus */
+.Scrollbar-module_arrow:focus-visible {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: -2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	.Scrollbar-module_thumb {
+		transition: none;
+	}
+}
+
+/* High contrast mode support */
 @media (prefers-contrast: high) {
-  .Scrollbar_scrollbar {
-    border-width: 2px;
-  }
-  .Scrollbar_thumb {
-    border-width: 2px;
-  }
+	.Scrollbar-module_scrollbar {
+		border-width: 2px;
+	}
+	
+	.Scrollbar-module_thumb {
+		border-width: 2px;
+	}
 }
 
-/* src/components/ListView/ListView.module.css */
-.ListView_listView {
-  display: flex;
-  flex-direction: column;
-  background: var(--color-surface);
-  border: var(--border-width-thin) solid var(--color-border);
-  box-shadow: var(--shadow-inset);
-  font-family: var(--font-system);
-  font-size: var(--font-size-md);
-  user-select: none;
-  overflow: auto;
+/* ListView Component Styles - Mac OS 9 */
+
+/* ========================================
+ * Base ListView Container
+ * ======================================== */
+
+.ListView-module_listView {
+	/* Base styling */
+	display: flex;
+	flex-direction: column;
+	background: var(--color-surface);
+	border: var(--border-width-thin) solid var(--color-border);
+	
+	/* Mac OS 9 inset appearance */
+	box-shadow: var(--shadow-inset);
+	
+	/* Font */
+	font-family: var(--font-system);
+	font-size: var(--font-size-md);
+	
+	/* No user select on structure */
+	user-select: none;
+	
+	/* Overflow */
+	overflow: auto;
 }
-.ListView_header {
-  display: flex;
-  flex-shrink: 0;
-  background: var(--color-gray-400);
-  border-bottom: var(--border-width-thin) solid var(--color-border);
-  box-shadow: var(--shadow-raised);
-  position: sticky;
-  top: 0;
-  z-index: 1;
+
+/* ========================================
+ * Header (Column Headers)
+ * ======================================== */
+
+.ListView-module_header {
+	/* Layout */
+	display: flex;
+	flex-shrink: 0;
+	
+	/* Styling */
+	background: var(--color-gray-400);
+	border-bottom: var(--border-width-thin) solid var(--color-border);
+	box-shadow: var(--shadow-raised);
+	
+	/* Position */
+	position: sticky;
+	top: 0;
+	z-index: 1;
 }
-.ListView_headerCell {
-  padding: var(--spacing-1) var(--spacing-2);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-1);
-  border-right: var(--border-width-thin) solid var(--color-border);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+
+.ListView-module_headerCell {
+	/* Base styling */
+	padding: var(--spacing-1) var(--spacing-2);
+	
+	/* Text */
+	font-weight: var(--font-weight-bold);
+	color: var(--color-text);
+	
+	/* Layout */
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-1);
+	
+	/* Border */
+	border-right: var(--border-width-thin) solid var(--color-border);
+	
+	/* Prevent text wrap */
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
-.ListView_headerCell:last-child {
-  border-right: none;
-  flex: 1;
+
+.ListView-module_headerCell:last-child {
+	border-right: none;
+	flex: 1; /* Last column takes remaining space */
 }
-.ListView_headerCell.ListView_sortable {
-  cursor: pointer;
+
+.ListView-module_headerCell.ListView-module_sortable {
+	cursor: pointer;
 }
-.ListView_headerCell.ListView_sortable:hover {
-  background: var(--color-gray-300);
+
+.ListView-module_headerCell.ListView-module_sortable:hover {
+	background: var(--color-gray-300);
 }
-.ListView_sortIndicator {
-  font-size: var(--font-size-xs);
-  color: var(--color-text);
+
+.ListView-module_sortIndicator {
+	font-size: var(--font-size-xs);
+	color: var(--color-text);
 }
-.ListView_body {
-  flex: 1;
-  overflow-y: auto;
-  background: var(--color-surface);
+
+/* ========================================
+ * Body (List Items)
+ * ======================================== */
+
+.ListView-module_body {
+	/* Layout */
+	flex: 1;
+	overflow-y: auto;
+	
+	/* Background */
+	background: var(--color-surface);
 }
-.ListView_row {
-  display: flex;
-  border-bottom: var(--border-width-thin) solid var(--color-border);
-  cursor: pointer;
-  transition: none;
+
+.ListView-module_row {
+	/* Layout */
+	display: flex;
+	
+	/* Styling */
+	border-bottom: var(--border-width-thin) solid var(--color-border);
+	
+	/* Cursor */
+	cursor: pointer;
+	
+	/* No transitions */
+	transition: none;
 }
-.ListView_row:hover {
-  background: var(--color-gray-300);
+
+.ListView-module_row:hover {
+	background: var(--color-gray-300);
 }
-.ListView_row.ListView_selected {
-  background: var(--color-gray-400);
-  color: var(--color-text);
+
+.ListView-module_row.ListView-module_selected {
+	background: var(--color-gray-400);
+	color: var(--color-text);
 }
-.ListView_row.ListView_selected:hover {
-  background: var(--color-gray-500);
+
+.ListView-module_row.ListView-module_selected:hover {
+	background: var(--color-gray-500);
 }
-.ListView_cell {
-  padding: var(--spacing-1) var(--spacing-2);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-1);
-  border-right: var(--border-width-thin) solid var(--color-border);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+
+.ListView-module_cell {
+	/* Base styling */
+	padding: var(--spacing-1) var(--spacing-2);
+	
+	/* Layout */
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-1);
+	
+	/* Border */
+	border-right: var(--border-width-thin) solid var(--color-border);
+	
+	/* Prevent text wrap */
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
-.ListView_cell:last-child {
-  border-right: none;
-  flex: 1;
+
+.ListView-module_cell:last-child {
+	border-right: none;
+	flex: 1; /* Last cell takes remaining space */
 }
-.ListView_icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 16px;
-  height: 16px;
+
+.ListView-module_icon {
+	/* Layout */
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	
+	/* Size */
+	width: 16px;
+	height: 16px;
 }
-.ListView_row:focus-visible {
-  outline: 1px dotted var(--color-focus);
-  outline-offset: -1px;
+
+/* ========================================
+ * Accessibility
+ * ======================================== */
+
+/* Keyboard focus */
+.ListView-module_row:focus-visible {
+	outline: 1px dotted var(--color-focus);
+	outline-offset: -1px;
 }
+
+/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-  .ListView_row {
-    transition: none;
-  }
-}
-@media (prefers-contrast: high) {
-  .ListView_listView {
-    border-width: 2px;
-  }
-  .ListView_row.ListView_selected {
-    outline: 2px solid var(--color-text);
-  }
+	.ListView-module_row {
+		transition: none;
+	}
 }
 
-/* src/components/FolderList/FolderList.module.css */
-.FolderList_folderListContent {
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+	.ListView-module_listView {
+		border-width: 2px;
+	}
+	
+	.ListView-module_row.ListView-module_selected {
+		outline: 2px solid var(--color-text);
+	}
 }
-.FolderList_listView {
-  flex: 1;
-  border: none;
-  box-shadow: none;
+
+/* FolderList Component Styles - Mac OS 9 */
+
+/* ========================================
+ * FolderList Content Area
+ * ======================================== */
+
+.FolderList-module_folderListContent {
+	/* Remove default padding from Window content */
+	padding: 0;
+	
+	/* Ensure ListView fills the content area */
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
 }
+
+.FolderList-module_listView {
+	/* Fill the entire content area */
+	flex: 1;
+	
+	/* Remove extra borders (Window already has a border) */
+	border: none;
+	
+	/* Remove shadow (already inset in Window) */
+	box-shadow: none;
+}
+
 /*# sourceMappingURL=index.css.map */

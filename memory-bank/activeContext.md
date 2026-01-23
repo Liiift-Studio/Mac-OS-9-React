@@ -63,7 +63,34 @@ Foundation and all core form/navigation components are now complete. Moving into
 
 ## Recent Changes
 
-### 2026-01-16 16:50 - CSS Modules Build Configuration Fix (CRITICAL)
+### 2026-01-23 13:45 - Migrated Build System from tsup to Rollup (CRITICAL FIX)
+- **Problem**: CSS Modules were not working in published NPM package - components rendered with empty `class=""` attributes
+- **Root Cause**: tsup's esbuild `local-css` loader doesn't reliably handle CSS Modules for library distribution
+- **Solution**: Migrated from tsup to Rollup with proper CSS Modules support
+  - Installed: `rollup`, `@rollup/plugin-node-resolve`, `@rollup/plugin-commonjs`, `@rollup/plugin-typescript`, `rollup-plugin-postcss`, `rollup-plugin-peer-deps-external`, `rollup-plugin-dts`, `postcss`
+  - Created `rollup.config.js` with proper CSS Modules configuration
+  - PostCSS modules configured with `generateScopedName: '[name]_[local]'` pattern
+  - Rollup handles both ESM and CJS outputs with source maps
+  - TypeScript declarations generated and bundled via rollup-plugin-dts
+- **Results Verified**:
+  - JavaScript mappings: `{"window":"Window-module_window","titleBar":"Window-module_titleBar",...}`
+  - CSS classes: `.Window-module_window { ... }`, `.Button-module_button { ... }`
+  - All components now render with correct scoped class names
+  - Build output: ESM (dist/index.js), CJS (dist/index.cjs), CSS (dist/index.css), Types (dist/index.d.ts)
+- **Why Rollup**: Industry standard for CSS Modules in NPM libraries (used by React Select, React DatePicker, and many others)
+- **Impact**: 
+  - Package is now fully functional when installed via npm
+  - CSS Modules reliably work in all consuming applications
+  - Follows industry best practices for library CSS bundling
+  - Build is now production-ready for NPM publishing
+- **Technical Details**:
+  - Rollup uses `rollup-plugin-postcss` which has mature CSS Modules support
+  - PostCSS modules plugin properly generates scoped class names
+  - Build script simplified to `rollup -c`
+  - tsup.config.ts retained in repo but no longer used (can be removed later)
+- **Date**: 2026-01-23 13:30-13:45
+
+### 2026-01-16 16:50 - CSS Modules Build Configuration Fix (ATTEMPTED - INCOMPLETE)
 - **Problem**: After downloading the npm package, CSS classes were not appearing in HTML (empty `class=""` attributes)
 - **Root Cause**: tsup wasn't properly processing CSS Modules during the build - the CSS Module imports resulted in empty objects in the bundled JavaScript
 - **Solution**: Configured tsup to use esbuild's `local-css` loader for CSS Modules

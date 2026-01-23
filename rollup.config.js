@@ -1,0 +1,91 @@
+// Rollup configuration for Mac OS 9 React UI library
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import typescript from '@rollup/plugin-typescript';
+import postcss from 'rollup-plugin-postcss';
+import peerDepsExternal from 'rollup-plugin-peer-deps-external';
+import dts from 'rollup-plugin-dts';
+import { readFileSync } from 'fs';
+
+const packageJson = JSON.parse(readFileSync('./package.json', 'utf-8'));
+
+export default [
+	// Main build for ESM and CJS
+	{
+		input: 'src/index.ts',
+		output: [
+			{
+				file: packageJson.module,
+				format: 'esm',
+				sourcemap: true,
+				banner: '"use client";',
+			},
+			{
+				file: packageJson.main,
+				format: 'cjs',
+				sourcemap: true,
+				banner: '"use client";',
+				exports: 'named',
+			},
+		],
+		plugins: [
+			// Automatically externalize peer dependencies
+			peerDepsExternal(),
+			
+			// Resolve node modules
+			resolve({
+				extensions: ['.ts', '.tsx', '.js', '.jsx'],
+			}),
+			
+			// Convert CommonJS modules to ES6
+			commonjs(),
+			
+			// Process CSS with modules support
+			postcss({
+				modules: {
+					// Generate scoped class names
+					generateScopedName: '[name]_[local]',
+				},
+				// Extract CSS to separate file
+				extract: 'index.css',
+				// Minimize CSS in production
+				minimize: false,
+				// Enable source maps
+				sourceMap: true,
+				// Auto-prefix CSS
+				autoModules: true,
+				// Process .css and .module.css files
+				test: /\.css$/,
+			}),
+			
+			// Compile TypeScript
+			typescript({
+				tsconfig: './tsconfig.json',
+				declaration: true,
+				declarationDir: 'dist/types',
+				declarationMap: false,
+				exclude: [
+					'**/*.test.tsx',
+					'**/*.test.ts',
+					'**/*.stories.tsx',
+					'node_modules',
+					'dist',
+				],
+			}),
+		],
+		external: ['react', 'react-dom', 'react/jsx-runtime'],
+	},
+	
+	// Bundle TypeScript declaration files
+	{
+		input: 'dist/types/index.d.ts',
+		output: [
+			{
+				file: 'dist/index.d.ts',
+				format: 'esm',
+			},
+		],
+		plugins: [dts()],
+		external: [/\.css$/],
+	},
+];
