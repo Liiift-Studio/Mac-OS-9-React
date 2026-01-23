@@ -63,6 +63,23 @@ Foundation and all core form/navigation components are now complete. Moving into
 
 ## Recent Changes
 
+### 2026-01-23 14:45 - Added onMouseEnter Callback Prop to FolderList and Window Components
+- **Enhancement**: Added `onMouseEnter` callback prop to both FolderList and Window components
+- **FolderList Changes**:
+  - Added `onMouseEnter?: (event: React.MouseEvent<HTMLDivElement>) => void` to FolderListProps interface
+  - Passes callback through to underlying Window component
+  - Updated JSDoc with usage example
+- **Window Changes**:
+  - Added `onMouseEnter?: (event: React.MouseEvent<HTMLDivElement>) => void` to WindowProps interface
+  - Wired handler to root div element
+  - Added to component's destructured props
+- **Rationale**: User requested mouse hover/enter callback capability for FolderList component
+- **Impact**: Developers can now detect when mouse enters a FolderList or Window, useful for focus management, window activation, or hover effects
+- **Files Modified**:
+  - `src/components/FolderList/FolderList.tsx`
+  - `src/components/Window/Window.tsx`
+- **Date**: 2026-01-23 14:45
+
 ### 2026-01-23 14:08 - Fixed CSS @import Resolution in Rollup Build
 - **Problem**: Build was failing in consuming applications with "Module not found: Can't resolve '../../styles/pixelated-corners.css'"
 - **Root Cause**: Rollup's PostCSS plugin was not resolving `@import` statements in CSS Module files
