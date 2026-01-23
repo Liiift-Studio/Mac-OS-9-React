@@ -63,6 +63,27 @@ Foundation and all core form/navigation components are now complete. Moving into
 
 ## Recent Changes
 
+### 2026-01-23 14:08 - Fixed CSS @import Resolution in Rollup Build
+- **Problem**: Build was failing in consuming applications with "Module not found: Can't resolve '../../styles/pixelated-corners.css'"
+- **Root Cause**: Rollup's PostCSS plugin was not resolving `@import` statements in CSS Module files
+  - Three components had unresolved imports: IconButton, Tabs, and Window
+  - The bundled `dist/index.css` contained `@import '../../styles/pixelated-corners.css'` statements
+  - These relative paths broke when the CSS was flattened into a single file
+- **Solution**: Installed and configured `postcss-import` plugin
+  - Installed: `npm install --save-dev postcss-import`
+  - Updated `rollup.config.js` to add `postcssImport()` to the plugins array
+  - Plugin must be first in the array to process imports before other transformations
+- **Results Verified**:
+  - Build completes successfully
+  - No `@import` statements remain in bundled CSS (search returned 0 results)
+  - `pixelated-corners.css` content is now inlined into `dist/index.css`
+  - Consuming applications can now import the library without module resolution errors
+- **Impact**: 
+  - Package is now fully functional when consumed via npm
+  - CSS build process is more robust
+  - Follows best practices for CSS bundling in libraries
+- **Date**: 2026-01-23 14:08
+
 ### 2026-01-23 14:01 - Removed Unused Plain CSS Files
 - **Problem**: Plain `.css` files were leftover artifacts from the CSS Modules migration on 2026-01-16
 - **Solution**: Deleted 7 unused plain CSS files that are no longer referenced

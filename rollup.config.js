@@ -3,6 +3,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
 import postcss from 'rollup-plugin-postcss';
+import postcssImport from 'postcss-import';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import dts from 'rollup-plugin-dts';
 import { readFileSync } from 'fs';
@@ -42,6 +43,10 @@ export default [
 			
 			// Process CSS with modules support
 			postcss({
+				plugins: [
+					// Process @import statements - MUST be first
+					postcssImport(),
+				],
 				modules: {
 					// Generate scoped class names
 					generateScopedName: '[name]_[local]',

@@ -239,6 +239,7 @@ body {
  * ======================================== */
 
 /* Bevel effects */
+
 .bevel {
 	box-shadow: var(--shadow-bevel);
 }
@@ -248,6 +249,7 @@ body {
 }
 
 /* Border utilities */
+
 .border {
 	border: var(--border-width-thin) solid var(--color-border);
 }
@@ -257,6 +259,7 @@ body {
 }
 
 /* Surface styles */
+
 .surface {
 	background-color: var(--color-surface);
 }
@@ -266,17 +269,20 @@ body {
 }
 
 /* Text utilities */
+
 .text-inverse {
 	color: var(--color-text-inverse);
 }
 
 /* Focus styles for keyboard navigation */
+
 .focus-visible:focus-visible {
 	outline: 1px dotted var(--color-focus);
 	outline-offset: 2px;
 }
 
 /* Disabled state */
+
 .disabled {
 	opacity: 0.5;
 	cursor: not-allowed;
@@ -333,6 +339,7 @@ body {
 }
 
 /* For links styled as buttons */
+
 .Button-module_button[href] {
 	text-decoration: none;
 }
@@ -391,11 +398,13 @@ body {
  * ======================================== */
 
 /* Hover state - subtle highlight */
+
 .Button-module_button:hover:not(:disabled) {
 	background-color: var(--color-gray-100);
 }
 
 /* Active/Pressed state - inverted bevel */
+
 .Button-module_button:active:not(:disabled) {
 	box-shadow: var(--shadow-inset);
 	background-color: var(--color-gray-300);
@@ -404,6 +413,7 @@ body {
 }
 
 /* Focus state - keyboard navigation */
+
 .Button-module_button:focus-visible {
 	outline: 1px dotted var(--color-focus);
 	outline-offset: 2px;
@@ -442,6 +452,7 @@ body {
 }
 
 /* Mac OS 9 watch cursor during loading */
+
 .Button-module_button--cursor-loading {
 	cursor: wait;
 }
@@ -477,6 +488,7 @@ body {
 }
 
 /* Icon-only buttons should be square */
+
 .Button-module_button--icon-only {
 	padding: var(--spacing-1);
 	aspect-ratio: 1;
@@ -495,6 +507,7 @@ body {
  * ======================================== */
 
 /* High contrast mode support */
+
 @media (prefers-contrast: high) {
 	.Button-module_button {
 		border-width: var(--border-width-medium);
@@ -502,6 +515,7 @@ body {
 }
 
 /* Reduced motion support */
+
 @media (prefers-reduced-motion: reduce) {
 	.Button-module_button {
 		transition: none;
@@ -550,7 +564,295 @@ body {
 /* IconButton Component Styles - Mac OS 9 */
 
 /* Import pixelated corners utility */
-@import '../../styles/pixelated-corners.css';
+
+/**
+ * Pixelated Corner Effects for Mac OS 9
+ * 
+ * Mac OS 9 didn't use modern border-radius. Instead, rounded corners were 
+ * achieved through pixelated/stepped edges that created a retro aesthetic.
+ * 
+ * This is implemented using box-shadow technique to create pixel-perfect
+ * corner effects without relying on border-radius.
+ */
+
+/* ========================================
+ * Pixelated Corner Utilities
+ * ======================================== */
+
+/**
+ * Small pixelated corner (1-2px chamfer)
+ * Used for buttons, checkboxes, and small UI elements
+ */
+
+.IconButton-module_pixelated-corner-sm {
+	/* Clip the actual corners */
+	clip-path: polygon(
+		/* Top-left corner */
+		2px 0,
+		0 2px,
+		/* Left edge */
+		0 100%,
+		/* Bottom-left - no clip */
+		0 100%,
+		/* Bottom edge */
+		100% 100%,
+		/* Bottom-right - no clip */
+		100% 100%,
+		/* Right edge */
+		100% 2px,
+		/* Top-right corner */
+		calc(100% - 2px) 0
+	);
+}
+
+/**
+ * Medium pixelated corner (3-4px chamfer)
+ * Used for dialog boxes, windows, larger UI elements
+ */
+
+.IconButton-module_pixelated-corner-md {
+	clip-path: polygon(
+		/* Top-left corner */
+		4px 0,
+		3px 1px,
+		2px 2px,
+		1px 3px,
+		0 4px,
+		/* Left edge */
+		0 calc(100% - 4px),
+		/* Bottom-left corner */
+		1px calc(100% - 3px),
+		2px calc(100% - 2px),
+		3px calc(100% - 1px),
+		4px 100%,
+		/* Bottom edge */
+		calc(100% - 4px) 100%,
+		/* Bottom-right corner */
+		calc(100% - 3px) calc(100% - 1px),
+		calc(100% - 2px) calc(100% - 2px),
+		calc(100% - 1px) calc(100% - 3px),
+		100% calc(100% - 4px),
+		/* Right edge */
+		100% 4px,
+		/* Top-right corner */
+		calc(100% - 1px) 3px,
+		calc(100% - 2px) 2px,
+		calc(100% - 3px) 1px,
+		calc(100% - 4px) 0
+	);
+}
+
+/**
+ * Alternative technique using pseudo-elements
+ * Better browser compatibility but more complex
+  */
+
+.IconButton-module_pixelated-corner-pseudo::before,
+.IconButton-module_pixelated-corner-pseudo::after {
+	content: '';
+	position: absolute;
+	background-color: inherit;
+}
+
+/* Top corners */
+
+.IconButton-module_pixelated-corner-pseudo::before {
+	top: 0;
+	left: 2px;
+	right: 2px;
+	height: 1px;
+	box-shadow:
+		-1px 1px 0 0 currentColor,
+		/* Left corner pixel */
+			calc(100% + 1px) 1px 0 0 currentColor; /* Right corner pixel */
+}
+
+/* Bottom corners */
+
+.IconButton-module_pixelated-corner-pseudo::after {
+	bottom: 0;
+	left: 2px;
+	right: 2px;
+	height: 1px;
+	box-shadow:
+		-1px -1px 0 0 currentColor,
+		/* Left corner pixel */
+			calc(100% + 1px) -1px 0 0 currentColor; /* Right corner pixel */
+}
+
+/* ========================================
+ * Box-Shadow Technique (Most Authentic)
+ * ======================================== */
+
+/**
+ * Creates pixelated corners using box-shadow layering
+ * This is the most authentic Mac OS 9 appearance
+ * 
+ * Usage: Apply to element with background color
+ */
+
+.IconButton-module_mac-corner {
+	position: relative;
+	/* Create notched corners effect */
+	background-clip: padding-box;
+}
+
+/* Top-left notch */
+
+.IconButton-module_mac-corner::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 2px;
+	height: 2px;
+	background: transparent;
+	box-shadow:
+		0 0 0 1px var(--color-background, #eeeeee),
+		1px 1px 0 0 var(--color-border, #262626);
+}
+
+/* Top-right notch */
+
+.IconButton-module_mac-corner::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 2px;
+	height: 2px;
+	background: transparent;
+	box-shadow:
+		0 0 0 1px var(--color-background, #eeeeee),
+		-1px 1px 0 0 var(--color-border, #262626);
+}
+
+/* ========================================
+ * Simple Chamfered Corners (CSS-only)
+ * ======================================== */
+
+/**
+ * Creates simple chamfered (cut) corners
+ * Lightweight alternative to full pixelated effect
+ */
+
+.IconButton-module_chamfered-sm {
+	clip-path: polygon(
+		2px 0,
+		calc(100% - 2px) 0,
+		100% 2px,
+		100% calc(100% - 2px),
+		calc(100% - 2px) 100%,
+		2px 100%,
+		0 calc(100% - 2px),
+		0 2px
+	);
+}
+
+.IconButton-module_chamfered-md {
+	clip-path: polygon(
+		3px 0,
+		calc(100% - 3px) 0,
+		100% 3px,
+		100% calc(100% - 3px),
+		calc(100% - 3px) 100%,
+		3px 100%,
+		0 calc(100% - 3px),
+		0 3px
+	);
+}
+
+/* ========================================
+ * Tab-specific Pixelated Corners
+ * Used for tab components
+ * ======================================== */
+
+/**
+ * Tab with pixelated top corners only
+ * Bottom remains flat for connection to content
+ */
+
+.IconButton-module_tab-corner {
+	position: relative;
+	clip-path: polygon(
+		/* Top-left pixelated corner */
+		3px 0,
+		2px 1px,
+		1px 2px,
+		0 3px,
+		/* Left edge down */
+		0 100%,
+		/* Bottom edge (flat) */
+		100% 100%,
+		/* Right edge up */
+		100% 3px,
+		/* Top-right pixelated corner */
+		calc(100% - 1px) 2px,
+		calc(100% - 2px) 1px,
+		calc(100% - 3px) 0
+	);
+}
+
+/**
+ * Button with all rounded pixelated corners
+ */
+
+.IconButton-module_button-corner {
+	clip-path: polygon(
+		/* Top edge with corners */
+		2px 0,
+		calc(100% - 2px) 0,
+		/* Top-right corner */
+		100% 2px,
+		/* Right edge */
+		100% calc(100% - 2px),
+		/* Bottom-right corner */
+		calc(100% - 2px) 100%,
+		/* Bottom edge */
+		2px 100%,
+		/* Bottom-left corner */
+		0 calc(100% - 2px),
+		/* Left edge */
+		0 2px
+	);
+}
+
+/* ========================================
+ * Window-specific Corners
+ * Larger radius for window chrome
+ * ======================================== */
+
+.IconButton-module_window-corner {
+	clip-path: polygon(
+		/* Top-left stepped corner */
+		4px 0,
+		3px 1px,
+		2px 2px,
+		1px 3px,
+		0 4px,
+		/* Left edge */
+		0 calc(100% - 4px),
+		/* Bottom-left stepped corner */
+		1px calc(100% - 3px),
+		2px calc(100% - 2px),
+		3px calc(100% - 1px),
+		4px 100%,
+		/* Bottom edge */
+		calc(100% - 4px) 100%,
+		/* Bottom-right stepped corner */
+		calc(100% - 3px) calc(100% - 1px),
+		calc(100% - 2px) calc(100% - 2px),
+		calc(100% - 1px) calc(100% - 3px),
+		100% calc(100% - 4px),
+		/* Right edge */
+		100% 4px,
+		/* Top-right stepped corner */
+		calc(100% - 1px) 3px,
+		calc(100% - 2px) 2px,
+		calc(100% - 3px) 1px,
+		calc(100% - 4px) 0
+	);
+}
 
 /* ========================================
  * Base IconButton Styles
@@ -638,6 +940,7 @@ body {
 }
 
 /* Layout direction variants */
+
 .IconButton-module_iconButton--label-top,
 .IconButton-module_iconButton--label-bottom {
 	flex-direction: column;
@@ -713,23 +1016,27 @@ body {
  * ======================================== */
 
 /* Hover state */
+
 .IconButton-module_iconButton:hover:not(:disabled) {
 	background: var(--color-gray-300);
 }
 
 /* Active/pressed state */
+
 .IconButton-module_iconButton:active:not(:disabled) {
 	box-shadow: var(--shadow-inset);
 	background: var(--color-gray-500);
 }
 
 /* Focus state */
+
 .IconButton-module_iconButton:focus-visible {
 	outline: 1px dotted var(--color-focus);
 	outline-offset: -3px;
 }
 
 /* Disabled state */
+
 .IconButton-module_iconButton--disabled,
 .IconButton-module_iconButton:disabled {
 	opacity: 0.5;
@@ -742,6 +1049,7 @@ body {
  * ======================================== */
 
 /* Reduced motion support */
+
 @media (prefers-reduced-motion: reduce) {
 	.IconButton-module_iconButton {
 		transition: none;
@@ -749,6 +1057,7 @@ body {
 }
 
 /* High contrast mode support */
+
 @media (prefers-contrast: high) {
 	.IconButton-module_iconButton {
 		border-width: 2px;
@@ -847,6 +1156,7 @@ body {
 }
 
 /* Checkmark using pseudo-element */
+
 .Checkbox-module_checkbox:checked::after {
 	content: '';
 	position: absolute;
@@ -977,6 +1287,7 @@ body {
  * ======================================== */
 
 /* High contrast mode support */
+
 @media (prefers-contrast: high) {
 	.Checkbox-module_checkbox {
 		border-width: var(--border-width-medium);
@@ -989,6 +1300,7 @@ body {
 }
 
 /* Reduced motion support */
+
 @media (prefers-reduced-motion: reduce) {
 	.Checkbox-module_checkbox {
 		transition: none;
@@ -1086,6 +1398,7 @@ body {
 }
 
 /* Radio dot using pseudo-element */
+
 .Radio-module_radio:checked::after {
 	content: '';
 	position: absolute;
@@ -1183,6 +1496,7 @@ body {
  * ======================================== */
 
 /* High contrast mode support */
+
 @media (prefers-contrast: high) {
 	.Radio-module_radio {
 		border-width: var(--border-width-medium);
@@ -1206,6 +1520,7 @@ body {
 }
 
 /* Reduced motion support */
+
 @media (prefers-reduced-motion: reduce) {
 	.Radio-module_radio {
 		transition: none;
@@ -1381,6 +1696,7 @@ body {
 }
 
 /* Adjust input padding when icons are present */
+
 .TextField-module_input-wrapper--with-left-icon .TextField-module_input {
 	padding-left: calc(var(--spacing-6) + var(--spacing-2));
 }
@@ -1451,6 +1767,7 @@ body {
  * ======================================== */
 
 /* Number input - remove spinner */
+
 .TextField-module_input[type='number']::-webkit-inner-spin-button,
 .TextField-module_input[type='number']::-webkit-outer-spin-button {
 	-webkit-appearance: none;
@@ -1462,6 +1779,7 @@ body {
 }
 
 /* Search input */
+
 .TextField-module_input[type='search']::-webkit-search-decoration,
 .TextField-module_input[type='search']::-webkit-search-cancel-button,
 .TextField-module_input[type='search']::-webkit-search-results-button,
@@ -1470,6 +1788,7 @@ body {
 }
 
 /* Password input */
+
 .TextField-module_input[type='password'] {
 	font-family: monospace;
 }
@@ -1479,6 +1798,7 @@ body {
  * ======================================== */
 
 /* High contrast mode support */
+
 @media (prefers-contrast: high) {
 	.TextField-module_input {
 		border-width: var(--border-width-medium);
@@ -1486,6 +1806,7 @@ body {
 }
 
 /* Reduced motion support */
+
 @media (prefers-reduced-motion: reduce) {
 	.TextField-module_input {
 		transition: none;
@@ -1704,6 +2025,7 @@ body {
  * ======================================== */
 
 /* High contrast mode support */
+
 @media (prefers-contrast: high) {
 	.Select-module_select {
 		border-width: var(--border-width-medium);
@@ -1711,6 +2033,7 @@ body {
 }
 
 /* Reduced motion support */
+
 @media (prefers-reduced-motion: reduce) {
 	.Select-module_select {
 		transition: none;
@@ -1719,7 +2042,295 @@ body {
 /* Tabs Component Styles - Mac OS 9 */
 
 /* Import pixelated corners utility */
-@import '../../styles/pixelated-corners.css';
+
+/**
+ * Pixelated Corner Effects for Mac OS 9
+ * 
+ * Mac OS 9 didn't use modern border-radius. Instead, rounded corners were 
+ * achieved through pixelated/stepped edges that created a retro aesthetic.
+ * 
+ * This is implemented using box-shadow technique to create pixel-perfect
+ * corner effects without relying on border-radius.
+ */
+
+/* ========================================
+ * Pixelated Corner Utilities
+ * ======================================== */
+
+/**
+ * Small pixelated corner (1-2px chamfer)
+ * Used for buttons, checkboxes, and small UI elements
+ */
+
+.Tabs-module_pixelated-corner-sm {
+	/* Clip the actual corners */
+	clip-path: polygon(
+		/* Top-left corner */
+		2px 0,
+		0 2px,
+		/* Left edge */
+		0 100%,
+		/* Bottom-left - no clip */
+		0 100%,
+		/* Bottom edge */
+		100% 100%,
+		/* Bottom-right - no clip */
+		100% 100%,
+		/* Right edge */
+		100% 2px,
+		/* Top-right corner */
+		calc(100% - 2px) 0
+	);
+}
+
+/**
+ * Medium pixelated corner (3-4px chamfer)
+ * Used for dialog boxes, windows, larger UI elements
+ */
+
+.Tabs-module_pixelated-corner-md {
+	clip-path: polygon(
+		/* Top-left corner */
+		4px 0,
+		3px 1px,
+		2px 2px,
+		1px 3px,
+		0 4px,
+		/* Left edge */
+		0 calc(100% - 4px),
+		/* Bottom-left corner */
+		1px calc(100% - 3px),
+		2px calc(100% - 2px),
+		3px calc(100% - 1px),
+		4px 100%,
+		/* Bottom edge */
+		calc(100% - 4px) 100%,
+		/* Bottom-right corner */
+		calc(100% - 3px) calc(100% - 1px),
+		calc(100% - 2px) calc(100% - 2px),
+		calc(100% - 1px) calc(100% - 3px),
+		100% calc(100% - 4px),
+		/* Right edge */
+		100% 4px,
+		/* Top-right corner */
+		calc(100% - 1px) 3px,
+		calc(100% - 2px) 2px,
+		calc(100% - 3px) 1px,
+		calc(100% - 4px) 0
+	);
+}
+
+/**
+ * Alternative technique using pseudo-elements
+ * Better browser compatibility but more complex
+  */
+
+.Tabs-module_pixelated-corner-pseudo::before,
+.Tabs-module_pixelated-corner-pseudo::after {
+	content: '';
+	position: absolute;
+	background-color: inherit;
+}
+
+/* Top corners */
+
+.Tabs-module_pixelated-corner-pseudo::before {
+	top: 0;
+	left: 2px;
+	right: 2px;
+	height: 1px;
+	box-shadow:
+		-1px 1px 0 0 currentColor,
+		/* Left corner pixel */
+			calc(100% + 1px) 1px 0 0 currentColor; /* Right corner pixel */
+}
+
+/* Bottom corners */
+
+.Tabs-module_pixelated-corner-pseudo::after {
+	bottom: 0;
+	left: 2px;
+	right: 2px;
+	height: 1px;
+	box-shadow:
+		-1px -1px 0 0 currentColor,
+		/* Left corner pixel */
+			calc(100% + 1px) -1px 0 0 currentColor; /* Right corner pixel */
+}
+
+/* ========================================
+ * Box-Shadow Technique (Most Authentic)
+ * ======================================== */
+
+/**
+ * Creates pixelated corners using box-shadow layering
+ * This is the most authentic Mac OS 9 appearance
+ * 
+ * Usage: Apply to element with background color
+ */
+
+.Tabs-module_mac-corner {
+	position: relative;
+	/* Create notched corners effect */
+	background-clip: padding-box;
+}
+
+/* Top-left notch */
+
+.Tabs-module_mac-corner::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 2px;
+	height: 2px;
+	background: transparent;
+	box-shadow:
+		0 0 0 1px var(--color-background, #eeeeee),
+		1px 1px 0 0 var(--color-border, #262626);
+}
+
+/* Top-right notch */
+
+.Tabs-module_mac-corner::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 2px;
+	height: 2px;
+	background: transparent;
+	box-shadow:
+		0 0 0 1px var(--color-background, #eeeeee),
+		-1px 1px 0 0 var(--color-border, #262626);
+}
+
+/* ========================================
+ * Simple Chamfered Corners (CSS-only)
+ * ======================================== */
+
+/**
+ * Creates simple chamfered (cut) corners
+ * Lightweight alternative to full pixelated effect
+ */
+
+.Tabs-module_chamfered-sm {
+	clip-path: polygon(
+		2px 0,
+		calc(100% - 2px) 0,
+		100% 2px,
+		100% calc(100% - 2px),
+		calc(100% - 2px) 100%,
+		2px 100%,
+		0 calc(100% - 2px),
+		0 2px
+	);
+}
+
+.Tabs-module_chamfered-md {
+	clip-path: polygon(
+		3px 0,
+		calc(100% - 3px) 0,
+		100% 3px,
+		100% calc(100% - 3px),
+		calc(100% - 3px) 100%,
+		3px 100%,
+		0 calc(100% - 3px),
+		0 3px
+	);
+}
+
+/* ========================================
+ * Tab-specific Pixelated Corners
+ * Used for tab components
+ * ======================================== */
+
+/**
+ * Tab with pixelated top corners only
+ * Bottom remains flat for connection to content
+ */
+
+.Tabs-module_tab-corner {
+	position: relative;
+	clip-path: polygon(
+		/* Top-left pixelated corner */
+		3px 0,
+		2px 1px,
+		1px 2px,
+		0 3px,
+		/* Left edge down */
+		0 100%,
+		/* Bottom edge (flat) */
+		100% 100%,
+		/* Right edge up */
+		100% 3px,
+		/* Top-right pixelated corner */
+		calc(100% - 1px) 2px,
+		calc(100% - 2px) 1px,
+		calc(100% - 3px) 0
+	);
+}
+
+/**
+ * Button with all rounded pixelated corners
+ */
+
+.Tabs-module_button-corner {
+	clip-path: polygon(
+		/* Top edge with corners */
+		2px 0,
+		calc(100% - 2px) 0,
+		/* Top-right corner */
+		100% 2px,
+		/* Right edge */
+		100% calc(100% - 2px),
+		/* Bottom-right corner */
+		calc(100% - 2px) 100%,
+		/* Bottom edge */
+		2px 100%,
+		/* Bottom-left corner */
+		0 calc(100% - 2px),
+		/* Left edge */
+		0 2px
+	);
+}
+
+/* ========================================
+ * Window-specific Corners
+ * Larger radius for window chrome
+ * ======================================== */
+
+.Tabs-module_window-corner {
+	clip-path: polygon(
+		/* Top-left stepped corner */
+		4px 0,
+		3px 1px,
+		2px 2px,
+		1px 3px,
+		0 4px,
+		/* Left edge */
+		0 calc(100% - 4px),
+		/* Bottom-left stepped corner */
+		1px calc(100% - 3px),
+		2px calc(100% - 2px),
+		3px calc(100% - 1px),
+		4px 100%,
+		/* Bottom edge */
+		calc(100% - 4px) 100%,
+		/* Bottom-right stepped corner */
+		calc(100% - 3px) calc(100% - 1px),
+		calc(100% - 2px) calc(100% - 2px),
+		calc(100% - 1px) calc(100% - 3px),
+		100% calc(100% - 4px),
+		/* Right edge */
+		100% 4px,
+		/* Top-right stepped corner */
+		calc(100% - 1px) 3px,
+		calc(100% - 2px) 2px,
+		calc(100% - 3px) 1px,
+		calc(100% - 4px) 0
+	);
+}
 
 .Tabs-module_container {
 	/* Container for tabs and panels */
@@ -1803,6 +2414,7 @@ body {
 }
 
 /* Active tab - raised above panel */
+
 .Tabs-module_tab--active {
 	background: var(--color-surface);
 	z-index: 1;
@@ -1810,6 +2422,7 @@ body {
 }
 
 /* Disabled tab */
+
 .Tabs-module_tab--disabled {
 	opacity: 0.5;
 	cursor: not-allowed;
@@ -1902,6 +2515,7 @@ body {
  * ======================================== */
 
 /* Reduced motion support */
+
 @media (prefers-reduced-motion: reduce) {
 	.Tabs-module_tab {
 		transition: none;
@@ -1911,7 +2525,295 @@ body {
 /* Window Component Styles - Mac OS 9 */
 
 /* Import pixelated corners utility */
-@import '../../styles/pixelated-corners.css';
+
+/**
+ * Pixelated Corner Effects for Mac OS 9
+ * 
+ * Mac OS 9 didn't use modern border-radius. Instead, rounded corners were 
+ * achieved through pixelated/stepped edges that created a retro aesthetic.
+ * 
+ * This is implemented using box-shadow technique to create pixel-perfect
+ * corner effects without relying on border-radius.
+ */
+
+/* ========================================
+ * Pixelated Corner Utilities
+ * ======================================== */
+
+/**
+ * Small pixelated corner (1-2px chamfer)
+ * Used for buttons, checkboxes, and small UI elements
+ */
+
+.Window-module_pixelated-corner-sm {
+	/* Clip the actual corners */
+	clip-path: polygon(
+		/* Top-left corner */
+		2px 0,
+		0 2px,
+		/* Left edge */
+		0 100%,
+		/* Bottom-left - no clip */
+		0 100%,
+		/* Bottom edge */
+		100% 100%,
+		/* Bottom-right - no clip */
+		100% 100%,
+		/* Right edge */
+		100% 2px,
+		/* Top-right corner */
+		calc(100% - 2px) 0
+	);
+}
+
+/**
+ * Medium pixelated corner (3-4px chamfer)
+ * Used for dialog boxes, windows, larger UI elements
+ */
+
+.Window-module_pixelated-corner-md {
+	clip-path: polygon(
+		/* Top-left corner */
+		4px 0,
+		3px 1px,
+		2px 2px,
+		1px 3px,
+		0 4px,
+		/* Left edge */
+		0 calc(100% - 4px),
+		/* Bottom-left corner */
+		1px calc(100% - 3px),
+		2px calc(100% - 2px),
+		3px calc(100% - 1px),
+		4px 100%,
+		/* Bottom edge */
+		calc(100% - 4px) 100%,
+		/* Bottom-right corner */
+		calc(100% - 3px) calc(100% - 1px),
+		calc(100% - 2px) calc(100% - 2px),
+		calc(100% - 1px) calc(100% - 3px),
+		100% calc(100% - 4px),
+		/* Right edge */
+		100% 4px,
+		/* Top-right corner */
+		calc(100% - 1px) 3px,
+		calc(100% - 2px) 2px,
+		calc(100% - 3px) 1px,
+		calc(100% - 4px) 0
+	);
+}
+
+/**
+ * Alternative technique using pseudo-elements
+ * Better browser compatibility but more complex
+  */
+
+.Window-module_pixelated-corner-pseudo::before,
+.Window-module_pixelated-corner-pseudo::after {
+	content: '';
+	position: absolute;
+	background-color: inherit;
+}
+
+/* Top corners */
+
+.Window-module_pixelated-corner-pseudo::before {
+	top: 0;
+	left: 2px;
+	right: 2px;
+	height: 1px;
+	box-shadow:
+		-1px 1px 0 0 currentColor,
+		/* Left corner pixel */
+			calc(100% + 1px) 1px 0 0 currentColor; /* Right corner pixel */
+}
+
+/* Bottom corners */
+
+.Window-module_pixelated-corner-pseudo::after {
+	bottom: 0;
+	left: 2px;
+	right: 2px;
+	height: 1px;
+	box-shadow:
+		-1px -1px 0 0 currentColor,
+		/* Left corner pixel */
+			calc(100% + 1px) -1px 0 0 currentColor; /* Right corner pixel */
+}
+
+/* ========================================
+ * Box-Shadow Technique (Most Authentic)
+ * ======================================== */
+
+/**
+ * Creates pixelated corners using box-shadow layering
+ * This is the most authentic Mac OS 9 appearance
+ * 
+ * Usage: Apply to element with background color
+ */
+
+.Window-module_mac-corner {
+	position: relative;
+	/* Create notched corners effect */
+	background-clip: padding-box;
+}
+
+/* Top-left notch */
+
+.Window-module_mac-corner::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 2px;
+	height: 2px;
+	background: transparent;
+	box-shadow:
+		0 0 0 1px var(--color-background, #eeeeee),
+		1px 1px 0 0 var(--color-border, #262626);
+}
+
+/* Top-right notch */
+
+.Window-module_mac-corner::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 2px;
+	height: 2px;
+	background: transparent;
+	box-shadow:
+		0 0 0 1px var(--color-background, #eeeeee),
+		-1px 1px 0 0 var(--color-border, #262626);
+}
+
+/* ========================================
+ * Simple Chamfered Corners (CSS-only)
+ * ======================================== */
+
+/**
+ * Creates simple chamfered (cut) corners
+ * Lightweight alternative to full pixelated effect
+ */
+
+.Window-module_chamfered-sm {
+	clip-path: polygon(
+		2px 0,
+		calc(100% - 2px) 0,
+		100% 2px,
+		100% calc(100% - 2px),
+		calc(100% - 2px) 100%,
+		2px 100%,
+		0 calc(100% - 2px),
+		0 2px
+	);
+}
+
+.Window-module_chamfered-md {
+	clip-path: polygon(
+		3px 0,
+		calc(100% - 3px) 0,
+		100% 3px,
+		100% calc(100% - 3px),
+		calc(100% - 3px) 100%,
+		3px 100%,
+		0 calc(100% - 3px),
+		0 3px
+	);
+}
+
+/* ========================================
+ * Tab-specific Pixelated Corners
+ * Used for tab components
+ * ======================================== */
+
+/**
+ * Tab with pixelated top corners only
+ * Bottom remains flat for connection to content
+ */
+
+.Window-module_tab-corner {
+	position: relative;
+	clip-path: polygon(
+		/* Top-left pixelated corner */
+		3px 0,
+		2px 1px,
+		1px 2px,
+		0 3px,
+		/* Left edge down */
+		0 100%,
+		/* Bottom edge (flat) */
+		100% 100%,
+		/* Right edge up */
+		100% 3px,
+		/* Top-right pixelated corner */
+		calc(100% - 1px) 2px,
+		calc(100% - 2px) 1px,
+		calc(100% - 3px) 0
+	);
+}
+
+/**
+ * Button with all rounded pixelated corners
+ */
+
+.Window-module_button-corner {
+	clip-path: polygon(
+		/* Top edge with corners */
+		2px 0,
+		calc(100% - 2px) 0,
+		/* Top-right corner */
+		100% 2px,
+		/* Right edge */
+		100% calc(100% - 2px),
+		/* Bottom-right corner */
+		calc(100% - 2px) 100%,
+		/* Bottom edge */
+		2px 100%,
+		/* Bottom-left corner */
+		0 calc(100% - 2px),
+		/* Left edge */
+		0 2px
+	);
+}
+
+/* ========================================
+ * Window-specific Corners
+ * Larger radius for window chrome
+ * ======================================== */
+
+.Window-module_window-corner {
+	clip-path: polygon(
+		/* Top-left stepped corner */
+		4px 0,
+		3px 1px,
+		2px 2px,
+		1px 3px,
+		0 4px,
+		/* Left edge */
+		0 calc(100% - 4px),
+		/* Bottom-left stepped corner */
+		1px calc(100% - 3px),
+		2px calc(100% - 2px),
+		3px calc(100% - 1px),
+		4px 100%,
+		/* Bottom edge */
+		calc(100% - 4px) 100%,
+		/* Bottom-right stepped corner */
+		calc(100% - 3px) calc(100% - 1px),
+		calc(100% - 2px) calc(100% - 2px),
+		calc(100% - 1px) calc(100% - 3px),
+		100% calc(100% - 4px),
+		/* Right edge */
+		100% 4px,
+		/* Top-right stepped corner */
+		calc(100% - 1px) 3px,
+		calc(100% - 2px) 2px,
+		calc(100% - 3px) 1px,
+		calc(100% - 4px) 0
+	);
+}
 
 .Window-module_window {
 	/* Base window styling */
@@ -1978,14 +2880,17 @@ body {
 	position: relative;
 
 }
+
 .Window-module_titleBar[data-numControls="3"] .Window-module_titleCenter > :first-child{
 	width: calc(100% - (48px + var(--spacing-2)));
 	margin-left: calc(48px + var(--spacing-2));
 }
+
 .Window-module_titleBar[data-numControls="2"] .Window-module_titleCenter> :first-child {
 	width: calc(100% - (36px + var(--spacing-2)));
 	margin-left: calc(36px + var(--spacing-2));
 }
+
 .Window-module_titleBar[data-numControls="1"] .Window-module_titleCenter> :first-child {
 	width: calc(100% - (24px));
 	margin-left: calc(24px);
@@ -1997,10 +2902,13 @@ body {
 	width: 100%;
 	grid-template-columns: 1fr max-content 1fr;
 }
+
 .Window-module_titleCenter svg{
 	width: 100%;
 }
+
 /* Header striped lines - left side */
+
 .Window-module_titleBar::before {
 	content: '';
 	left: 60px;
@@ -2024,6 +2932,7 @@ body {
 }
 
 /* Header striped lines - right side */
+
 .Window-module_titleBar::after {
 	content: '';
 	right: 8px;
@@ -2102,6 +3011,7 @@ body {
 }
 
 /* Control button visual indicators */
+
 .Window-module_closeBox,
 .Window-module_minimizeBox,
 .Window-module_maximizeBox {
@@ -2111,6 +3021,7 @@ body {
 }
 
 /* Close button: X pattern */
+
 .Window-module_closeBox::before,
 .Window-module_closeBox::after {
 	content: '';
@@ -2131,6 +3042,7 @@ body {
 } */
 
 /* Minimize button: dash */
+
 .Window-module_minimizeBox::before {
 	content: '';
 	position: absolute;
@@ -2143,6 +3055,7 @@ body {
 }
 
 /* Maximize button: small square */
+
 .Window-module_maximizeBox::before {
 	content: '';
 	position: absolute;
@@ -2242,6 +3155,7 @@ body {
  * ======================================== */
 
 /* High contrast mode */
+
 @media (prefers-contrast: high) {
 	.Window-module_window {
 		border-width: 2px;
@@ -2253,6 +3167,7 @@ body {
 }
 
 /* Reduced motion */
+
 @media (prefers-reduced-motion: reduce) {
 	.Window-module_controlButton {
 		transition: none;
@@ -2313,6 +3228,7 @@ body {
  * ======================================== */
 
 /* Reduced motion */
+
 @media (prefers-reduced-motion: reduce) {
 	.Dialog-module_dialogContainer {
 		animation: none;
@@ -2457,6 +3373,7 @@ body {
  * ======================================== */
 
 /* High contrast mode */
+
 @media (prefers-contrast: high) {
 	.MenuBar-module_menuBar {
 		border-width: 2px;
@@ -2474,6 +3391,7 @@ body {
 }
 
 /* Reduced motion */
+
 @media (prefers-reduced-motion: reduce) {
 	.MenuBar-module_menuButton {
 		transition: none;
@@ -2612,6 +3530,7 @@ body {
  * ======================================== */
 
 /* When menu item is hovered, change text color of all children */
+
 .MenuItem-module_menuItem:hover:not(.MenuItem-module_menuItem--disabled) .MenuItem-module_checkmark,
 .MenuItem-module_menuItem:hover:not(.MenuItem-module_menuItem--disabled) .MenuItem-module_icon,
 .MenuItem-module_menuItem:hover:not(.MenuItem-module_menuItem--disabled) .MenuItem-module_label,
@@ -2621,6 +3540,7 @@ body {
 }
 
 /* When menu item is selected, change text color of all children */
+
 .MenuItem-module_menuItem--selected .MenuItem-module_checkmark,
 .MenuItem-module_menuItem--selected .MenuItem-module_icon,
 .MenuItem-module_menuItem--selected .MenuItem-module_label,
@@ -2634,6 +3554,7 @@ body {
  * ======================================== */
 
 /* High contrast mode */
+
 @media (prefers-contrast: high) {
 	.MenuItem-module_menuItem:hover:not(.MenuItem-module_menuItem--disabled) {
 		outline: 2px solid currentColor;
@@ -2642,6 +3563,7 @@ body {
 }
 
 /* Reduced motion */
+
 @media (prefers-reduced-motion: reduce) {
 	.MenuItem-module_menuItem {
 		transition: none;
@@ -2679,6 +3601,7 @@ body {
 }
 
 /* Disabled state */
+
 .Scrollbar-module_scrollbar--disabled {
 	opacity: 0.5;
 	cursor: not-allowed;
@@ -2720,6 +3643,7 @@ body {
 }
 
 /* Arrow states */
+
 .Scrollbar-module_arrow:hover:not(:disabled) {
 	background: var(--color-gray-300);
 }
@@ -2735,6 +3659,7 @@ body {
 }
 
 /* Arrow icons */
+
 .Scrollbar-module_arrowIcon {
 	width: 0;
 	height: 0;
@@ -2742,6 +3667,7 @@ body {
 }
 
 /* Vertical scrollbar arrows */
+
 .Scrollbar-module_scrollbar--vertical .Scrollbar-module_arrow--start .Scrollbar-module_arrowIcon {
 	/* Up arrow */
 	border-width: 0 3px 4px 3px;
@@ -2755,6 +3681,7 @@ body {
 }
 
 /* Horizontal scrollbar arrows */
+
 .Scrollbar-module_scrollbar--horizontal .Scrollbar-module_arrow--start .Scrollbar-module_arrowIcon {
 	/* Left arrow */
 	border-width: 3px 4px 3px 0;
@@ -2818,6 +3745,7 @@ body {
 }
 
 /* Vertical thumb */
+
 .Scrollbar-module_scrollbar--vertical .Scrollbar-module_thumb {
 	left: 0;
 	right: 0;
@@ -2825,6 +3753,7 @@ body {
 }
 
 /* Horizontal thumb */
+
 .Scrollbar-module_scrollbar--horizontal .Scrollbar-module_thumb {
 	top: 0;
 	bottom: 0;
@@ -2836,12 +3765,14 @@ body {
  * ======================================== */
 
 /* Keyboard focus */
+
 .Scrollbar-module_arrow:focus-visible {
 	outline: 1px dotted var(--color-focus);
 	outline-offset: -2px;
 }
 
 /* Reduced motion support */
+
 @media (prefers-reduced-motion: reduce) {
 	.Scrollbar-module_thumb {
 		transition: none;
@@ -2849,6 +3780,7 @@ body {
 }
 
 /* High contrast mode support */
+
 @media (prefers-contrast: high) {
 	.Scrollbar-module_scrollbar {
 		border-width: 2px;
@@ -3026,12 +3958,14 @@ body {
  * ======================================== */
 
 /* Keyboard focus */
+
 .ListView-module_row:focus-visible {
 	outline: 1px dotted var(--color-focus);
 	outline-offset: -1px;
 }
 
 /* Reduced motion support */
+
 @media (prefers-reduced-motion: reduce) {
 	.ListView-module_row {
 		transition: none;
@@ -3039,6 +3973,7 @@ body {
 }
 
 /* High contrast mode support */
+
 @media (prefers-contrast: high) {
 	.ListView-module_listView {
 		border-width: 2px;
