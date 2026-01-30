@@ -1,0 +1,100 @@
+/**
+ * Mac OS 9 Font Face Declarations
+ * Loads authentic Mac OS 9 system fonts when available
+ * Falls back to system fonts defined in theme.css
+ */
+
+/* ========================================
+ * Charcoal - Primary System UI Font
+ * Used for buttons, menus, dialogs
+ * ======================================== */
+
+@font-face {
+	font-family: 'Charcoal';
+	src: url('./charcoal/Charcoal.woff2') format('woff2'),
+		url('./charcoal/Charcoal.woff') format('woff'),
+		url('./charcoal/Charcoal.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Charcoal';
+	src: url('./charcoal/Charcoal-Bold.woff2') format('woff2'),
+		url('./charcoal/Charcoal-Bold.woff') format('woff'),
+		url('./charcoal/Charcoal-Bold.ttf') format('truetype');
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* ========================================
+ * Geneva - Body Text Font
+ * Used for body text and secondary UI
+ * ======================================== */
+
+@font-face {
+	font-family: 'Geneva';
+	src: url('./geneva/Geneva.woff2') format('woff2'),
+		url('./geneva/Geneva.woff') format('woff'),
+		url('./geneva/Geneva.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* ========================================
+ * Chicago - Classic Mac OS Font
+ * Used for menu bar and headers
+ * ======================================== */
+
+@font-face {
+	font-family: 'Chicago';
+	src: url('./chicago/Chicago.woff2') format('woff2'),
+		url('./chicago/Chicago.woff') format('woff'),
+		url('./chicago/Chicago.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* ========================================
+ * Monaco - Monospace Font
+ * Used for code and fixed-width text
+ * ======================================== */
+
+@font-face {
+	font-family: 'Monaco';
+	src: url('./monaco/Monaco.woff2') format('woff2'),
+		url('./monaco/Monaco.woff') format('woff'),
+		url('./monaco/Monaco.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* ========================================
+ * Apple Garamond Light - Display Font
+ * Used for headlines and editorial
+ * ======================================== */
+
+@font-face {
+	font-family: 'Apple Garamond Light';
+	src: url('./apple-garamond/AppleGaramond-Light.woff2') format('woff2'),
+		url('./apple-garamond/AppleGaramond-Light.woff') format('woff'),
+		url('./apple-garamond/AppleGaramond-Light.ttf') format('truetype');
+	font-weight: 300;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Apple Garamond';
+	src: url('./apple-garamond/AppleGaramond.woff2') format('woff2'),
+		url('./apple-garamond/AppleGaramond.woff') format('woff'),
+		url('./apple-garamond/AppleGaramond.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}

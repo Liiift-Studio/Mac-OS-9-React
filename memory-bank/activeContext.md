@@ -63,6 +63,35 @@ Foundation and all core form/navigation components are now complete. Moving into
 
 ## Recent Changes
 
+### 2026-01-30 11:24 - Created Fonts Folder Structure for Mac OS 9 Font Files
+- **Enhancement**: Set up organized fonts directory for importing authentic Mac OS 9 font files
+- **Structure Created**:
+  - `src/fonts/` - Main fonts directory with README and fonts.css
+  - `src/fonts/charcoal/` - Primary system UI font directory
+  - `src/fonts/geneva/` - Body text font directory
+  - `src/fonts/chicago/` - Classic Mac OS menu bar font directory
+  - `src/fonts/monaco/` - Monospace font directory
+  - `src/fonts/apple-garamond/` - Display/headline font directory
+- **Files Added**:
+  - `src/fonts/fonts.css` - @font-face declarations for all Mac OS 9 fonts (woff2, woff, ttf fallbacks)
+  - `src/fonts/README.md` - Comprehensive documentation on font usage, licensing, and setup
+  - `.gitkeep` files in each font directory to preserve structure
+  - `src/types/fonts.d.ts` - TypeScript declarations for font file imports
+- **Build Configuration**:
+  - Updated `.gitignore` to exclude font files (*.woff, *.woff2, *.ttf, *.otf, *.eot)
+  - Git will preserve directory structure via .gitkeep files but not track font files
+- **Rationale**: 
+  - Mac OS 9 fonts are proprietary Apple fonts that cannot be distributed
+  - Users must provide their own licensed copies
+  - Library continues to work via fallback fonts in theme.css
+  - When font files are added, authentic Mac OS 9 typography is loaded
+- **Usage**: 
+  - Import `src/fonts/fonts.css` in app entry point
+  - Place font files in appropriate directories
+  - Fonts automatically available via CSS custom properties (--font-system, --font-body, etc.)
+- **Impact**: Infrastructure ready for authentic Mac OS 9 fonts without licensing issues
+- **Date**: 2026-01-30 11:24
+
 ### 2026-01-23 15:54 - Converted Font Size Variables to rem Units for Responsive Typography
 - **Fix**: Converted all font size custom properties from fixed pixel values to rem units
 - **Problem**: Window titles and ListView text were not scaling responsively despite responsive typography media queries being in place
