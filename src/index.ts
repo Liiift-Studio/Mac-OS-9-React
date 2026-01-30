@@ -4,6 +4,7 @@
 // Note: Users must import '@liiift-studio/mac-os9-ui/styles' in their app entry point
 // This import is for internal use during development/build only
 import './styles/theme.css';
+import './fonts/fonts.css';
 
 // Export components
 export { Button, type ButtonProps } from './components/Button';
