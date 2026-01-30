@@ -1,5 +1,5 @@
 // MenuBar component - Mac OS 9 style
-// Horizontal menu bar with dropdown menus
+// Horizontal menu bar with dropdown menus, logo support, and status area
 
 import React, { forwardRef, useRef, useState, useEffect, useCallback } from 'react';
 import styles from './MenuBar.module.css';
@@ -11,9 +11,28 @@ export interface Menu {
 	label: string;
 
 	/**
-	 * Menu items (content of the dropdown)
+	 * Menu type - determines behavior
+	 * @default 'dropdown'
 	 */
-	items: React.ReactNode;
+	type?: 'dropdown' | 'link';
+
+	/**
+	 * Menu items (content of the dropdown)
+	 * Required when type is 'dropdown'
+	 */
+	items?: React.ReactNode;
+
+	/**
+	 * Link href (for link-type menus)
+	 * Used when type is 'link'
+	 */
+	href?: string;
+
+	/**
+	 * Click handler (for link-type menus)
+	 * Used when type is 'link'
+	 */
+	onClick?: () => void;
 
 	/**
 	 * Whether the menu is disabled
@@ -52,17 +71,31 @@ export interface MenuBarProps {
 	 * Custom class name for menu dropdowns
 	 */
 	dropdownClassName?: string;
+
+	/**
+	 * Content to display on the left side (typically a logo)
+	 */
+	leftContent?: React.ReactNode;
+
+	/**
+	 * Content to display on the right side (status items, clock, etc.)
+	 * Can be a single element or array of elements
+	 */
+	rightContent?: React.ReactNode | React.ReactNode[];
 }
 
 /**
  * Mac OS 9 style MenuBar component
  * 
- * Horizontal menu bar with dropdown menus.
+ * Horizontal menu bar with dropdown menus, logo support, and status area.
  * 
  * Features:
  * - Classic Mac OS 9 menu bar styling
  * - Horizontal menu layout
  * - Dropdown menus on click
+ * - Link-type menu items for navigation
+ * - Logo/icon support on the left
+ * - Status area on the right (clock, system indicators, etc.)
  * - Keyboard navigation (Left/Right for menus, Up/Down for items)
  * - Click outside to close
  * - Escape key to close
@@ -74,12 +107,14 @@ export interface MenuBarProps {
  * const [openMenu, setOpenMenu] = useState<number | undefined>();
  * 
  * <MenuBar
+ *   leftContent={<img src="/logo.png" alt="Logo" width={16} height={16} />}
  *   openMenuIndex={openMenu}
  *   onMenuOpen={setOpenMenu}
  *   onMenuClose={() => setOpenMenu(undefined)}
  *   menus={[
  *     {
  *       label: 'File',
+ *       type: 'dropdown',
  *       items: (
  *         <>
  *           <MenuItem label="Open..." shortcut="⌘O" onClick={() => {}} />
@@ -88,20 +123,30 @@ export interface MenuBarProps {
  *       ),
  *     },
  *     {
- *       label: 'Edit',
- *       items: (
- *         <>
- *           <MenuItem label="Undo" shortcut="⌘Z" onClick={() => {}} />
- *           <MenuItem label="Redo" shortcut="⇧⌘Z" onClick={() => {}} />
- *         </>
- *       ),
+ *       label: 'Home',
+ *       type: 'link',
+ *       href: '/',
  *     },
+ *   ]}
+ *   rightContent={[
+ *     <Clock key="clock" />,
+ *     <div key="divider" className={styles.divider} />,
+ *     <SystemIndicator key="indicator" />,
  *   ]}
  * />
  * ```
  */
 export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
-	({ menus, openMenuIndex, onMenuOpen, onMenuClose, className = '', dropdownClassName = '' }, ref) => {
+	({ 
+		menus, 
+		openMenuIndex, 
+		onMenuOpen, 
+		onMenuClose, 
+		className = '', 
+		dropdownClassName = '',
+		leftContent,
+		rightContent,
+	}, ref) => {
 		const [menuBarElement, setMenuBarElement] = useState<HTMLDivElement | null>(null);
 		const [focusedIndex, setFocusedIndex] = useState<number>(-1);
 
@@ -167,8 +212,9 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
 					case 'ArrowDown':
 						event.preventDefault();
 						if (openMenuIndex === undefined && focusedIndex >= 0) {
-							// Open the focused menu
-							if (!menus[focusedIndex]?.disabled) {
+							// Open the focused menu (only if it's a dropdown)
+							const menu = menus[focusedIndex];
+							if (!menu?.disabled && menu?.type !== 'link') {
 								onMenuOpen?.(focusedIndex);
 							}
 						}
@@ -178,9 +224,15 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
 					case ' ':
 						event.preventDefault();
 						if (openMenuIndex === undefined && focusedIndex >= 0) {
-							// Open the focused menu
-							if (!menus[focusedIndex]?.disabled) {
-								onMenuOpen?.(focusedIndex);
+							const menu = menus[focusedIndex];
+							if (!menu?.disabled) {
+								if (menu.type === 'link') {
+									// Trigger click handler for link-type menu
+									menu.onClick?.();
+								} else {
+									// Open the focused dropdown menu
+									onMenuOpen?.(focusedIndex);
+								}
 							}
 						}
 						break;
@@ -191,7 +243,14 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
 
 		// Handle menu button click
 		const handleMenuClick = (index: number) => {
-			if (menus[index]?.disabled) return;
+			const menu = menus[index];
+			if (menu?.disabled) return;
+
+			if (menu.type === 'link') {
+				// For link-type menus, trigger the onClick handler
+				menu.onClick?.();
+				return;
+			}
 
 			if (openMenuIndex === index) {
 				// Clicking the same menu closes it
@@ -207,55 +266,104 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
 
 		const dropdownClassNames = [styles.dropdown, dropdownClassName].filter(Boolean).join(' ');
 
-	// Callback ref to handle both internal state and forwarded ref
-	const handleRef = useCallback(
-		(node: HTMLDivElement | null) => {
-			setMenuBarElement(node);
-			if (typeof ref === 'function') {
-				ref(node);
-			}
-		},
-		[ref]
-	);
+		// Callback ref to handle both internal state and forwarded ref
+		const handleRef = useCallback(
+			(node: HTMLDivElement | null) => {
+				setMenuBarElement(node);
+				if (typeof ref === 'function') {
+					ref(node);
+				} else if (ref) {
+					ref.current = node;
+				}
+			},
+			[ref]
+		);
 
-	return (
-		<div ref={handleRef} className={menuBarClassNames} role="menubar" onKeyDown={handleKeyDown}>
-				{menus.map((menu, index) => {
-					const isOpen = openMenuIndex === index;
-					const isFocused = focusedIndex === index;
+		return (
+			<div ref={handleRef} className={menuBarClassNames} role="menubar" onKeyDown={handleKeyDown}>
+				{/* Left content (logo) */}
+				{leftContent && (
+					<div className={styles.leftContent}>
+						{leftContent}
+					</div>
+				)}
 
-					const menuButtonClassNames = [
-						styles.menuButton,
-						isOpen ? styles['menuButton--open'] : '',
-						menu.disabled ? styles['menuButton--disabled'] : '',
-					]
-						.filter(Boolean)
-						.join(' ');
+				{/* Menu items */}
+				<div className={styles.menusContainer}>
+					{menus.map((menu, index) => {
+						const isOpen = openMenuIndex === index;
+						const isFocused = focusedIndex === index;
+						const isDropdown = menu.type !== 'link';
 
-					return (
-						<div key={index} className={styles.menuContainer}>
-							<button
-								type="button"
-								className={menuButtonClassNames}
-								onClick={() => handleMenuClick(index)}
-								onFocus={() => setFocusedIndex(index)}
-								onBlur={() => setFocusedIndex(-1)}
-								disabled={menu.disabled}
-								aria-haspopup="true"
-								aria-expanded={isOpen}
-								aria-disabled={menu.disabled}
-							>
-								{menu.label}
-							</button>
+						const menuButtonClassNames = [
+							styles.menuButton,
+							isOpen ? styles['menuButton--open'] : '',
+							menu.disabled ? styles['menuButton--disabled'] : '',
+						]
+							.filter(Boolean)
+							.join(' ');
 
-							{isOpen && (
-								<div className={dropdownClassNames} role="menu">
-									{menu.items}
+						// For link-type menus, render as anchor if href is provided
+						if (menu.type === 'link' && menu.href) {
+							return (
+								<div key={index} className={styles.menuContainer}>
+									<a
+										href={menu.href}
+										className={menuButtonClassNames}
+										onClick={(e) => {
+											if (menu.onClick) {
+												e.preventDefault();
+												menu.onClick();
+											}
+										}}
+										onFocus={() => setFocusedIndex(index)}
+										onBlur={() => setFocusedIndex(-1)}
+										aria-disabled={menu.disabled}
+									>
+										{menu.label}
+									</a>
 								</div>
-							)}
-						</div>
-					);
-				})}
+							);
+						}
+
+						// Standard dropdown menu or link without href
+						return (
+							<div key={index} className={styles.menuContainer}>
+								<button
+									type="button"
+									className={menuButtonClassNames}
+									onClick={() => handleMenuClick(index)}
+									onFocus={() => setFocusedIndex(index)}
+									onBlur={() => setFocusedIndex(-1)}
+									disabled={menu.disabled}
+									aria-haspopup={isDropdown ? 'true' : undefined}
+									aria-expanded={isOpen}
+									aria-disabled={menu.disabled}
+								>
+									{menu.label}
+								</button>
+
+								{isOpen && isDropdown && menu.items && (
+									<div className={dropdownClassNames} role="menu">
+										{menu.items}
+									</div>
+								)}
+							</div>
+						);
+					})}
+				</div>
+
+				{/* Right content (status area) */}
+				{rightContent && (
+					<div className={styles.rightContent}>
+						{Array.isArray(rightContent) 
+							? rightContent.map((item, index) => (
+								<React.Fragment key={index}>{item}</React.Fragment>
+							))
+							: rightContent
+						}
+					</div>
+				)}
 			</div>
 		);
 	}

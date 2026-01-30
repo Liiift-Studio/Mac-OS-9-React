@@ -63,6 +63,29 @@ Foundation and all core form/navigation components are now complete. Moving into
 
 ## Recent Changes
 
+### 2026-01-30 13:35 - Fixed Storybook JSDoc Code Formatting in MenuBar Component
+- **Fix**: Added markdown code fences with language identifier to @example JSDoc comment in MenuBar.tsx
+- **Problem**: In Storybook's auto-generated documentation, the example code was displaying as plain text instead of formatted code with syntax highlighting
+- **Root Cause**: JSDoc @example tags require markdown code fences (triple backticks) with a language identifier for Storybook to properly format the code
+- **Solution**: Added ` ```tsx ` and ` ``` ` markers around the code in the @example JSDoc comment
+- **Verification**: Searched all components for similar issues - MenuBar was the only component with this formatting problem
+- **Files Modified**:
+  - `src/components/MenuBar/MenuBar.tsx` - Added markdown code fences with `tsx` language identifier to @example JSDoc comment
+- **Impact**: 
+  - Storybook documentation now displays MenuBar example code with proper syntax highlighting
+  - Example code is properly formatted and readable in Storybook's "Docs" section
+  - No other components affected - only MenuBar had this issue
+- **Correct Format**: 
+  ```typescript
+  /**
+   * @example
+   * ```tsx
+   * const code = 'here';
+   * ```
+   */
+  ```
+- **Date**: 2026-01-30 13:35
+
 ### 2026-01-30 11:47 - Replaced Geneva/Monaco with IBM Plex Sans/Mono (Google Fonts)
 - **Change**: Switched from proprietary Geneva/Monaco fonts to open-source IBM Plex Sans and IBM Plex Mono
 - **Rationale**: Use freely available, high-quality Google Fonts alternatives to avoid licensing issues
