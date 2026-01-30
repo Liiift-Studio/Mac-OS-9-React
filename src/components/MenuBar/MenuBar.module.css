@@ -13,12 +13,12 @@
 	
 	background-color: var(--color-gray-100); /* Light gray like Mac OS 9 */
 	border-bottom: var(--border-width-thin) solid var(--color-black);
-		background: linear-gradient(180deg,
-				#EEEEEE 0%,
-				#DDDDDD 5%,
-				#DDDDDD 90%,
-				#BBBBBB 95%,
-				#262626 100%);
+	background: linear-gradient(180deg,
+			#EEEEEE 0%,
+			#DDDDDD 5%,
+			#DDDDDD 90%,
+			#BBBBBB 95%,
+			#262626 100%);
 	/* Layout */
 	width: 100%;
 	min-height: 24px;
