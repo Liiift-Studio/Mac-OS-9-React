@@ -63,13 +63,28 @@ Foundation and all core form/navigation components are now complete. Moving into
 
 ## Recent Changes
 
+### 2026-01-30 11:34 - Added Creative Commons License for Chicago Font
+- **Enhancement**: Added proper licensing for the ChiKareGo2 (Chicago variant) font included in the repository
+- **Files Added/Modified**:
+  - `src/fonts/chicago/LICENSE` - Full Creative Commons CC BY-SA license text with attribution
+  - `src/fonts/fonts.css` - Added licensing comments to Chicago @font-face declaration
+  - `src/fonts/README.md` - Updated to document Chicago font inclusion and CC BY-SA license
+- **Chicago Font Details**:
+  - Font Name: ChiKareGo2 (Chicago-style bitmap font)
+  - Source: [BitFontMaker2 Gallery](https://www.pentacom.jp/pentacom/bitfontmaker2/gallery/?id=3780)
+  - License: Creative Commons Attribution-ShareAlike (CC BY-SA)
+  - File: `chicago/ChiKareGo2.ttf` (included in repository)
+- **License Terms**: CC BY-SA allows free use, modification, and distribution with attribution and share-alike requirements
+- **Impact**: Chicago font is now legally distributable with the library, properly attributed to creator
+- **Date**: 2026-01-30 11:34
+
 ### 2026-01-30 11:24 - Created Fonts Folder Structure for Mac OS 9 Font Files
 - **Enhancement**: Set up organized fonts directory for importing authentic Mac OS 9 font files
 - **Structure Created**:
   - `src/fonts/` - Main fonts directory with README and fonts.css
   - `src/fonts/charcoal/` - Primary system UI font directory
   - `src/fonts/geneva/` - Body text font directory
-  - `src/fonts/chicago/` - Classic Mac OS menu bar font directory
+  - `src/fonts/chicago/` - Classic Mac OS menu bar font directory (includes ChiKareGo2.ttf)
   - `src/fonts/monaco/` - Monospace font directory
   - `src/fonts/apple-garamond/` - Display/headline font directory
 - **Files Added**:

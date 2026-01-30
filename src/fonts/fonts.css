@@ -47,13 +47,16 @@
 /* ========================================
  * Chicago - Classic Mac OS Font
  * Used for menu bar and headers
+ * 
+ * Font: ChiKareGo2 (Chicago variant)
+ * Source: https://www.pentacom.jp/pentacom/bitfontmaker2/gallery/?id=3780
+ * License: Creative Commons (CC BY-SA)
+ * See: src/fonts/chicago/LICENSE for full license text
  * ======================================== */
 
 @font-face {
 	font-family: 'Chicago';
-	src: url('./chicago/Chicago.woff2') format('woff2'),
-		url('./chicago/Chicago.woff') format('woff'),
-		url('./chicago/Chicago.ttf') format('truetype');
+	src: url('./chicago/ChiKareGo2.ttf') format('truetype');
 	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
