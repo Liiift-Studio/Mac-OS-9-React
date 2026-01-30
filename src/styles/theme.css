@@ -21,6 +21,21 @@
 	font-style: normal;
 	font-display: swap;
 }
+
+@font-face {
+	font-family: 'Pixel-Op';
+	src: url('../pixelOperator/pixelOperator.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Pixel-Op';
+	src: url('../pixelOperator/pixelOperator-Bold.ttf') format('truetype');
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
 :root {
 	/* ========================================
 	 * Colors - Grayscale Palette
@@ -29,7 +44,7 @@
 	--color-gray-200: #eeeeee;
 	--color-gray-300: #dddddd;
 	--color-gray-400: #cccccc;
-	--color-gray-500: #999999;
+	--color-gray-500: #BBBBBB;
 	--color-gray-600: #666666;
 	--color-gray-700: #4d4d4d;
 	--color-gray-800: #333333;
@@ -71,19 +86,22 @@
 	 * ======================================== */
 	
 	/* Charcoal - Primary system UI font (menus, buttons, dialogs) */
-	--font-system: 'Charcoal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-	
+	--font-system: 'IBM Plex Mono', monospace;
+
 	/* IBM Plex Sans - Body text and secondary UI elements (open-source alternative to Geneva) */
-	--font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	--font-body: 'IBM Plex Sans', monospace;
 	
 	/* EB Garamond - Headlines and editorial content (open-source alternative) */
-	--font-display: 'EB Garamond', Garamond, Georgia, serif;
+	--font-display: 'Pixel-Op', monospace;
 	
+	--font-title: 'EB Garamond', Garamond, Georgia, serif;
 	/* Chicago - Classic Mac OS system font (menu bar) */
-	--font-chicago: 'Chicago', 'Chicago Classic', 'Charcoal CY', Charcoal, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	--font-chicago: 'Chicago', 'Chicago Classic', 'Charcoal CY', monospace;
 	
 	/* IBM Plex Mono - Mac OS 9 monospace font (open-source alternative to Monaco) */
-	--font-mono: 'IBM Plex Mono', Monaco, 'Courier New', monospace;
+	--font-mono: 'IBM Plex Mono', monospace;
+	
+	--font-pixel: 'Pixel-Op', monospace;
 
 	/* ========================================
 	 * Typography - Font Sizes

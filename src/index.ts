@@ -8,7 +8,7 @@ import './fonts/fonts.css';
 
 // Export components
 export { Button, type ButtonProps } from './components/Button';
-export { Icon, type IconProps } from './components/Icon';
+export { Icon, IconLibrary, type IconProps, type IconLibraryProps, type IconName } from './components/Icon';
 export { IconButton, type IconButtonProps } from './components/IconButton';
 export { Checkbox, type CheckboxProps } from './components/Checkbox';
 export { Radio, type RadioProps } from './components/Radio';
@@ -23,8 +23,8 @@ export { Scrollbar, type ScrollbarProps } from './components/Scrollbar';
 export { ListView, type ListViewProps, type ListColumn, type ListItem } from './components/ListView';
 export { FolderList, type FolderListProps } from './components/FolderList';
 
-// Export icon components from Icon library
-export * from './components/Icon/icons';
+// Export all icon components from Icon library
+export * from './components/Icon/categories';
 
 // Export design tokens
 export * from './tokens';

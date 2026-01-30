@@ -10,9 +10,15 @@
 	align-items: stretch;
 	
 	/* Mac OS 9 menu bar appearance */
+	
 	background-color: var(--color-gray-100); /* Light gray like Mac OS 9 */
 	border-bottom: var(--border-width-thin) solid var(--color-black);
-	
+		background: linear-gradient(180deg,
+				#EEEEEE 0%,
+				#DDDDDD 5%,
+				#DDDDDD 90%,
+				#BBBBBB 95%,
+				#262626 100%);
 	/* Layout */
 	width: 100%;
 	min-height: 24px;
@@ -22,6 +28,29 @@
 	
 	/* Prevent selection */
 	user-select: none;
+}
+
+/* ========================================
+ * Left Content (Logo Area)
+ * ======================================== */
+
+.leftContent {
+	/* Container for logo or left-side content */
+	display: flex;
+	align-items: center;
+	padding: 0 var(--spacing-2);
+	flex-shrink: 0;
+}
+
+/* ========================================
+ * Menus Container
+ * ======================================== */
+
+.menusContainer {
+	/* Container for all menu items */
+	display: flex;
+	align-items: stretch;
+	flex: 1;
 }
 
 /* ========================================
@@ -36,6 +65,32 @@
 }
 
 /* ========================================
+ * Right Content (Status Area)
+ * ======================================== */
+
+.rightContent {
+	/* Container for status items, clock, etc. */
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-2);
+	padding: 0 var(--spacing-2);
+	flex-shrink: 0;
+	margin-left: auto;
+}
+
+/* ========================================
+ * Divider (Utility Class)
+ * ======================================== */
+
+.divider {
+	/* Vertical divider for right content items */
+	width: 1px;
+	height: 16px;
+	background-color: var(--color-gray-500);
+	align-self: center;
+}
+
+/* ========================================
  * Menu Button
  * ======================================== */
 
@@ -44,7 +99,7 @@
 	padding: var(--spacing-1) var(--spacing-3);
 	
 	/* Text styling */
-	font-family: var(--font-system);
+	font-family: var(--font-display);
 	font-size: var(--font-size-md);
 	font-weight: var(--font-weight-bold);
 	line-height: var(--line-height-snug);
@@ -52,10 +107,12 @@
 	text-align: center;
 	white-space: nowrap;
 	
-	/* Remove button defaults */
+	/* Remove button/link defaults */
 	background-color: transparent;
 	border: none;
 	cursor: pointer;
+	text-decoration: none;
+	display: inline-block;
 	
 	/* Transitions */
 	transition: background-color 50ms ease;
