@@ -63,6 +63,30 @@ Foundation and all core form/navigation components are now complete. Moving into
 
 ## Recent Changes
 
+### 2026-01-30 11:47 - Replaced Geneva/Monaco with IBM Plex Sans/Mono (Google Fonts)
+- **Change**: Switched from proprietary Geneva/Monaco fonts to open-source IBM Plex Sans and IBM Plex Mono
+- **Rationale**: Use freely available, high-quality Google Fonts alternatives to avoid licensing issues
+- **Files Modified**:
+  - Renamed `src/fonts/geneva/` to `src/fonts/ibm-plex-sans/`
+  - Renamed `src/fonts/monaco/` to `src/fonts/ibm-plex-mono/`
+  - `src/fonts/fonts.css` - Updated @font-face declarations for both IBM Plex fonts (Regular, Medium, Bold weights)
+  - `src/fonts/README.md` - Updated directory structure and font documentation
+  - `src/fonts/ibm-plex-sans/.gitkeep` - Created with download instructions
+  - `src/fonts/ibm-plex-mono/.gitkeep` - Created with download instructions
+  - `src/styles/theme.css` - Updated --font-body and --font-mono CSS variables
+- **IBM Plex Sans Details**:
+  - Source: [Google Fonts](https://fonts.google.com/specimen/IBM+Plex+Sans)
+  - License: SIL Open Font License (OFL) - free and open source
+  - Weights: Regular (400), Medium (500), Bold (700)
+  - Excellent alternative to Geneva for body text
+- **IBM Plex Mono Details**:
+  - Source: [Google Fonts](https://fonts.google.com/specimen/IBM+Plex+Mono)
+  - License: SIL Open Font License (OFL) - free and open source
+  - Weights: Regular (400), Medium (500), Bold (700)
+  - Excellent alternative to Monaco for monospace text
+- **Impact**: 4 out of 5 fonts now use freely licensed alternatives, only Charcoal remains proprietary
+- **Date**: 2026-01-30 11:47
+
 ### 2026-01-30 11:44 - Replaced ChiKareGo2 with ChicagoFLF (Public Domain Font)
 - **Change**: Switched from ChiKareGo2 (CC BY-SA) to ChicagoFLF (Public Domain) for the Chicago font
 - **Rationale**: Public Domain license is simpler and offers more freedom than Creative Commons

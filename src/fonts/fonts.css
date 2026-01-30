@@ -30,16 +30,41 @@
 }
 
 /* ========================================
- * Geneva - Body Text Font
+ * IBM Plex Sans - Body Text Font
  * Used for body text and secondary UI
+ * 
+ * Font: IBM Plex Sans (open-source sans-serif)
+ * Source: https://fonts.google.com/specimen/IBM+Plex+Sans
+ * License: SIL Open Font License (OFL)
+ * Free alternative to Geneva
  * ======================================== */
 
 @font-face {
-	font-family: 'Geneva';
-	src: url('./geneva/Geneva.woff2') format('woff2'),
-		url('./geneva/Geneva.woff') format('woff'),
-		url('./geneva/Geneva.ttf') format('truetype');
+	font-family: 'IBM Plex Sans';
+	src: url('./ibm-plex-sans/IBMPlexSans-Regular.woff2') format('woff2'),
+		url('./ibm-plex-sans/IBMPlexSans-Regular.woff') format('woff'),
+		url('./ibm-plex-sans/IBMPlexSans-Regular.ttf') format('truetype');
 	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'IBM Plex Sans';
+	src: url('./ibm-plex-sans/IBMPlexSans-Medium.woff2') format('woff2'),
+		url('./ibm-plex-sans/IBMPlexSans-Medium.woff') format('woff'),
+		url('./ibm-plex-sans/IBMPlexSans-Medium.ttf') format('truetype');
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'IBM Plex Sans';
+	src: url('./ibm-plex-sans/IBMPlexSans-Bold.woff2') format('woff2'),
+		url('./ibm-plex-sans/IBMPlexSans-Bold.woff') format('woff'),
+		url('./ibm-plex-sans/IBMPlexSans-Bold.ttf') format('truetype');
+	font-weight: 700;
 	font-style: normal;
 	font-display: swap;
 }
@@ -63,16 +88,41 @@
 }
 
 /* ========================================
- * Monaco - Monospace Font
+ * IBM Plex Mono - Monospace Font
  * Used for code and fixed-width text
+ * 
+ * Font: IBM Plex Mono (open-source monospace)
+ * Source: https://fonts.google.com/specimen/IBM+Plex+Mono
+ * License: SIL Open Font License (OFL)
+ * Free alternative to Monaco
  * ======================================== */
 
 @font-face {
-	font-family: 'Monaco';
-	src: url('./monaco/Monaco.woff2') format('woff2'),
-		url('./monaco/Monaco.woff') format('woff'),
-		url('./monaco/Monaco.ttf') format('truetype');
+	font-family: 'IBM Plex Mono';
+	src: url('./ibm-plex-mono/IBMPlexMono-Regular.woff2') format('woff2'),
+		url('./ibm-plex-mono/IBMPlexMono-Regular.woff') format('woff'),
+		url('./ibm-plex-mono/IBMPlexMono-Regular.ttf') format('truetype');
 	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'IBM Plex Mono';
+	src: url('./ibm-plex-mono/IBMPlexMono-Medium.woff2') format('woff2'),
+		url('./ibm-plex-mono/IBMPlexMono-Medium.woff') format('woff'),
+		url('./ibm-plex-mono/IBMPlexMono-Medium.ttf') format('truetype');
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'IBM Plex Mono';
+	src: url('./ibm-plex-mono/IBMPlexMono-Bold.woff2') format('woff2'),
+		url('./ibm-plex-mono/IBMPlexMono-Bold.woff') format('woff'),
+		url('./ibm-plex-mono/IBMPlexMono-Bold.ttf') format('truetype');
+	font-weight: 700;
 	font-style: normal;
 	font-display: swap;
 }

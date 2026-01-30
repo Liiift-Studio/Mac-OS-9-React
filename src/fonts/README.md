@@ -7,9 +7,9 @@ This directory contains font files for authentic Mac OS 9 typography.
 ```
 src/fonts/
 ├── charcoal/          # Primary system UI font
-├── geneva/            # Body text and secondary UI
+├── ibm-plex-sans/     # Body text and secondary UI (IBM Plex Sans)
 ├── chicago/           # Classic Mac OS menu bar font
-├── monaco/            # Monospace font
+├── ibm-plex-mono/     # Monospace font (IBM Plex Mono)
 ├── eb-garamond/       # Display/headline font (EB Garamond)
 ├── fonts.css          # @font-face declarations
 └── README.md          # This file
@@ -24,10 +24,15 @@ To achieve authentic Mac OS 9 typography, place the following font files in thei
 - `Charcoal.ttf` or `Charcoal.woff2` (regular/bold)
 - Used for: Buttons, menus, dialogs, primary UI elements
 
-### Geneva (Body Text)
-**Directory**: `geneva/`
-- `Geneva.ttf` or `Geneva.woff2` (regular)
+### IBM Plex Sans (Body Text)
+**Directory**: `ibm-plex-sans/`
+- `IBMPlexSans-Regular.ttf/woff2` (regular weight)
+- `IBMPlexSans-Medium.ttf/woff2` (medium weight)
+- `IBMPlexSans-Bold.ttf/woff2` (bold weight)
+- Source: [Google Fonts - IBM Plex Sans](https://fonts.google.com/specimen/IBM+Plex+Sans)
+- License: SIL Open Font License (OFL) - free and open source
 - Used for: Body text, secondary UI elements
+- Free alternative to Geneva
 
 ### Chicago (Classic Menu Bar)
 **Directory**: `chicago/`
@@ -36,10 +41,15 @@ To achieve authentic Mac OS 9 typography, place the following font files in thei
 - License: Public Domain (completely free to use) - see `chicago/LICENSE`
 - Used for: Menu bar, classic Mac OS headers
 
-### Monaco (Monospace)
-**Directory**: `monaco/`
-- `Monaco.ttf` or `Monaco.woff2` (regular)
+### IBM Plex Mono (Monospace)
+**Directory**: `ibm-plex-mono/`
+- `IBMPlexMono-Regular.ttf/woff2` (regular weight)
+- `IBMPlexMono-Medium.ttf/woff2` (medium weight)
+- `IBMPlexMono-Bold.ttf/woff2` (bold weight)
+- Source: [Google Fonts - IBM Plex Mono](https://fonts.google.com/specimen/IBM+Plex+Mono)
+- License: SIL Open Font License (OFL) - free and open source
 - Used for: Code, fixed-width text
+- Free alternative to Monaco
 
 ### EB Garamond (Display)
 **Directory**: `eb-garamond/`
@@ -86,22 +96,38 @@ import '../src/styles/fonts.css';
 
 ## License Considerations
 
-### Chicago Font (Included)
+### Freely Licensed Fonts (Included/Recommended)
 
-✅ **ChicagoFLF** - A Chicago-style font is included in this repository.
-
-- **License**: Public Domain (completely free to use)
+✅ **ChicagoFLF** - Public Domain
+- **License**: Public Domain (completely free)
 - **Source**: [Font Library - ChicagoFLF](https://fontlibrary.org/en/font/chicagoflf)
 - **File**: `chicago/ChicagoFLF.ttf`
 - **License File**: `chicago/LICENSE`
-- Free to use for any purpose without restrictions or attribution requirements
 
-### Other Mac OS 9 Fonts (Not Included)
+✅ **IBM Plex Sans** - SIL Open Font License (OFL)
+- **License**: Free and open source
+- **Source**: [Google Fonts](https://fonts.google.com/specimen/IBM+Plex+Sans)
+- **Directory**: `ibm-plex-sans/`
+- Free alternative to Geneva
 
-⚠️ **Important**: Other Mac OS 9 system fonts (Charcoal, Geneva, Monaco, Apple Garamond) are proprietary Apple fonts.
+✅ **IBM Plex Mono** - SIL Open Font License (OFL)
+- **License**: Free and open source
+- **Source**: [Google Fonts](https://fonts.google.com/specimen/IBM+Plex+Mono)
+- **Directory**: `ibm-plex-mono/`
+- Free alternative to Monaco
 
-- These fonts are **NOT** included in this repository
-- Users must provide their own licensed copies
+✅ **EB Garamond** - SIL Open Font License (OFL)
+- **License**: Free and open source
+- **Source**: [Google Fonts](https://fonts.google.com/specimen/EB+Garamond)
+- **Directory**: `eb-garamond/`
+- Free alternative to Apple Garamond
+
+### Proprietary Mac OS 9 Font (Not Included)
+
+⚠️ **Charcoal** - Proprietary Apple font
+
+- This font is **NOT** included in this repository
+- Users must provide their own licensed copy
 - Common sources:
   - Original Mac OS 9 installation
   - Licensed font archives
