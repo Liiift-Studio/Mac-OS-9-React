@@ -10,7 +10,7 @@ src/fonts/
 ├── geneva/            # Body text and secondary UI
 ├── chicago/           # Classic Mac OS menu bar font
 ├── monaco/            # Monospace font
-├── apple-garamond/    # Display/headline font
+├── eb-garamond/       # Display/headline font (EB Garamond)
 ├── fonts.css          # @font-face declarations
 └── README.md          # This file
 ```
@@ -41,10 +41,15 @@ To achieve authentic Mac OS 9 typography, place the following font files in thei
 - `Monaco.ttf` or `Monaco.woff2` (regular)
 - Used for: Code, fixed-width text
 
-### Apple Garamond Light (Display)
-**Directory**: `apple-garamond/`
-- `AppleGaramond.ttf` or `AppleGaramond-Light.woff2`
+### EB Garamond (Display)
+**Directory**: `eb-garamond/`
+- `EBGaramond-Regular.ttf/woff2` (regular weight)
+- `EBGaramond-Medium.ttf/woff2` (medium weight)
+- `EBGaramond-SemiBold.ttf/woff2` (semi-bold weight)
+- Source: [Google Fonts](https://fonts.google.com/specimen/EB+Garamond)
+- License: SIL Open Font License (OFL) - free and open source
 - Used for: Headlines, editorial content
+- Free alternative to Apple Garamond
 
 ## Font Format Recommendations
 

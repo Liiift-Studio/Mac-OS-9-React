@@ -78,26 +78,41 @@
 }
 
 /* ========================================
- * Apple Garamond Light - Display Font
+ * EB Garamond - Display Font
  * Used for headlines and editorial
+ * 
+ * Font: EB Garamond (open-source Garamond revival)
+ * Source: https://fonts.google.com/specimen/EB+Garamond
+ * License: SIL Open Font License (OFL)
+ * Free alternative to Apple Garamond
  * ======================================== */
 
 @font-face {
-	font-family: 'Apple Garamond Light';
-	src: url('./apple-garamond/AppleGaramond-Light.woff2') format('woff2'),
-		url('./apple-garamond/AppleGaramond-Light.woff') format('woff'),
-		url('./apple-garamond/AppleGaramond-Light.ttf') format('truetype');
-	font-weight: 300;
+	font-family: 'EB Garamond';
+	src: url('./eb-garamond/EBGaramond-Regular.woff2') format('woff2'),
+		url('./eb-garamond/EBGaramond-Regular.woff') format('woff'),
+		url('./eb-garamond/EBGaramond-Regular.ttf') format('truetype');
+	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
 }
 
 @font-face {
-	font-family: 'Apple Garamond';
-	src: url('./apple-garamond/AppleGaramond.woff2') format('woff2'),
-		url('./apple-garamond/AppleGaramond.woff') format('woff'),
-		url('./apple-garamond/AppleGaramond.ttf') format('truetype');
-	font-weight: 400;
+	font-family: 'EB Garamond';
+	src: url('./eb-garamond/EBGaramond-Medium.woff2') format('woff2'),
+		url('./eb-garamond/EBGaramond-Medium.woff') format('woff'),
+		url('./eb-garamond/EBGaramond-Medium.ttf') format('truetype');
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'EB Garamond';
+	src: url('./eb-garamond/EBGaramond-SemiBold.woff2') format('woff2'),
+		url('./eb-garamond/EBGaramond-SemiBold.woff') format('woff'),
+		url('./eb-garamond/EBGaramond-SemiBold.ttf') format('truetype');
+	font-weight: 600;
 	font-style: normal;
 	font-display: swap;
 }

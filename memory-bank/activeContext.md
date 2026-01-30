@@ -63,6 +63,23 @@ Foundation and all core form/navigation components are now complete. Moving into
 
 ## Recent Changes
 
+### 2026-01-30 11:41 - Replaced Apple Garamond with EB Garamond (Open Source Alternative)
+- **Change**: Switched from proprietary Apple Garamond to open-source EB Garamond font
+- **Rationale**: Avoid licensing issues with proprietary Apple fonts by using free, open-source alternative
+- **Files Modified**:
+  - Renamed `src/fonts/apple-garamond/` to `src/fonts/eb-garamond/`
+  - `src/fonts/fonts.css` - Updated @font-face declarations for EB Garamond (Regular, Medium, SemiBold weights)
+  - `src/fonts/README.md` - Updated directory structure and font documentation
+  - `src/fonts/eb-garamond/.gitkeep` - Updated with EB Garamond file examples and Google Fonts link
+  - `src/styles/theme.css` - Updated --font-display CSS variable to use 'EB Garamond'
+- **EB Garamond Details**:
+  - Source: [Google Fonts](https://fonts.google.com/specimen/EB+Garamond)
+  - License: SIL Open Font License (OFL) - free and open source
+  - Weights included: Regular (400), Medium (500), SemiBold (600)
+  - High-quality Garamond revival, excellent alternative to Apple Garamond
+- **Impact**: Display font now uses freely distributable open-source typeface, avoiding licensing complications
+- **Date**: 2026-01-30 11:41
+
 ### 2026-01-30 11:34 - Added Creative Commons License for Chicago Font
 - **Enhancement**: Added proper licensing for the ChiKareGo2 (Chicago variant) font included in the repository
 - **Files Added/Modified**:

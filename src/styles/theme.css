@@ -61,8 +61,8 @@
 	/* Geneva - Body text and secondary UI elements */
 	--font-body: Geneva, 'Geneva CY', 'Lucida Grande', 'Lucida Sans Unicode', sans-serif;
 	
-	/* Apple Garamond Light - Headlines and editorial content */
-	--font-display: 'Apple Garamond Light', 'Apple Garamond', Garamond, Georgia, serif;
+	/* EB Garamond - Headlines and editorial content (open-source alternative) */
+	--font-display: 'EB Garamond', Garamond, Georgia, serif;
 	
 	/* Chicago - Classic Mac OS system font (menu bar) */
 	--font-chicago: Chicago, 'Chicago Classic', 'Charcoal CY', Charcoal, monospace;
