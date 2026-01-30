@@ -5,69 +5,11 @@
  */
 
 /* ========================================
- * Charcoal - Primary System UI Font
- * Used for buttons, menus, dialogs
+ * Google Fonts Import
+ * Import IBM Plex Sans, IBM Plex Mono, and EB Garamond from Google Fonts
  * ======================================== */
 
-@font-face {
-	font-family: 'Charcoal';
-	src: url('./charcoal/Charcoal.woff2') format('woff2'),
-		url('./charcoal/Charcoal.woff') format('woff'),
-		url('./charcoal/Charcoal.ttf') format('truetype');
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: 'Charcoal';
-	src: url('./charcoal/Charcoal-Bold.woff2') format('woff2'),
-		url('./charcoal/Charcoal-Bold.woff') format('woff'),
-		url('./charcoal/Charcoal-Bold.ttf') format('truetype');
-	font-weight: 700;
-	font-style: normal;
-	font-display: swap;
-}
-
-/* ========================================
- * IBM Plex Sans - Body Text Font
- * Used for body text and secondary UI
- * 
- * Font: IBM Plex Sans (open-source sans-serif)
- * Source: https://fonts.google.com/specimen/IBM+Plex+Sans
- * License: SIL Open Font License (OFL)
- * Free alternative to Geneva
- * ======================================== */
-
-@font-face {
-	font-family: 'IBM Plex Sans';
-	src: url('./ibm-plex-sans/IBMPlexSans-Regular.woff2') format('woff2'),
-		url('./ibm-plex-sans/IBMPlexSans-Regular.woff') format('woff'),
-		url('./ibm-plex-sans/IBMPlexSans-Regular.ttf') format('truetype');
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: 'IBM Plex Sans';
-	src: url('./ibm-plex-sans/IBMPlexSans-Medium.woff2') format('woff2'),
-		url('./ibm-plex-sans/IBMPlexSans-Medium.woff') format('woff'),
-		url('./ibm-plex-sans/IBMPlexSans-Medium.ttf') format('truetype');
-	font-weight: 500;
-	font-style: normal;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: 'IBM Plex Sans';
-	src: url('./ibm-plex-sans/IBMPlexSans-Bold.woff2') format('woff2'),
-		url('./ibm-plex-sans/IBMPlexSans-Bold.woff') format('woff'),
-		url('./ibm-plex-sans/IBMPlexSans-Bold.ttf') format('truetype');
-	font-weight: 700;
-	font-style: normal;
-	font-display: swap;
-}
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
 
 /* ========================================
  * Chicago - Classic Mac OS Font
@@ -82,12 +24,27 @@
 @font-face {
 	font-family: 'Chicago';
 	src: url('./chicago/ChicagoFLF.ttf') format('truetype');
-	font-weight: 400;
+	font-weight: normal;
 	font-style: normal;
 	font-display: swap;
 }
 
 /* ========================================
+ * Font Notes
+ * ======================================== */
+
+/*
+ * IBM Plex Sans - Body Text Font
+ * Used for body text and secondary UI
+ * 
+ * Font: IBM Plex Sans (open-source sans-serif)
+ * Source: https://fonts.google.com/specimen/IBM+Plex+Sans
+ * License: SIL Open Font License (OFL)
+ * Free alternative to Geneva
+ * Loaded via @import from Google Fonts
+ */
+
+/*
  * IBM Plex Mono - Monospace Font
  * Used for code and fixed-width text
  * 
@@ -95,39 +52,10 @@
  * Source: https://fonts.google.com/specimen/IBM+Plex+Mono
  * License: SIL Open Font License (OFL)
  * Free alternative to Monaco
- * ======================================== */
+ * Loaded via @import from Google Fonts
+ */
 
-@font-face {
-	font-family: 'IBM Plex Mono';
-	src: url('./ibm-plex-mono/IBMPlexMono-Regular.woff2') format('woff2'),
-		url('./ibm-plex-mono/IBMPlexMono-Regular.woff') format('woff'),
-		url('./ibm-plex-mono/IBMPlexMono-Regular.ttf') format('truetype');
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: 'IBM Plex Mono';
-	src: url('./ibm-plex-mono/IBMPlexMono-Medium.woff2') format('woff2'),
-		url('./ibm-plex-mono/IBMPlexMono-Medium.woff') format('woff'),
-		url('./ibm-plex-mono/IBMPlexMono-Medium.ttf') format('truetype');
-	font-weight: 500;
-	font-style: normal;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: 'IBM Plex Mono';
-	src: url('./ibm-plex-mono/IBMPlexMono-Bold.woff2') format('woff2'),
-		url('./ibm-plex-mono/IBMPlexMono-Bold.woff') format('woff'),
-		url('./ibm-plex-mono/IBMPlexMono-Bold.ttf') format('truetype');
-	font-weight: 700;
-	font-style: normal;
-	font-display: swap;
-}
-
-/* ========================================
+/*
  * EB Garamond - Display Font
  * Used for headlines and editorial
  * 
@@ -135,34 +63,14 @@
  * Source: https://fonts.google.com/specimen/EB+Garamond
  * License: SIL Open Font License (OFL)
  * Free alternative to Apple Garamond
- * ======================================== */
+ * Loaded via @import from Google Fonts
+ */
 
-@font-face {
-	font-family: 'EB Garamond';
-	src: url('./eb-garamond/EBGaramond-Regular.woff2') format('woff2'),
-		url('./eb-garamond/EBGaramond-Regular.woff') format('woff'),
-		url('./eb-garamond/EBGaramond-Regular.ttf') format('truetype');
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: 'EB Garamond';
-	src: url('./eb-garamond/EBGaramond-Medium.woff2') format('woff2'),
-		url('./eb-garamond/EBGaramond-Medium.woff') format('woff'),
-		url('./eb-garamond/EBGaramond-Medium.ttf') format('truetype');
-	font-weight: 500;
-	font-style: normal;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: 'EB Garamond';
-	src: url('./eb-garamond/EBGaramond-SemiBold.woff2') format('woff2'),
-		url('./eb-garamond/EBGaramond-SemiBold.woff') format('woff'),
-		url('./eb-garamond/EBGaramond-SemiBold.ttf') format('truetype');
-	font-weight: 600;
-	font-style: normal;
-	font-display: swap;
-}
+/*
+ * Charcoal - Primary System UI Font
+ * Used for buttons, menus, dialogs
+ * 
+ * This font is NOT included in this repository
+ * Users must provide their own licensed copy
+ * Falls back to system fonts defined in theme.css
+ */

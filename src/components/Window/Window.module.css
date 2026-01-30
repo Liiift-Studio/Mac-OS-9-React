@@ -250,7 +250,7 @@
 
 .titleText {
 	/* Title text styling */
-	font-family: var(--font-system);
+	font-family: var(--font-chicago);
 	font-size: var(--font-size-md);
 	font-weight: var(--font-weight-bold);
 	line-height: var(--line-height-snug);

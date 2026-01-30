@@ -55,20 +55,19 @@
 	 * ======================================== */
 	
 	/* Charcoal - Primary system UI font (menus, buttons, dialogs) */
-	--font-system: Charcoal, 'Charcoal CY', Chicago, 'Chicago Classic', -apple-system,
-		BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+	--font-system: 'Charcoal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 	
 	/* IBM Plex Sans - Body text and secondary UI elements (open-source alternative to Geneva) */
-	--font-body: 'IBM Plex Sans', Geneva, 'Geneva CY', 'Lucida Grande', 'Lucida Sans Unicode', sans-serif;
+	--font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 	
 	/* EB Garamond - Headlines and editorial content (open-source alternative) */
 	--font-display: 'EB Garamond', Garamond, Georgia, serif;
 	
 	/* Chicago - Classic Mac OS system font (menu bar) */
-	--font-chicago: Chicago, 'Chicago Classic', 'Charcoal CY', Charcoal, monospace;
+	--font-chicago: 'Chicago', 'Chicago Classic', 'Charcoal CY', Charcoal, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 	
 	/* IBM Plex Mono - Mac OS 9 monospace font (open-source alternative to Monaco) */
-	--font-mono: 'IBM Plex Mono', Monaco, 'Monaco CY', 'SF Mono', 'Courier New', Courier, monospace;
+	--font-mono: 'IBM Plex Mono', Monaco, 'Courier New', monospace;
 
 	/* ========================================
 	 * Typography - Font Sizes
