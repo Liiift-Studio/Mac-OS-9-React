@@ -31,9 +31,9 @@ To achieve authentic Mac OS 9 typography, place the following font files in thei
 
 ### Chicago (Classic Menu Bar)
 **Directory**: `chicago/`
-- `ChiKareGo2.ttf` (included - Chicago variant)
-- Source: [BitFontMaker2 Gallery](https://www.pentacom.jp/pentacom/bitfontmaker2/gallery/?id=3780)
-- License: Creative Commons (CC BY-SA) - see `chicago/LICENSE`
+- `ChicagoFLF.ttf` (included - Chicago variant)
+- Source: [Font Library - ChicagoFLF](https://fontlibrary.org/en/font/chicagoflf)
+- License: Public Domain (completely free to use) - see `chicago/LICENSE`
 - Used for: Menu bar, classic Mac OS headers
 
 ### Monaco (Monospace)
@@ -88,13 +88,13 @@ import '../src/styles/fonts.css';
 
 ### Chicago Font (Included)
 
-✅ **ChiKareGo2** - A Chicago-style font is included in this repository.
+✅ **ChicagoFLF** - A Chicago-style font is included in this repository.
 
-- **License**: Creative Commons Attribution-ShareAlike (CC BY-SA)
-- **Source**: [BitFontMaker2 Gallery](https://www.pentacom.jp/pentacom/bitfontmaker2/gallery/?id=3780)
-- **File**: `chicago/ChiKareGo2.ttf`
+- **License**: Public Domain (completely free to use)
+- **Source**: [Font Library - ChicagoFLF](https://fontlibrary.org/en/font/chicagoflf)
+- **File**: `chicago/ChicagoFLF.ttf`
 - **License File**: `chicago/LICENSE`
-- Free to use, modify, and distribute under CC BY-SA terms
+- Free to use for any purpose without restrictions or attribution requirements
 
 ### Other Mac OS 9 Fonts (Not Included)
 

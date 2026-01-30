@@ -63,6 +63,22 @@ Foundation and all core form/navigation components are now complete. Moving into
 
 ## Recent Changes
 
+### 2026-01-30 11:44 - Replaced ChiKareGo2 with ChicagoFLF (Public Domain Font)
+- **Change**: Switched from ChiKareGo2 (CC BY-SA) to ChicagoFLF (Public Domain) for the Chicago font
+- **Rationale**: Public Domain license is simpler and offers more freedom than Creative Commons
+- **Files Modified**:
+  - `src/fonts/fonts.css` - Updated @font-face declaration to use ChicagoFLF.ttf
+  - `src/fonts/chicago/LICENSE` - Updated with Public Domain license text
+  - `src/fonts/README.md` - Updated documentation with ChicagoFLF information
+  - `src/fonts/chicago/.gitkeep` - Updated with ChicagoFLF file reference
+- **ChicagoFLF Details**:
+  - Source: [Font Library - ChicagoFLF](https://fontlibrary.org/en/font/chicagoflf)
+  - License: Public Domain - completely free to use without restrictions
+  - Creator: Fración Libre Foundry (FLF)
+  - No attribution required, can be used for any purpose
+- **Impact**: Simplifies licensing, provides maximum freedom for users and library distribution
+- **Date**: 2026-01-30 11:44
+
 ### 2026-01-30 11:41 - Replaced Apple Garamond with EB Garamond (Open Source Alternative)
 - **Change**: Switched from proprietary Apple Garamond to open-source EB Garamond font
 - **Rationale**: Avoid licensing issues with proprietary Apple fonts by using free, open-source alternative
