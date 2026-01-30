@@ -1,6 +1,6 @@
 import './styles/theme.css';
 export { Button, type ButtonProps } from './components/Button';
-export { Icon, type IconProps } from './components/Icon';
+export { Icon, IconLibrary, type IconProps, type IconLibraryProps, type IconName } from './components/Icon';
 export { IconButton, type IconButtonProps } from './components/IconButton';
 export { Checkbox, type CheckboxProps } from './components/Checkbox';
 export { Radio, type RadioProps } from './components/Radio';
@@ -13,6 +13,6 @@ export { MenuBar, MenuItem, type MenuBarProps, type MenuItemProps, type Menu } f
 export { Scrollbar, type ScrollbarProps } from './components/Scrollbar';
 export { ListView, type ListViewProps, type ListColumn, type ListItem } from './components/ListView';
 export { FolderList, type FolderListProps } from './components/FolderList';
-export * from './components/Icon/icons';
+export * from './components/Icon/categories';
 export * from './tokens';
 export type * from './types';

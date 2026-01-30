@@ -6,6 +6,7 @@ import postcss from 'rollup-plugin-postcss';
 import postcssImport from 'postcss-import';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import dts from 'rollup-plugin-dts';
+import copy from 'rollup-plugin-copy';
 import { readFileSync } from 'fs';
 
 const packageJson = JSON.parse(readFileSync('./package.json', 'utf-8'));
@@ -75,6 +76,20 @@ export default [
 					'**/*.stories.tsx',
 					'node_modules',
 					'dist',
+				],
+			}),
+			
+			// Copy font files to dist
+			copy({
+				targets: [
+					{
+						src: 'src/fonts/pixelOperator/*.ttf',
+						dest: 'dist/fonts/pixelOperator',
+					},
+					{
+						src: 'src/fonts/pixelOperator/LICENSE.txt',
+						dest: 'dist/fonts/pixelOperator',
+					},
 				],
 			}),
 		],

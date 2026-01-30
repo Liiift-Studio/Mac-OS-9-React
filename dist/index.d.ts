@@ -1,4 +1,5 @@
-import React$1, { ButtonHTMLAttributes, AnchorHTMLAttributes, SVGAttributes, InputHTMLAttributes, SelectHTMLAttributes, ReactElement } from 'react';
+import * as React$1 from 'react';
+import React__default, { ButtonHTMLAttributes, AnchorHTMLAttributes, SVGAttributes, InputHTMLAttributes, SelectHTMLAttributes, ReactElement } from 'react';
 
 interface BaseButtonProps {
     /**
@@ -38,11 +39,11 @@ interface BaseButtonProps {
     /**
      * Icon to display before the button text
      */
-    leftIcon?: React$1.ReactNode;
+    leftIcon?: React__default.ReactNode;
     /**
      * Icon to display after the button text
      */
-    rightIcon?: React$1.ReactNode;
+    rightIcon?: React__default.ReactNode;
     /**
      * If true, only displays icon (children used as aria-label)
      */
@@ -66,7 +67,7 @@ interface BaseButtonProps {
     /**
      * Button content
      */
-    children: React$1.ReactNode;
+    children: React__default.ReactNode;
 }
 interface ButtonAsButton extends BaseButtonProps, Omit<ButtonHTMLAttributes<HTMLButtonElement>, keyof BaseButtonProps | 'aria-label' | 'aria-describedby' | 'aria-pressed'> {
     /**
@@ -153,7 +154,7 @@ type ButtonProps = ButtonAsButton | ButtonAsLink;
  * </Button>
  * ```
  */
-declare const Button: React$1.ForwardRefExoticComponent<ButtonProps & React$1.RefAttributes<HTMLButtonElement | HTMLAnchorElement>>;
+declare const Button: React__default.ForwardRefExoticComponent<ButtonProps & React__default.RefAttributes<HTMLButtonElement | HTMLAnchorElement>>;
 
 interface IconProps extends SVGAttributes<SVGElement> {
     /**
@@ -164,7 +165,7 @@ interface IconProps extends SVGAttributes<SVGElement> {
     /**
      * Icon content (SVG path or element)
      */
-    children: React$1.ReactNode;
+    children: React__default.ReactNode;
     /**
      * Optional label for accessibility
      */
@@ -191,13 +192,59 @@ interface IconProps extends SVGAttributes<SVGElement> {
  * </Icon>
  * ```
  */
-declare const Icon: React$1.ForwardRefExoticComponent<IconProps & React$1.RefAttributes<SVGSVGElement>>;
+declare const Icon: React__default.ForwardRefExoticComponent<IconProps & React__default.RefAttributes<SVGSVGElement>>;
+
+/**
+ * Central icon registry
+ * Maps icon names to their components
+ */
+declare const iconRegistry: {
+    readonly divider: React$1.FC<{}>;
+};
+/**
+ * Type-safe icon names
+ * Auto-generated from the icon registry
+ */
+type IconName = keyof typeof iconRegistry;
+
+interface IconLibraryProps extends Omit<IconProps, 'children' | 'label'> {
+    /**
+     * Icon name from the registry
+     */
+    icon: IconName;
+    /**
+     * Optional custom label for accessibility
+     * If not provided, uses the icon name
+     */
+    label?: string;
+}
+/**
+ * IconLibrary component for Mac OS 9 UI
+ *
+ * Provides a convenient way to use icons by name rather than importing each one individually.
+ * All icons are registered in the icon registry and can be accessed by their string names.
+ *
+ * @example
+ * ```tsx
+ * <IconLibrary icon="save" size="md" />
+ * <IconLibrary icon="folder" size="lg" />
+ * <IconLibrary icon="arrow-right" size="sm" />
+ * ```
+ */
+declare const IconLibrary: React__default.FC<IconLibraryProps>;
+
+/**
+ * Divider icon
+ * Vertical divider for menu bars and toolbars
+ * Note: Uses a 10x32 viewBox instead of standard 24x24
+ */
+declare const DividerIcon: React__default.FC;
 
 interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     /**
      * Icon element to display
      */
-    icon: React$1.ReactNode;
+    icon: React__default.ReactNode;
     /**
      * Optional text label to display alongside icon
      */
@@ -253,7 +300,7 @@ interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
  * />
  * ```
  */
-declare const IconButton: React$1.ForwardRefExoticComponent<IconButtonProps & React$1.RefAttributes<HTMLButtonElement>>;
+declare const IconButton: React__default.ForwardRefExoticComponent<IconButtonProps & React__default.RefAttributes<HTMLButtonElement>>;
 
 interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
     /**
@@ -280,7 +327,7 @@ interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'typ
     /**
      * Label text for the checkbox
      */
-    label?: React$1.ReactNode;
+    label?: React__default.ReactNode;
     /**
      * Position of the label relative to the checkbox
      * @default 'right'
@@ -311,7 +358,7 @@ interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'typ
     /**
      * Callback when checked state changes
      */
-    onChange?: (event: React$1.ChangeEvent<HTMLInputElement>) => void;
+    onChange?: (event: React__default.ChangeEvent<HTMLInputElement>) => void;
 }
 /**
  * Mac OS 9 style Checkbox component
@@ -349,7 +396,7 @@ interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'typ
  * />
  * ```
  */
-declare const Checkbox: React$1.ForwardRefExoticComponent<CheckboxProps & React$1.RefAttributes<HTMLInputElement>>;
+declare const Checkbox: React__default.ForwardRefExoticComponent<CheckboxProps & React__default.RefAttributes<HTMLInputElement>>;
 
 interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
     /**
@@ -370,7 +417,7 @@ interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' 
     /**
      * Label text for the radio
      */
-    label?: React$1.ReactNode;
+    label?: React__default.ReactNode;
     /**
      * Position of the label relative to the radio
      * @default 'right'
@@ -409,7 +456,7 @@ interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' 
     /**
      * Callback when checked state changes
      */
-    onChange?: (event: React$1.ChangeEvent<HTMLInputElement>) => void;
+    onChange?: (event: React__default.ChangeEvent<HTMLInputElement>) => void;
 }
 /**
  * Mac OS 9 style Radio component
@@ -454,13 +501,13 @@ interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' 
  * </div>
  * ```
  */
-declare const Radio: React$1.ForwardRefExoticComponent<RadioProps & React$1.RefAttributes<HTMLInputElement>>;
+declare const Radio: React__default.ForwardRefExoticComponent<RadioProps & React__default.RefAttributes<HTMLInputElement>>;
 
 interface TextFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
     /**
      * Label text for the text field
      */
-    label?: React$1.ReactNode;
+    label?: React__default.ReactNode;
     /**
      * Position of the label relative to the text field
      * @default 'top'
@@ -492,11 +539,11 @@ interface TextFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'si
     /**
      * Icon to display before the input (left side)
      */
-    leftIcon?: React$1.ReactNode;
+    leftIcon?: React__default.ReactNode;
     /**
      * Icon to display after the input (right side)
      */
-    rightIcon?: React$1.ReactNode;
+    rightIcon?: React__default.ReactNode;
     /**
      * Override aria-label
      */
@@ -554,7 +601,7 @@ interface TextFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'si
  * />
  * ```
  */
-declare const TextField: React$1.ForwardRefExoticComponent<TextFieldProps & React$1.RefAttributes<HTMLInputElement>>;
+declare const TextField: React__default.ForwardRefExoticComponent<TextFieldProps & React__default.RefAttributes<HTMLInputElement>>;
 
 interface SelectOption {
     value: string | number;
@@ -565,7 +612,7 @@ interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'siz
     /**
      * Label text for the select
      */
-    label?: React$1.ReactNode;
+    label?: React__default.ReactNode;
     /**
      * Position of the label relative to the select
      * @default 'top'
@@ -657,7 +704,7 @@ interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'siz
  * </Select>
  * ```
  */
-declare const Select: React$1.ForwardRefExoticComponent<SelectProps & React$1.RefAttributes<HTMLSelectElement>>;
+declare const Select: React__default.ForwardRefExoticComponent<SelectProps & React__default.RefAttributes<HTMLSelectElement>>;
 
 interface TabPanelProps {
     /**
@@ -667,11 +714,11 @@ interface TabPanelProps {
     /**
      * Content of the tab panel
      */
-    children: React$1.ReactNode;
+    children: React__default.ReactNode;
     /**
      * Optional icon to display in the tab
      */
-    icon?: React$1.ReactNode;
+    icon?: React__default.ReactNode;
     /**
      * Whether this tab is disabled
      * @default false
@@ -686,7 +733,7 @@ interface TabPanelProps {
  * TabPanel component - Individual tab content
  * Must be used as a child of Tabs component
  */
-declare const TabPanel: React$1.FC<TabPanelProps>;
+declare const TabPanel: React__default.FC<TabPanelProps>;
 interface TabsProps {
     /**
      * Tab panels as children
@@ -764,13 +811,13 @@ interface TabsProps {
  * </Tabs>
  * ```
  */
-declare const Tabs: React$1.FC<TabsProps>;
+declare const Tabs: React__default.FC<TabsProps>;
 
 interface WindowProps {
     /**
      * Window content
      */
-    children: React$1.ReactNode;
+    children: React__default.ReactNode;
     /**
      * Window title (displays in title bar if no titleBar prop provided)
      */
@@ -779,7 +826,7 @@ interface WindowProps {
      * Custom title bar component
      * If provided, overrides the default title bar
      */
-    titleBar?: React$1.ReactNode;
+    titleBar?: React__default.ReactNode;
     /**
      * Whether window is active/focused
      * @default true
@@ -821,6 +868,10 @@ interface WindowProps {
      */
     onMaximize?: () => void;
     /**
+     * Callback when mouse enters the window
+     */
+    onMouseEnter?: (event: React__default.MouseEvent<HTMLDivElement>) => void;
+    /**
      * Whether the window has a resize handle
      * @default false
      */
@@ -860,7 +911,7 @@ interface WindowProps {
  * </Window>
  * ```
  */
-declare const Window: React$1.ForwardRefExoticComponent<WindowProps & React$1.RefAttributes<HTMLDivElement>>;
+declare const Window: React__default.ForwardRefExoticComponent<WindowProps & React__default.RefAttributes<HTMLDivElement>>;
 
 interface DialogProps extends Omit<WindowProps, 'active'> {
     /**
@@ -895,7 +946,7 @@ interface DialogProps extends Omit<WindowProps, 'active'> {
     /**
      * Initial focus element selector or ref
      */
-    initialFocus?: string | React$1.RefObject<HTMLElement>;
+    initialFocus?: string | React__default.RefObject<HTMLElement>;
 }
 /**
  * Mac OS 9 style Dialog component
@@ -929,7 +980,7 @@ interface DialogProps extends Omit<WindowProps, 'active'> {
  * </Dialog>
  * ```
  */
-declare const Dialog: React$1.ForwardRefExoticComponent<DialogProps & React$1.RefAttributes<HTMLDivElement>>;
+declare const Dialog: React__default.ForwardRefExoticComponent<DialogProps & React__default.RefAttributes<HTMLDivElement>>;
 
 interface Menu {
     /**
@@ -937,9 +988,25 @@ interface Menu {
      */
     label: string;
     /**
-     * Menu items (content of the dropdown)
+     * Menu type - determines behavior
+     * @default 'dropdown'
      */
-    items: React$1.ReactNode;
+    type?: 'dropdown' | 'link';
+    /**
+     * Menu items (content of the dropdown)
+     * Required when type is 'dropdown'
+     */
+    items?: React__default.ReactNode;
+    /**
+     * Link href (for link-type menus)
+     * Used when type is 'link'
+     */
+    href?: string;
+    /**
+     * Click handler (for link-type menus)
+     * Used when type is 'link'
+     */
+    onClick?: () => void;
     /**
      * Whether the menu is disabled
      * @default false
@@ -971,16 +1038,28 @@ interface MenuBarProps {
      * Custom class name for menu dropdowns
      */
     dropdownClassName?: string;
+    /**
+     * Content to display on the left side (typically a logo)
+     */
+    leftContent?: React__default.ReactNode;
+    /**
+     * Content to display on the right side (status items, clock, etc.)
+     * Can be a single element or array of elements
+     */
+    rightContent?: React__default.ReactNode | React__default.ReactNode[];
 }
 /**
  * Mac OS 9 style MenuBar component
  *
- * Horizontal menu bar with dropdown menus.
+ * Horizontal menu bar with dropdown menus, logo support, and status area.
  *
  * Features:
  * - Classic Mac OS 9 menu bar styling
  * - Horizontal menu layout
  * - Dropdown menus on click
+ * - Link-type menu items for navigation
+ * - Logo/icon support on the left
+ * - Status area on the right (clock, system indicators, etc.)
  * - Keyboard navigation (Left/Right for menus, Up/Down for items)
  * - Click outside to close
  * - Escape key to close
@@ -992,12 +1071,14 @@ interface MenuBarProps {
  * const [openMenu, setOpenMenu] = useState<number | undefined>();
  *
  * <MenuBar
+ *   leftContent={<img src="/logo.png" alt="Logo" width={16} height={16} />}
  *   openMenuIndex={openMenu}
  *   onMenuOpen={setOpenMenu}
  *   onMenuClose={() => setOpenMenu(undefined)}
  *   menus={[
  *     {
  *       label: 'File',
+ *       type: 'dropdown',
  *       items: (
  *         <>
  *           <MenuItem label="Open..." shortcut="⌘O" onClick={() => {}} />
@@ -1006,19 +1087,20 @@ interface MenuBarProps {
  *       ),
  *     },
  *     {
- *       label: 'Edit',
- *       items: (
- *         <>
- *           <MenuItem label="Undo" shortcut="⌘Z" onClick={() => {}} />
- *           <MenuItem label="Redo" shortcut="⇧⌘Z" onClick={() => {}} />
- *         </>
- *       ),
+ *       label: 'Home',
+ *       type: 'link',
+ *       href: '/',
  *     },
+ *   ]}
+ *   rightContent={[
+ *     <Clock key="clock" />,
+ *     <div key="divider" className={styles.divider} />,
+ *     <SystemIndicator key="indicator" />,
  *   ]}
  * />
  * ```
  */
-declare const MenuBar: React$1.ForwardRefExoticComponent<MenuBarProps & React$1.RefAttributes<HTMLDivElement>>;
+declare const MenuBar: React__default.ForwardRefExoticComponent<MenuBarProps & React__default.RefAttributes<HTMLDivElement>>;
 
 interface MenuItemProps {
     /**
@@ -1052,19 +1134,19 @@ interface MenuItemProps {
     /**
      * Optional icon to display before the label
      */
-    icon?: React$1.ReactNode;
+    icon?: React__default.ReactNode;
     /**
      * Callback when menu item is clicked
      */
-    onClick?: (event: React$1.MouseEvent<HTMLButtonElement>) => void;
+    onClick?: (event: React__default.MouseEvent<HTMLButtonElement>) => void;
     /**
      * Callback when menu item is focused
      */
-    onFocus?: (event: React$1.FocusEvent<HTMLButtonElement>) => void;
+    onFocus?: (event: React__default.FocusEvent<HTMLButtonElement>) => void;
     /**
      * Callback when menu item loses focus
      */
-    onBlur?: (event: React$1.FocusEvent<HTMLButtonElement>) => void;
+    onBlur?: (event: React__default.FocusEvent<HTMLButtonElement>) => void;
     /**
      * Custom class name for the menu item
      */
@@ -1112,7 +1194,7 @@ interface MenuItemProps {
  * <MenuItem label="Recent Files" hasSubmenu />
  * ```
  */
-declare const MenuItem: React$1.ForwardRefExoticComponent<MenuItemProps & React$1.RefAttributes<HTMLButtonElement>>;
+declare const MenuItem: React__default.ForwardRefExoticComponent<MenuItemProps & React__default.RefAttributes<HTMLButtonElement>>;
 
 interface ScrollbarProps {
     /**
@@ -1159,7 +1241,7 @@ interface ScrollbarProps {
  * />
  * ```
  */
-declare const Scrollbar: React$1.ForwardRefExoticComponent<ScrollbarProps & React$1.RefAttributes<HTMLDivElement>>;
+declare const Scrollbar: React__default.ForwardRefExoticComponent<ScrollbarProps & React__default.RefAttributes<HTMLDivElement>>;
 
 interface ListColumn {
     /**
@@ -1193,7 +1275,7 @@ interface ListItem {
     /**
      * Optional icon to display
      */
-    icon?: React$1.ReactNode;
+    icon?: React__default.ReactNode;
 }
 interface ListViewProps {
     /**
@@ -1216,6 +1298,10 @@ interface ListViewProps {
      * Callback when item is double-clicked
      */
     onItemOpen?: (item: ListItem) => void;
+    /**
+     * Callback when mouse enters an item
+     */
+    onItemMouseEnter?: (item: ListItem) => void;
     /**
      * Callback when column is clicked for sorting
      */
@@ -1249,10 +1335,11 @@ interface ListViewProps {
  *   ]}
  *   selectedIds={['1']}
  *   onSelectionChange={(ids) => console.log('Selected:', ids)}
+ *   onItemMouseEnter={(item) => console.log('Hovering:', item.name)}
  * />
  * ```
  */
-declare const ListView: React$1.ForwardRefExoticComponent<ListViewProps & React$1.RefAttributes<HTMLDivElement>>;
+declare const ListView: React__default.ForwardRefExoticComponent<ListViewProps & React__default.RefAttributes<HTMLDivElement>>;
 
 interface FolderListProps extends Omit<WindowProps, 'children'> {
     /**
@@ -1277,9 +1364,17 @@ interface FolderListProps extends Omit<WindowProps, 'children'> {
      */
     onItemOpen?: (item: ListItem) => void;
     /**
+     * Callback when mouse enters an item
+     */
+    onItemMouseEnter?: (item: ListItem) => void;
+    /**
      * Callback when column header is clicked for sorting
      */
     onSort?: (columnKey: string, direction: 'asc' | 'desc') => void;
+    /**
+     * Callback when mouse enters the folder list window
+     */
+    onMouseEnter?: (event: React__default.MouseEvent<HTMLDivElement>) => void;
     /**
      * Height of the list view area
      * @default 400
@@ -1303,46 +1398,12 @@ interface FolderListProps extends Omit<WindowProps, 'children'> {
  *   selectedIds={['1']}
  *   onSelectionChange={(ids) => console.log('Selected:', ids)}
  *   onItemOpen={(item) => console.log('Open:', item.name)}
+ *   onItemMouseEnter={(item) => console.log('Hovering:', item.name)}
+ *   onMouseEnter={(e) => console.log('Mouse entered folder list')}
  * />
  * ```
  */
-declare const FolderList: React$1.ForwardRefExoticComponent<FolderListProps & React$1.RefAttributes<HTMLDivElement>>;
-
-declare const SaveIcon: React$1.FC;
-declare const FolderIcon: React$1.FC;
-declare const CloseIcon: React$1.FC;
-declare const ArrowRightIcon: React$1.FC;
-declare const ArrowLeftIcon: React$1.FC;
-declare const DownloadIcon: React$1.FC;
-declare const LinkIcon: React$1.FC;
-declare const MailIcon: React$1.FC;
-declare const PrintIcon: React$1.FC;
-declare const TrashIcon: React$1.FC;
-declare const SearchIcon: React$1.FC;
-declare const UserIcon: React$1.FC;
-declare const LockIcon: React$1.FC;
-declare const CalendarIcon: React$1.FC;
-declare const DocumentIcon: React$1.FC;
-declare const FileIcon: React$1.FC;
-declare const ImageIcon: React$1.FC;
-declare const MusicIcon: React$1.FC;
-declare const VideoIcon: React$1.FC;
-declare const SettingsIcon: React$1.FC;
-declare const HomeIcon: React$1.FC;
-declare const StarIcon: React$1.FC;
-declare const HeartIcon: React$1.FC;
-declare const InfoIcon: React$1.FC;
-declare const WarningIcon: React$1.FC;
-declare const ErrorIcon: React$1.FC;
-declare const CheckIcon: React$1.FC;
-declare const PlusIcon: React$1.FC;
-declare const MinusIcon: React$1.FC;
-declare const RefreshIcon: React$1.FC;
-declare const MenuIcon: React$1.FC;
-declare const MoreIcon: React$1.FC;
-declare const ChevronUpIcon: React$1.FC;
-declare const ChevronDownIcon: React$1.FC;
-declare const EyeIcon: React$1.FC;
+declare const FolderList: React__default.ForwardRefExoticComponent<FolderListProps & React__default.RefAttributes<HTMLDivElement>>;
 
 /**
  * Color tokens based on Mac OS 9 grayscale palette
@@ -1713,5 +1774,5 @@ type SelectRef = HTMLSelectElement;
 type TextAreaRef = HTMLTextAreaElement;
 type DivRef = HTMLDivElement;
 
-export { ArrowLeftIcon, ArrowRightIcon, Button, CalendarIcon, CheckIcon, Checkbox, ChevronDownIcon, ChevronUpIcon, CloseIcon, Dialog, DocumentIcon, DownloadIcon, ErrorIcon, EyeIcon, FileIcon, FolderIcon, FolderList, HeartIcon, HomeIcon, Icon, IconButton, ImageIcon, InfoIcon, LinkIcon, ListView, LockIcon, MailIcon, MenuBar, MenuIcon, MenuItem, MinusIcon, MoreIcon, MusicIcon, PlusIcon, PrintIcon, Radio, RefreshIcon, SaveIcon, Scrollbar, SearchIcon, Select, SettingsIcon, StarIcon, TabPanel, Tabs, TextField, TrashIcon, UserIcon, VideoIcon, WarningIcon, Window, borders, colors, shadows, spacing, tokens, transitions, typography, zIndex };
-export type { BaseComponentProps, ButtonProps, ButtonRef, CheckboxProps, DialogProps, DivRef, FolderListProps, IconButtonProps, IconProps, InputRef, ListColumn, ListItem, ListViewProps, Menu, MenuBarProps, MenuItemProps, RadioProps, ScrollbarProps, SelectOption, SelectProps, SelectRef, Size, State, TabPanelProps, TabsProps, TextAreaRef, TextFieldProps, Variant, WindowProps };
+export { Button, Checkbox, Dialog, DividerIcon, FolderList, Icon, IconButton, IconLibrary, ListView, MenuBar, MenuItem, Radio, Scrollbar, Select, TabPanel, Tabs, TextField, Window, borders, colors, shadows, spacing, tokens, transitions, typography, zIndex };
+export type { BaseComponentProps, ButtonProps, ButtonRef, CheckboxProps, DialogProps, DivRef, FolderListProps, IconButtonProps, IconLibraryProps, IconName, IconProps, InputRef, ListColumn, ListItem, ListViewProps, Menu, MenuBarProps, MenuItemProps, RadioProps, ScrollbarProps, SelectOption, SelectProps, SelectRef, Size, State, TabPanelProps, TabsProps, TextAreaRef, TextFieldProps, Variant, WindowProps };

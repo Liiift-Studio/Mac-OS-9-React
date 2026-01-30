@@ -54,6 +54,10 @@ export interface WindowProps {
      */
     onMaximize?: () => void;
     /**
+     * Callback when mouse enters the window
+     */
+    onMouseEnter?: (event: React.MouseEvent<HTMLDivElement>) => void;
+    /**
      * Whether the window has a resize handle
      * @default false
      */

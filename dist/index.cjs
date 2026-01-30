@@ -131,6 +131,56 @@ const Icon = React.forwardRef(({ size = 'md', children, label, className = '', .
 });
 Icon.displayName = 'Icon';
 
+/**
+ * Divider icon
+ * Vertical divider for menu bars and toolbars
+ * Note: Uses a 10x32 viewBox instead of standard 24x24
+ */
+const DividerIcon = () => (jsxRuntime.jsxs(Icon, { label: "Divider", size: "sm", viewBox: "0 0 10 32", children: [jsxRuntime.jsxs("g", { clipPath: "url(#clip0_529_36832)", children: [jsxRuntime.jsx("path", { d: "M8 4H10V32H8V4Z", fill: "#999999" }), jsxRuntime.jsx("path", { d: "M8 0H10V4H8V0Z", fill: "#999999" }), jsxRuntime.jsx("path", { d: "M0 4H2V32H0V4Z", fill: "white" }), jsxRuntime.jsx("path", { d: "M0 0H2V4H0V0Z", fill: "white" }), jsxRuntime.jsx("path", { d: "M5 28H7V30H5V28Z", fill: "#BBBBBB" }), jsxRuntime.jsx("path", { d: "M5 21H7V23H5V21Z", fill: "#BBBBBB" }), jsxRuntime.jsx("path", { d: "M5 14H7V16H5V14Z", fill: "#BBBBBB" }), jsxRuntime.jsx("path", { d: "M5 7H7V9H5V7Z", fill: "#BBBBBB" }), jsxRuntime.jsx("path", { d: "M5 4H7V2H5V4Z", fill: "#BBBBBB" }), jsxRuntime.jsx("path", { d: "M5 30H7V32H5V30Z", fill: "white" }), jsxRuntime.jsx("path", { d: "M5 23H7V25H5V23Z", fill: "white" }), jsxRuntime.jsx("path", { d: "M5 16H7V18H5V16Z", fill: "white" }), jsxRuntime.jsx("path", { d: "M5 9H7V11H5V9Z", fill: "white" }), jsxRuntime.jsx("path", { d: "M5 2H7V0H5V2Z", fill: "white" }), jsxRuntime.jsx("path", { d: "M3 28H5V30H3V28Z", fill: "#999999" }), jsxRuntime.jsx("path", { d: "M3 21H5V23H3V21Z", fill: "#999999" }), jsxRuntime.jsx("path", { d: "M3 14H5V16H3V14Z", fill: "#999999" }), jsxRuntime.jsx("path", { d: "M3 7H5V9H3V7Z", fill: "#999999" }), jsxRuntime.jsx("path", { d: "M3 4H5V2H3V4Z", fill: "#999999" }), jsxRuntime.jsx("path", { d: "M3 30H5V32H3V30Z", fill: "#BBBBBB" }), jsxRuntime.jsx("path", { d: "M3 23H5V25H3V23Z", fill: "#BBBBBB" }), jsxRuntime.jsx("path", { d: "M3 16H5V18H3V16Z", fill: "#BBBBBB" }), jsxRuntime.jsx("path", { d: "M3 9H5V11H3V9Z", fill: "#BBBBBB" }), jsxRuntime.jsx("path", { d: "M3 2H5V0H3V2Z", fill: "#BBBBBB" })] }), jsxRuntime.jsx("defs", { children: jsxRuntime.jsx("clipPath", { id: "clip0_529_36832", children: jsxRuntime.jsx("rect", { width: "10", height: "32", fill: "white" }) }) })] }));
+
+// Icon Registry - Mac OS 9 React UI
+// Central registry of all available icons with type-safe names
+/**
+ * Central icon registry
+ * Maps icon names to their components
+ */
+const iconRegistry = {
+    // UI
+    divider: DividerIcon,
+};
+/**
+ * Get icon component by name
+ * @param name - The icon name from the registry
+ * @returns The icon component or undefined if not found
+ */
+function getIcon(name) {
+    return iconRegistry[name];
+}
+
+/**
+ * IconLibrary component for Mac OS 9 UI
+ *
+ * Provides a convenient way to use icons by name rather than importing each one individually.
+ * All icons are registered in the icon registry and can be accessed by their string names.
+ *
+ * @example
+ * ```tsx
+ * <IconLibrary icon="save" size="md" />
+ * <IconLibrary icon="folder" size="lg" />
+ * <IconLibrary icon="arrow-right" size="sm" />
+ * ```
+ */
+const IconLibrary = ({ icon, ...props }) => {
+    const IconComponent = getIcon(icon);
+    if (!IconComponent) {
+        console.warn(`Icon "${icon}" not found in registry`);
+        return null;
+    }
+    // Render the icon component with any additional props
+    return jsxRuntime.jsx(IconComponent, { ...props });
+};
+IconLibrary.displayName = 'IconLibrary';
+
 var styles$c = {"pixelated-corner-sm":"IconButton-module_pixelated-corner-sm","pixelated-corner-md":"IconButton-module_pixelated-corner-md","pixelated-corner-pseudo":"IconButton-module_pixelated-corner-pseudo","mac-corner":"IconButton-module_mac-corner","chamfered-sm":"IconButton-module_chamfered-sm","chamfered-md":"IconButton-module_chamfered-md","tab-corner":"IconButton-module_tab-corner","button-corner":"IconButton-module_button-corner","window-corner":"IconButton-module_window-corner","iconButton":"IconButton-module_iconButton","icon":"IconButton-module_icon","label":"IconButton-module_label","iconButton--label-top":"IconButton-module_iconButton--label-top","iconButton--label-bottom":"IconButton-module_iconButton--label-bottom","iconButton--label-left":"IconButton-module_iconButton--label-left","iconButton--label-right":"IconButton-module_iconButton--label-right","iconButton--sm":"IconButton-module_iconButton--sm","iconButton--with-label":"IconButton-module_iconButton--with-label","iconButton--md":"IconButton-module_iconButton--md","iconButton--lg":"IconButton-module_iconButton--lg","iconButton--default":"IconButton-module_iconButton--default","iconButton--primary":"IconButton-module_iconButton--primary","iconButton--danger":"IconButton-module_iconButton--danger","iconButton--disabled":"IconButton-module_iconButton--disabled"};
 
 // IconButton component - Mac OS 9 style button with icon
@@ -704,7 +754,7 @@ var styles$6 = {"window":"Window-module_window","window--active":"Window-module_
  * </Window>
  * ```
  */
-const Window = React.forwardRef(({ children, title, titleBar, active = true, width = 'auto', height = 'auto', className = '', contentClassName = '', showControls = true, onClose, onMinimize, onMaximize, resizable = false, }, ref) => {
+const Window = React.forwardRef(({ children, title, titleBar, active = true, width = 'auto', height = 'auto', className = '', contentClassName = '', showControls = true, onClose, onMinimize, onMaximize, onMouseEnter, resizable = false, }, ref) => {
     // Class names
     const windowClassNames = [
         styles$6.window,
@@ -732,7 +782,7 @@ const Window = React.forwardRef(({ children, title, titleBar, active = true, wid
         }
         return null;
     };
-    return (jsxRuntime.jsxs("div", { ref: ref, className: windowClassNames, style: windowStyle, children: [renderTitleBar(), jsxRuntime.jsx("div", { className: contentClassNames, children: children }), resizable && jsxRuntime.jsx("div", { className: styles$6.resizeHandle, "aria-hidden": "true" })] }));
+    return (jsxRuntime.jsxs("div", { ref: ref, className: windowClassNames, style: windowStyle, onMouseEnter: onMouseEnter, children: [renderTitleBar(), jsxRuntime.jsx("div", { className: contentClassNames, children: children }), resizable && jsxRuntime.jsx("div", { className: styles$6.resizeHandle, "aria-hidden": "true" })] }));
 });
 Window.displayName = 'Window';
 
@@ -865,17 +915,20 @@ const Dialog = React.forwardRef(({ open = false, onClose, closeOnBackdropClick =
 });
 Dialog.displayName = 'Dialog';
 
-var styles$4 = {"menuBar":"MenuBar-module_menuBar","menuContainer":"MenuBar-module_menuContainer","menuButton":"MenuBar-module_menuButton","menuButton--disabled":"MenuBar-module_menuButton--disabled","menuButton--open":"MenuBar-module_menuButton--open","dropdown":"MenuBar-module_dropdown"};
+var styles$4 = {"menuBar":"MenuBar-module_menuBar","leftContent":"MenuBar-module_leftContent","menusContainer":"MenuBar-module_menusContainer","menuContainer":"MenuBar-module_menuContainer","rightContent":"MenuBar-module_rightContent","menuButton":"MenuBar-module_menuButton","menuButton--disabled":"MenuBar-module_menuButton--disabled","menuButton--open":"MenuBar-module_menuButton--open","dropdown":"MenuBar-module_dropdown"};
 
 /**
  * Mac OS 9 style MenuBar component
  *
- * Horizontal menu bar with dropdown menus.
+ * Horizontal menu bar with dropdown menus, logo support, and status area.
  *
  * Features:
  * - Classic Mac OS 9 menu bar styling
  * - Horizontal menu layout
  * - Dropdown menus on click
+ * - Link-type menu items for navigation
+ * - Logo/icon support on the left
+ * - Status area on the right (clock, system indicators, etc.)
  * - Keyboard navigation (Left/Right for menus, Up/Down for items)
  * - Click outside to close
  * - Escape key to close
@@ -887,12 +940,14 @@ var styles$4 = {"menuBar":"MenuBar-module_menuBar","menuContainer":"MenuBar-modu
  * const [openMenu, setOpenMenu] = useState<number | undefined>();
  *
  * <MenuBar
+ *   leftContent={<img src="/logo.png" alt="Logo" width={16} height={16} />}
  *   openMenuIndex={openMenu}
  *   onMenuOpen={setOpenMenu}
  *   onMenuClose={() => setOpenMenu(undefined)}
  *   menus={[
  *     {
  *       label: 'File',
+ *       type: 'dropdown',
  *       items: (
  *         <>
  *           <MenuItem label="Open..." shortcut="⌘O" onClick={() => {}} />
@@ -901,19 +956,20 @@ var styles$4 = {"menuBar":"MenuBar-module_menuBar","menuContainer":"MenuBar-modu
  *       ),
  *     },
  *     {
- *       label: 'Edit',
- *       items: (
- *         <>
- *           <MenuItem label="Undo" shortcut="⌘Z" onClick={() => {}} />
- *           <MenuItem label="Redo" shortcut="⇧⌘Z" onClick={() => {}} />
- *         </>
- *       ),
+ *       label: 'Home',
+ *       type: 'link',
+ *       href: '/',
  *     },
+ *   ]}
+ *   rightContent={[
+ *     <Clock key="clock" />,
+ *     <div key="divider" className={styles.divider} />,
+ *     <SystemIndicator key="indicator" />,
  *   ]}
  * />
  * ```
  */
-const MenuBar = React.forwardRef(({ menus, openMenuIndex, onMenuOpen, onMenuClose, className = '', dropdownClassName = '' }, ref) => {
+const MenuBar = React.forwardRef(({ menus, openMenuIndex, onMenuOpen, onMenuClose, className = '', dropdownClassName = '', leftContent, rightContent, }, ref) => {
     const [menuBarElement, setMenuBarElement] = React.useState(null);
     const [focusedIndex, setFocusedIndex] = React.useState(-1);
     // Handle click outside to close menu
@@ -973,8 +1029,9 @@ const MenuBar = React.forwardRef(({ menus, openMenuIndex, onMenuOpen, onMenuClos
             case 'ArrowDown':
                 event.preventDefault();
                 if (openMenuIndex === undefined && focusedIndex >= 0) {
-                    // Open the focused menu
-                    if (!menus[focusedIndex]?.disabled) {
+                    // Open the focused menu (only if it's a dropdown)
+                    const menu = menus[focusedIndex];
+                    if (!menu?.disabled && menu?.type !== 'link') {
                         onMenuOpen?.(focusedIndex);
                     }
                 }
@@ -983,9 +1040,16 @@ const MenuBar = React.forwardRef(({ menus, openMenuIndex, onMenuOpen, onMenuClos
             case ' ':
                 event.preventDefault();
                 if (openMenuIndex === undefined && focusedIndex >= 0) {
-                    // Open the focused menu
-                    if (!menus[focusedIndex]?.disabled) {
-                        onMenuOpen?.(focusedIndex);
+                    const menu = menus[focusedIndex];
+                    if (!menu?.disabled) {
+                        if (menu.type === 'link') {
+                            // Trigger click handler for link-type menu
+                            menu.onClick?.();
+                        }
+                        else {
+                            // Open the focused dropdown menu
+                            onMenuOpen?.(focusedIndex);
+                        }
                     }
                 }
                 break;
@@ -993,8 +1057,14 @@ const MenuBar = React.forwardRef(({ menus, openMenuIndex, onMenuOpen, onMenuClos
     }, [openMenuIndex, focusedIndex, menus, onMenuOpen, onMenuClose]);
     // Handle menu button click
     const handleMenuClick = (index) => {
-        if (menus[index]?.disabled)
+        const menu = menus[index];
+        if (menu?.disabled)
             return;
+        if (menu.type === 'link') {
+            // For link-type menus, trigger the onClick handler
+            menu.onClick?.();
+            return;
+        }
         if (openMenuIndex === index) {
             // Clicking the same menu closes it
             onMenuClose?.();
@@ -1013,18 +1083,34 @@ const MenuBar = React.forwardRef(({ menus, openMenuIndex, onMenuOpen, onMenuClos
         if (typeof ref === 'function') {
             ref(node);
         }
+        else if (ref) {
+            ref.current = node;
+        }
     }, [ref]);
-    return (jsxRuntime.jsx("div", { ref: handleRef, className: menuBarClassNames, role: "menubar", onKeyDown: handleKeyDown, children: menus.map((menu, index) => {
-            const isOpen = openMenuIndex === index;
-            const menuButtonClassNames = [
-                styles$4.menuButton,
-                isOpen ? styles$4['menuButton--open'] : '',
-                menu.disabled ? styles$4['menuButton--disabled'] : '',
-            ]
-                .filter(Boolean)
-                .join(' ');
-            return (jsxRuntime.jsxs("div", { className: styles$4.menuContainer, children: [jsxRuntime.jsx("button", { type: "button", className: menuButtonClassNames, onClick: () => handleMenuClick(index), onFocus: () => setFocusedIndex(index), onBlur: () => setFocusedIndex(-1), disabled: menu.disabled, "aria-haspopup": "true", "aria-expanded": isOpen, "aria-disabled": menu.disabled, children: menu.label }), isOpen && (jsxRuntime.jsx("div", { className: dropdownClassNames, role: "menu", children: menu.items }))] }, index));
-        }) }));
+    return (jsxRuntime.jsxs("div", { ref: handleRef, className: menuBarClassNames, role: "menubar", onKeyDown: handleKeyDown, children: [leftContent && (jsxRuntime.jsx("div", { className: styles$4.leftContent, children: leftContent })), jsxRuntime.jsx("div", { className: styles$4.menusContainer, children: menus.map((menu, index) => {
+                    const isOpen = openMenuIndex === index;
+                    const isDropdown = menu.type !== 'link';
+                    const menuButtonClassNames = [
+                        styles$4.menuButton,
+                        isOpen ? styles$4['menuButton--open'] : '',
+                        menu.disabled ? styles$4['menuButton--disabled'] : '',
+                    ]
+                        .filter(Boolean)
+                        .join(' ');
+                    // For link-type menus, render as anchor if href is provided
+                    if (menu.type === 'link' && menu.href) {
+                        return (jsxRuntime.jsx("div", { className: styles$4.menuContainer, children: jsxRuntime.jsx("a", { href: menu.href, className: menuButtonClassNames, onClick: (e) => {
+                                    if (menu.onClick) {
+                                        e.preventDefault();
+                                        menu.onClick();
+                                    }
+                                }, onFocus: () => setFocusedIndex(index), onBlur: () => setFocusedIndex(-1), "aria-disabled": menu.disabled, children: menu.label }) }, index));
+                    }
+                    // Standard dropdown menu or link without href
+                    return (jsxRuntime.jsxs("div", { className: styles$4.menuContainer, children: [jsxRuntime.jsx("button", { type: "button", className: menuButtonClassNames, onClick: () => handleMenuClick(index), onFocus: () => setFocusedIndex(index), onBlur: () => setFocusedIndex(-1), disabled: menu.disabled, "aria-haspopup": isDropdown ? 'true' : undefined, "aria-expanded": isOpen, "aria-disabled": menu.disabled, children: menu.label }), isOpen && isDropdown && menu.items && (jsxRuntime.jsx("div", { className: dropdownClassNames, role: "menu", children: menu.items }))] }, index));
+                }) }), rightContent && (jsxRuntime.jsx("div", { className: styles$4.rightContent, children: Array.isArray(rightContent)
+                    ? rightContent.map((item, index) => (jsxRuntime.jsx(React.Fragment, { children: item }, index)))
+                    : rightContent }))] }));
 });
 MenuBar.displayName = 'MenuBar';
 
@@ -1221,10 +1307,11 @@ var styles$1 = {"listView":"ListView-module_listView","header":"ListView-module_
  *   ]}
  *   selectedIds={['1']}
  *   onSelectionChange={(ids) => console.log('Selected:', ids)}
+ *   onItemMouseEnter={(item) => console.log('Hovering:', item.name)}
  * />
  * ```
  */
-const ListView = React.forwardRef(({ columns, items, selectedIds = [], onSelectionChange, onItemOpen, onSort, className = '', height = 'auto', }, ref) => {
+const ListView = React.forwardRef(({ columns, items, selectedIds = [], onSelectionChange, onItemOpen, onItemMouseEnter, onSort, className = '', height = 'auto', }, ref) => {
     const [sortColumn, setSortColumn] = React.useState(null);
     const [sortDirection, setSortDirection] = React.useState('asc');
     // Class names
@@ -1272,6 +1359,12 @@ const ListView = React.forwardRef(({ columns, items, selectedIds = [], onSelecti
             onItemOpen(item);
         }
     }, [onItemOpen]);
+    // Handle row mouse enter
+    const handleRowMouseEnter = React.useCallback((item) => {
+        if (onItemMouseEnter) {
+            onItemMouseEnter(item);
+        }
+    }, [onItemMouseEnter]);
     // Container style
     const containerStyle = {};
     if (height !== 'auto') {
@@ -1283,7 +1376,7 @@ const ListView = React.forwardRef(({ columns, items, selectedIds = [], onSelecti
                             : column.width,
                     }, onClick: () => handleColumnClick(column.key, column.sortable), children: [column.label, sortColumn === column.key && (jsxRuntime.jsx("span", { className: styles$1.sortIndicator, children: sortDirection === 'asc' ? '▲' : '▼' }))] }, column.key))) }), jsxRuntime.jsx("div", { className: styles$1.body, children: items.map((item) => {
                     const isSelected = selectedIds.includes(item.id);
-                    return (jsxRuntime.jsx("div", { className: `${styles$1.row} ${isSelected ? styles$1.selected : ''}`, onClick: (e) => handleRowClick(item.id, e), onDoubleClick: () => handleRowDoubleClick(item), children: columns.map((column, index) => (jsxRuntime.jsxs("div", { className: styles$1.cell, style: {
+                    return (jsxRuntime.jsx("div", { className: `${styles$1.row} ${isSelected ? styles$1.selected : ''}`, onClick: (e) => handleRowClick(item.id, e), onDoubleClick: () => handleRowDoubleClick(item), onMouseEnter: () => handleRowMouseEnter(item), children: columns.map((column, index) => (jsxRuntime.jsxs("div", { className: styles$1.cell, style: {
                                 width: typeof column.width === 'number'
                                     ? `${column.width}px`
                                     : column.width,
@@ -1313,6 +1406,8 @@ var styles = {"folderListContent":"FolderList-module_folderListContent","listVie
  *   selectedIds={['1']}
  *   onSelectionChange={(ids) => console.log('Selected:', ids)}
  *   onItemOpen={(item) => console.log('Open:', item.name)}
+ *   onItemMouseEnter={(item) => console.log('Hovering:', item.name)}
+ *   onMouseEnter={(e) => console.log('Mouse entered folder list')}
  * />
  * ```
  */
@@ -1320,47 +1415,11 @@ const FolderList = React.forwardRef(({ columns = [
     { key: 'name', label: 'Name', width: '40%' },
     { key: 'modified', label: 'Date Modified', width: '30%' },
     { key: 'size', label: 'Size', width: '30%' },
-], items, selectedIds, onSelectionChange, onItemOpen, onSort, listHeight = 400, ...windowProps }, ref) => {
+], items, selectedIds, onSelectionChange, onItemOpen, onItemMouseEnter, onSort, onMouseEnter, listHeight = 400, ...windowProps }, ref) => {
     // Window content with ListView
-    return (jsxRuntime.jsx(Window, { ref: ref, contentClassName: styles.folderListContent, ...windowProps, children: jsxRuntime.jsx(ListView, { columns: columns, items: items, selectedIds: selectedIds, onSelectionChange: onSelectionChange, onItemOpen: onItemOpen, onSort: onSort, height: listHeight, className: styles.listView }) }));
+    return (jsxRuntime.jsx(Window, { ref: ref, contentClassName: styles.folderListContent, onMouseEnter: onMouseEnter, ...windowProps, children: jsxRuntime.jsx(ListView, { columns: columns, items: items, selectedIds: selectedIds, onSelectionChange: onSelectionChange, onItemOpen: onItemOpen, onItemMouseEnter: onItemMouseEnter, onSort: onSort, height: listHeight, className: styles.listView }) }));
 });
 FolderList.displayName = 'FolderList';
-
-const SaveIcon = () => (jsxRuntime.jsx(Icon, { label: "Save", size: "sm", children: jsxRuntime.jsx("path", { d: "M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" }) }));
-const FolderIcon = () => (jsxRuntime.jsx(Icon, { label: "Folder", size: "sm", children: jsxRuntime.jsx("path", { d: "M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" }) }));
-const CloseIcon = () => (jsxRuntime.jsx(Icon, { label: "Close", size: "sm", children: jsxRuntime.jsx("path", { d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" }) }));
-const ArrowRightIcon = () => (jsxRuntime.jsx(Icon, { label: "Arrow Right", size: "sm", children: jsxRuntime.jsx("path", { d: "M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" }) }));
-const ArrowLeftIcon = () => (jsxRuntime.jsx(Icon, { label: "Arrow Left", size: "sm", children: jsxRuntime.jsx("path", { d: "M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" }) }));
-const DownloadIcon = () => (jsxRuntime.jsx(Icon, { label: "Download", size: "sm", children: jsxRuntime.jsx("path", { d: "M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" }) }));
-const LinkIcon = () => (jsxRuntime.jsx(Icon, { label: "Link", size: "sm", children: jsxRuntime.jsx("path", { d: "M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z" }) }));
-const MailIcon = () => (jsxRuntime.jsx(Icon, { label: "Mail", size: "sm", children: jsxRuntime.jsx("path", { d: "M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" }) }));
-const PrintIcon = () => (jsxRuntime.jsx(Icon, { label: "Print", size: "sm", children: jsxRuntime.jsx("path", { d: "M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z" }) }));
-const TrashIcon = () => (jsxRuntime.jsx(Icon, { label: "Delete", size: "sm", children: jsxRuntime.jsx("path", { d: "M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" }) }));
-const SearchIcon = () => (jsxRuntime.jsx(Icon, { label: "Search", size: "sm", children: jsxRuntime.jsx("path", { d: "M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" }) }));
-const UserIcon = () => (jsxRuntime.jsx(Icon, { label: "User", size: "sm", children: jsxRuntime.jsx("path", { d: "M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" }) }));
-const LockIcon = () => (jsxRuntime.jsx(Icon, { label: "Lock", size: "sm", children: jsxRuntime.jsx("path", { d: "M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" }) }));
-const CalendarIcon = () => (jsxRuntime.jsx(Icon, { label: "Calendar", size: "sm", children: jsxRuntime.jsx("path", { d: "M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z" }) }));
-const DocumentIcon = () => (jsxRuntime.jsx(Icon, { label: "Document", size: "sm", children: jsxRuntime.jsx("path", { d: "M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" }) }));
-const FileIcon = () => (jsxRuntime.jsx(Icon, { label: "File", size: "sm", children: jsxRuntime.jsx("path", { d: "M8 16h8v2H8zm0-4h8v2H8zm6-10H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z" }) }));
-const ImageIcon = () => (jsxRuntime.jsx(Icon, { label: "Image", size: "sm", children: jsxRuntime.jsx("path", { d: "M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" }) }));
-const MusicIcon = () => (jsxRuntime.jsx(Icon, { label: "Music", size: "sm", children: jsxRuntime.jsx("path", { d: "M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" }) }));
-const VideoIcon = () => (jsxRuntime.jsx(Icon, { label: "Video", size: "sm", children: jsxRuntime.jsx("path", { d: "M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z" }) }));
-const SettingsIcon = () => (jsxRuntime.jsx(Icon, { label: "Settings", size: "sm", children: jsxRuntime.jsx("path", { d: "M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94L14.4 2.81c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" }) }));
-const HomeIcon = () => (jsxRuntime.jsx(Icon, { label: "Home", size: "sm", children: jsxRuntime.jsx("path", { d: "M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" }) }));
-const StarIcon = () => (jsxRuntime.jsx(Icon, { label: "Star", size: "sm", children: jsxRuntime.jsx("path", { d: "M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" }) }));
-const HeartIcon = () => (jsxRuntime.jsx(Icon, { label: "Heart", size: "sm", children: jsxRuntime.jsx("path", { d: "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" }) }));
-const InfoIcon = () => (jsxRuntime.jsx(Icon, { label: "Info", size: "sm", children: jsxRuntime.jsx("path", { d: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" }) }));
-const WarningIcon = () => (jsxRuntime.jsx(Icon, { label: "Warning", size: "sm", children: jsxRuntime.jsx("path", { d: "M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" }) }));
-const ErrorIcon = () => (jsxRuntime.jsx(Icon, { label: "Error", size: "sm", children: jsxRuntime.jsx("path", { d: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" }) }));
-const CheckIcon = () => (jsxRuntime.jsx(Icon, { label: "Check", size: "sm", children: jsxRuntime.jsx("path", { d: "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" }) }));
-const PlusIcon = () => (jsxRuntime.jsx(Icon, { label: "Plus", size: "sm", children: jsxRuntime.jsx("path", { d: "M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" }) }));
-const MinusIcon = () => (jsxRuntime.jsx(Icon, { label: "Minus", size: "sm", children: jsxRuntime.jsx("path", { d: "M19 13H5v-2h14v2z" }) }));
-const RefreshIcon = () => (jsxRuntime.jsx(Icon, { label: "Refresh", size: "sm", children: jsxRuntime.jsx("path", { d: "M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" }) }));
-const MenuIcon = () => (jsxRuntime.jsx(Icon, { label: "Menu", size: "sm", children: jsxRuntime.jsx("path", { d: "M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" }) }));
-const MoreIcon = () => (jsxRuntime.jsx(Icon, { label: "More", size: "sm", children: jsxRuntime.jsx("path", { d: "M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" }) }));
-const ChevronUpIcon = () => (jsxRuntime.jsx(Icon, { label: "Chevron Up", size: "sm", children: jsxRuntime.jsx("path", { d: "M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z" }) }));
-const ChevronDownIcon = () => (jsxRuntime.jsx(Icon, { label: "Chevron Down", size: "sm", children: jsxRuntime.jsx("path", { d: "M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" }) }));
-const EyeIcon = () => (jsxRuntime.jsx(Icon, { label: "Eye", size: "sm", children: jsxRuntime.jsx("path", { d: "M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" }) }));
 
 // Mac OS 9 Design Tokens
 // Extracted from Figma file: vy2T5MCXFz7QWf4Ba86eqN
@@ -1580,56 +1639,23 @@ const tokens = {
     transitions,
 };
 
-exports.ArrowLeftIcon = ArrowLeftIcon;
-exports.ArrowRightIcon = ArrowRightIcon;
 exports.Button = Button;
-exports.CalendarIcon = CalendarIcon;
-exports.CheckIcon = CheckIcon;
 exports.Checkbox = Checkbox;
-exports.ChevronDownIcon = ChevronDownIcon;
-exports.ChevronUpIcon = ChevronUpIcon;
-exports.CloseIcon = CloseIcon;
 exports.Dialog = Dialog;
-exports.DocumentIcon = DocumentIcon;
-exports.DownloadIcon = DownloadIcon;
-exports.ErrorIcon = ErrorIcon;
-exports.EyeIcon = EyeIcon;
-exports.FileIcon = FileIcon;
-exports.FolderIcon = FolderIcon;
+exports.DividerIcon = DividerIcon;
 exports.FolderList = FolderList;
-exports.HeartIcon = HeartIcon;
-exports.HomeIcon = HomeIcon;
 exports.Icon = Icon;
 exports.IconButton = IconButton;
-exports.ImageIcon = ImageIcon;
-exports.InfoIcon = InfoIcon;
-exports.LinkIcon = LinkIcon;
+exports.IconLibrary = IconLibrary;
 exports.ListView = ListView;
-exports.LockIcon = LockIcon;
-exports.MailIcon = MailIcon;
 exports.MenuBar = MenuBar;
-exports.MenuIcon = MenuIcon;
 exports.MenuItem = MenuItem;
-exports.MinusIcon = MinusIcon;
-exports.MoreIcon = MoreIcon;
-exports.MusicIcon = MusicIcon;
-exports.PlusIcon = PlusIcon;
-exports.PrintIcon = PrintIcon;
 exports.Radio = Radio;
-exports.RefreshIcon = RefreshIcon;
-exports.SaveIcon = SaveIcon;
 exports.Scrollbar = Scrollbar;
-exports.SearchIcon = SearchIcon;
 exports.Select = Select;
-exports.SettingsIcon = SettingsIcon;
-exports.StarIcon = StarIcon;
 exports.TabPanel = TabPanel;
 exports.Tabs = Tabs;
 exports.TextField = TextField;
-exports.TrashIcon = TrashIcon;
-exports.UserIcon = UserIcon;
-exports.VideoIcon = VideoIcon;
-exports.WarningIcon = WarningIcon;
 exports.Window = Window;
 exports.borders = borders;
 exports.colors = colors;

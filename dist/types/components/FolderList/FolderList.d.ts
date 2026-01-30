@@ -24,9 +24,17 @@ export interface FolderListProps extends Omit<WindowProps, 'children'> {
      */
     onItemOpen?: (item: ListItem) => void;
     /**
+     * Callback when mouse enters an item
+     */
+    onItemMouseEnter?: (item: ListItem) => void;
+    /**
      * Callback when column header is clicked for sorting
      */
     onSort?: (columnKey: string, direction: 'asc' | 'desc') => void;
+    /**
+     * Callback when mouse enters the folder list window
+     */
+    onMouseEnter?: (event: React.MouseEvent<HTMLDivElement>) => void;
     /**
      * Height of the list view area
      * @default 400
@@ -50,6 +58,8 @@ export interface FolderListProps extends Omit<WindowProps, 'children'> {
  *   selectedIds={['1']}
  *   onSelectionChange={(ids) => console.log('Selected:', ids)}
  *   onItemOpen={(item) => console.log('Open:', item.name)}
+ *   onItemMouseEnter={(item) => console.log('Hovering:', item.name)}
+ *   onMouseEnter={(e) => console.log('Mouse entered folder list')}
  * />
  * ```
  */

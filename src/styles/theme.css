@@ -17,14 +17,14 @@
 
 @font-face {
 	font-family: 'Pixel-Op';
-	src: url('../pixelOperator/pixelOperator.ttf') format('truetype');
+	src: url('./fonts/pixelOperator/PixelOperator.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
 	font-display: swap;
 }
 @font-face {
 	font-family: 'Pixel-Op';
-	src: url('../pixelOperator/pixelOperator-Bold.ttf') format('truetype');
+	src: url('./fonts/pixelOperator/PixelOperator-Bold.ttf') format('truetype');
 	font-weight: 700;
 	font-style: normal;
 	font-display: swap;

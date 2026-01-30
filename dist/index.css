@@ -1,10 +1,32 @@
+
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
 /**
  * Mac OS 9 Theme
  * CSS Custom Properties for design tokens
  * Extracted from Figma file: vy2T5MCXFz7QWf4Ba86eqN
  * Reference: docs/figma-map.md
  */
-
+/* ========================================
+ * Google Fonts Import
+ * Import IBM Plex Sans, IBM Plex Mono, and EB Garamond from Google Fonts
+ * ======================================== */
+/* ========================================
+ * Local Font - Pixel Operator
+ * ======================================== */
+@font-face {
+	font-family: 'Pixel-Op';
+	src: url('./fonts/pixelOperator/PixelOperator.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Pixel-Op';
+	src: url('./fonts/pixelOperator/PixelOperator-Bold.ttf') format('truetype');
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
 :root {
 	/* ========================================
 	 * Colors - Grayscale Palette
@@ -13,7 +35,7 @@
 	--color-gray-200: #eeeeee;
 	--color-gray-300: #dddddd;
 	--color-gray-400: #cccccc;
-	--color-gray-500: #999999;
+	--color-gray-500: #BBBBBB;
 	--color-gray-600: #666666;
 	--color-gray-700: #4d4d4d;
 	--color-gray-800: #333333;
@@ -55,34 +77,35 @@
 	 * ======================================== */
 	
 	/* Charcoal - Primary system UI font (menus, buttons, dialogs) */
-	--font-system: Charcoal, 'Charcoal CY', Chicago, 'Chicago Classic', -apple-system,
-		BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+	--font-system: 'IBM Plex Mono', monospace;
+
+	/* IBM Plex Sans - Body text and secondary UI elements (open-source alternative to Geneva) */
+	--font-body: 'IBM Plex Sans', monospace;
 	
-	/* Geneva - Body text and secondary UI elements */
-	--font-body: Geneva, 'Geneva CY', 'Lucida Grande', 'Lucida Sans Unicode', sans-serif;
+	/* EB Garamond - Headlines and editorial content (open-source alternative) */
+	--font-display: 'Pixel-Op', monospace;
 	
-	/* Apple Garamond Light - Headlines and editorial content */
-	--font-display: 'Apple Garamond Light', 'Apple Garamond', Garamond, Georgia, serif;
+	--font-title: 'EB Garamond', Garamond, Georgia, serif;
+
+	/* IBM Plex Mono - Mac OS 9 monospace font (open-source alternative to Monaco) */
+	--font-mono: 'IBM Plex Mono', monospace;
 	
-	/* Chicago - Classic Mac OS system font (menu bar) */
-	--font-chicago: Chicago, 'Chicago Classic', 'Charcoal CY', Charcoal, monospace;
-	
-	/* Monaco - Mac OS 9 monospace font */
-	--font-mono: Monaco, 'Monaco CY', 'SF Mono', 'Courier New', Courier, monospace;
+	--font-pixel: 'Pixel-Op', monospace;
 
 	/* ========================================
 	 * Typography - Font Sizes
 	 * Mac OS 9 used smaller text (9-12pt typical)
+	 * Using rem units to enable responsive scaling
 	 * ======================================== */
-	--font-size-xs: 9px;   /* 9pt - smallest UI text */
-	--font-size-sm: 10px;  /* 10pt - small labels */
-	--font-size-md: 12px;  /* 12pt - standard UI text (Mac OS 9 default) */
-	--font-size-lg: 13px;  /* 13pt - slightly larger */
-	--font-size-xl: 14px;  /* 14pt - large UI text */
-	--font-size-2xl: 16px; /* 16pt - headings */
-	--font-size-3xl: 18px; /* 18pt - large headings */
-	--font-size-4xl: 20px; /* 20pt - major headings */
-	--font-size-5xl: 24px; /* 24pt - display text */
+	--font-size-xs: 0.5625rem;   /* 9pt - smallest UI text (9px at 16px base) */
+	--font-size-sm: 0.625rem;    /* 10pt - small labels (10px at 16px base) */
+	--font-size-md: 0.75rem;     /* 12pt - standard UI text (12px at 16px base - Mac OS 9 default) */
+	--font-size-lg: 0.8125rem;   /* 13pt - slightly larger (13px at 16px base) */
+	--font-size-xl: 0.875rem;    /* 14pt - large UI text (14px at 16px base) */
+	--font-size-2xl: 1rem;       /* 16pt - headings (16px at 16px base) */
+	--font-size-3xl: 1.125rem;   /* 18pt - large headings (18px at 16px base) */
+	--font-size-4xl: 1.25rem;    /* 20pt - major headings (20px at 16px base) */
+	--font-size-5xl: 1.5rem;     /* 24pt - display text (24px at 16px base) */
 
 	/* ========================================
 	 * Typography - Font Weights
@@ -206,24 +229,43 @@
 	--transition-timing-ease-out: cubic-bezier(0, 0, 0.2, 1);
 	--transition-timing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 /* ========================================
  * Base Styles
  * ======================================== */
-
 *,
 *::before,
 *::after {
 	box-sizing: border-box;
 }
-
 html {
 	/* Set base font size for rem calculations */
+	/* Mobile/default: 16px base */
 	font-size: 16px;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
-
+/* ========================================
+ * Responsive Typography
+ * Scale base font size at different breakpoints
+ * ======================================== */
+/* Tablet: 768px+ */
+@media (min-width: 768px) {
+	html {
+		font-size: 17px;
+	}
+}
+/* Desktop: 1024px+ */
+@media (min-width: 1024px) {
+	html {
+		font-size: 18px;
+	}
+}
+/* Large Desktop/XL: 1440px+ */
+@media (min-width: 1440px) {
+	html {
+		font-size: 20px;
+	}
+}
 body {
 	margin: 0;
 	padding: 0;
@@ -233,56 +275,40 @@ body {
 	color: var(--color-text);
 	background-color: var(--color-background);
 }
-
 /* ========================================
  * Utility Classes
  * ======================================== */
-
 /* Bevel effects */
-
 .bevel {
 	box-shadow: var(--shadow-bevel);
 }
-
 .bevel-inset {
 	box-shadow: var(--shadow-inset);
 }
-
 /* Border utilities */
-
 .border {
 	border: var(--border-width-thin) solid var(--color-border);
 }
-
 .border-none {
 	border: none;
 }
-
 /* Surface styles */
-
 .surface {
 	background-color: var(--color-surface);
 }
-
 .surface-inset {
 	background-color: var(--color-surface-inset);
 }
-
 /* Text utilities */
-
 .text-inverse {
 	color: var(--color-text-inverse);
 }
-
 /* Focus styles for keyboard navigation */
-
 .focus-visible:focus-visible {
 	outline: 1px dotted var(--color-focus);
 	outline-offset: 2px;
 }
-
 /* Disabled state */
-
 .disabled {
 	opacity: 0.5;
 	cursor: not-allowed;
@@ -3073,7 +3099,7 @@ body {
 
 .Window-module_titleText {
 	/* Title text styling */
-	font-family: var(--font-system);
+	font-family: var(--font-chicago);
 	font-size: var(--font-size-md);
 	font-weight: var(--font-weight-bold);
 	line-height: var(--line-height-snug);
@@ -3247,9 +3273,15 @@ body {
 	align-items: stretch;
 	
 	/* Mac OS 9 menu bar appearance */
+	
 	background-color: var(--color-gray-100); /* Light gray like Mac OS 9 */
 	border-bottom: var(--border-width-thin) solid var(--color-black);
-	
+	background: linear-gradient(180deg,
+			#EEEEEE 0%,
+			#DDDDDD 5%,
+			#DDDDDD 90%,
+			#BBBBBB 95%,
+			#262626 100%);
 	/* Layout */
 	width: 100%;
 	min-height: 24px;
@@ -3259,6 +3291,29 @@ body {
 	
 	/* Prevent selection */
 	user-select: none;
+}
+
+/* ========================================
+ * Left Content (Logo Area)
+ * ======================================== */
+
+.MenuBar-module_leftContent {
+	/* Container for logo or left-side content */
+	display: flex;
+	align-items: center;
+	padding: 0 var(--spacing-2);
+	flex-shrink: 0;
+}
+
+/* ========================================
+ * Menus Container
+ * ======================================== */
+
+.MenuBar-module_menusContainer {
+	/* Container for all menu items */
+	display: flex;
+	align-items: stretch;
+	flex: 1;
 }
 
 /* ========================================
@@ -3273,6 +3328,32 @@ body {
 }
 
 /* ========================================
+ * Right Content (Status Area)
+ * ======================================== */
+
+.MenuBar-module_rightContent {
+	/* Container for status items, clock, etc. */
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-2);
+	padding: 0 var(--spacing-2);
+	flex-shrink: 0;
+	margin-left: auto;
+}
+
+/* ========================================
+ * Divider (Utility Class)
+ * ======================================== */
+
+.MenuBar-module_divider {
+	/* Vertical divider for right content items */
+	width: 1px;
+	height: 16px;
+	background-color: var(--color-gray-500);
+	align-self: center;
+}
+
+/* ========================================
  * Menu Button
  * ======================================== */
 
@@ -3281,7 +3362,7 @@ body {
 	padding: var(--spacing-1) var(--spacing-3);
 	
 	/* Text styling */
-	font-family: var(--font-system);
+	font-family: var(--font-display);
 	font-size: var(--font-size-md);
 	font-weight: var(--font-weight-bold);
 	line-height: var(--line-height-snug);
@@ -3289,10 +3370,12 @@ body {
 	text-align: center;
 	white-space: nowrap;
 	
-	/* Remove button defaults */
+	/* Remove button/link defaults */
 	background-color: transparent;
 	border: none;
 	cursor: pointer;
+	text-decoration: none;
+	display: inline-block;
 	
 	/* Transitions */
 	transition: background-color 50ms ease;
