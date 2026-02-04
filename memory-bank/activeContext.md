@@ -5,6 +5,12 @@ Maintaining and improving the Mac OS 9 UI component library, including GitHub Ac
 
 ## Recent Changes
 
+### Font Path Fix (2026-02-04)
+- Fixed incorrect font paths in `src/styles/theme.css`
+- Changed `/font/` to `../fonts/` and `../font/` to `../fonts/` for Pixel font family
+- All @font-face declarations now correctly reference `src/fonts/Pixel/` directory
+- Ensures proper loading of Pixel font (normal, bold, italic variants) and PixelSmall font
+
 ### GitHub Actions Workflow Enhancement (2026-01-30)
 - Added manual trigger (`workflow_dispatch`) to the npm publishing workflow
 - Workflow can now be triggered both automatically (on version changes) and manually from the GitHub Actions UI
