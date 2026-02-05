@@ -1,5 +1,13 @@
 # @liiift-studio/mac-os9-ui
 
+## 0.2.20
+
+### Patch Changes
+
+- Fix build configuration where fonts were being copied to a nested `dist/fonts` folder instead of the root `fonts` folder in the distribution.
+- Updated dependencies
+  - @liiift-studio/mac-os9-ui@0.2.20
+
 ## 0.2.19
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
 	"name": "@liiift-studio/mac-os9-ui",
-	"version": "0.2.19",
+	"version": "0.2.20",
 	"description": "A pixel-perfect Mac OS 9 UI component library for React and TypeScript",
 	"private": false,
 	"sideEffects": [
@@ -117,5 +117,8 @@
 	"attribution": {
 		"designs": "Mac OS 9 UI Kit by Michael Feeney (https://swallowmygraphicdesign.com/project/macostalgia)",
 		"license": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)"
+	},
+	"dependencies": {
+		"@liiift-studio/mac-os9-ui": "^0.2.20"
 	}
 }

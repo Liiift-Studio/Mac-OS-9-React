@@ -14,6 +14,7 @@
 
 # production
 /build
+/dist
 
 # storybook
 /storybook-static
@@ -21,12 +22,12 @@
 # misc
 .DS_Store
 
-# fonts (users must provide their own licensed copies)
-*.woff
-*.woff2
-*.ttf
-*.otf
-*.eot
+# fonts
+# *.woff
+# *.woff2
+# *.ttf
+# *.otf
+# *.eot
 !.gitkeep
 
 # debug

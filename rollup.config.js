@@ -8,7 +8,7 @@ import postcssUrl from 'postcss-url';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import dts from 'rollup-plugin-dts';
 import copy from 'rollup-plugin-copy';
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync } from 'fs';
 
 const packageJson = JSON.parse(readFileSync('./package.json', 'utf-8'));
 
@@ -51,7 +51,7 @@ export default [
 					// Copy font files referenced in CSS
 					postcssUrl({
 						url: 'copy',
-						assetsPath: 'dist/fonts',
+						assetsPath: 'fonts',
 						useHash: true,
 					}),
 				],
@@ -60,7 +60,7 @@ export default [
 					generateScopedName: '[name]_[local]',
 				},
 				// Extract CSS to separate file
-				extract: 'dist/index.css',
+				extract: 'index.css',
 				// Explicitly set the output path for correct relative path calculation
 				to: 'dist/index.css',
 				// Minimize CSS in production
@@ -105,16 +105,21 @@ export default [
 			// Custom plugin to fix CSS paths
 			{
 				name: 'fix-css-font-paths',
-				writeBundle() {
-					try {
-						const cssPath = 'dist/index.css';
-						const content = readFileSync(cssPath, 'utf-8');
-						// Replace "dist/fonts/" with "fonts/" (and handle potential leading ./ or /)
-						const newContent = content.replace(/url\s*\(\s*["']?(?:\.?\/?dist\/)?fonts\//g, 'url("fonts/');
-						writeFileSync(cssPath, newContent);
-						console.log('Fixed font paths in dist/index.css');
-					} catch (e) {
-						console.error('Error fixing font paths:', e);
+				generateBundle(options, bundle) {
+					// Find the CSS asset
+					const cssFileName = 'index.css';
+					// Note: rollup-plugin-postcss emits assets with keys relative to output dir if extract is true ??
+					// Actually, let's look for any .css asset in the bundle
+					for (const fileName in bundle) {
+						if (fileName.endsWith('.css')) {
+							const asset = bundle[fileName];
+							if (asset.type === 'asset' && typeof asset.source === 'string') {
+								// Correct the font paths
+								// Replace "dist/fonts/" with "fonts/"
+								asset.source = asset.source.replace(/url\s*\(\s*["']?(?:\.?\/?dist\/)?fonts\//g, 'url("fonts/');
+								console.log(`Fixed font paths in ${fileName}`);
+							}
+						}
 					}
 				},
 			},
