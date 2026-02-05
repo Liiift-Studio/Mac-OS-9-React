@@ -1,5 +1,11 @@
 # @liiift-studio/mac-os9-ui
 
+## 0.2.17
+
+### Patch Changes
+
+- Fix font loading issue by bundling fonts in distribution and correcting import paths.
+
 ## 0.1.1
 
 ### Patch Changes

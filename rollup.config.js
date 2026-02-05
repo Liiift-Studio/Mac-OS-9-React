@@ -34,31 +34,36 @@ export default [
 		plugins: [
 			// Automatically externalize peer dependencies
 			peerDepsExternal(),
-			
+
 			// Resolve node modules
 			resolve({
 				extensions: ['.ts', '.tsx', '.js', '.jsx'],
 			}),
-			
+
 			// Convert CommonJS modules to ES6
 			commonjs(),
-			
+
 			// Process CSS with modules support
 			postcss({
 				plugins: [
 					// Process @import statements - MUST be first
 					postcssImport(),
-					// Inline font files as base64 data URLs
+					// Copy font files referenced in CSS
 					postcssUrl({
-						url: 'inline',
+						url: 'copy',
+						useHash: true,
 					}),
+					// Check if we need to refine the path handling if using assetsPath relative to root
+					// But usually with extract: 'dist/index.css', assetsPath: 'fonts' should work if relative to 'to'
 				],
 				modules: {
 					// Generate scoped class names
 					generateScopedName: '[name]_[local]',
 				},
 				// Extract CSS to separate file
-				extract: 'index.css',
+				extract: 'dist/index.css',
+				// Explicitly set the output path for correct relative path calculation
+				to: 'dist/index.css',
 				// Minimize CSS in production
 				minimize: false,
 				// Enable source maps
@@ -68,7 +73,7 @@ export default [
 				// Process .css and .module.css files
 				test: /\.css$/,
 			}),
-			
+
 			// Compile TypeScript
 			typescript({
 				tsconfig: './tsconfig.json',
@@ -83,14 +88,10 @@ export default [
 					'dist',
 				],
 			}),
-			
+
 			// Copy font files to dist
 			copy({
 				targets: [
-					{
-						src: 'src/fonts/Pixel',
-						dest: 'dist/fonts',
-					},
 					{
 						src: 'src/fonts/pixelOperator/*.ttf',
 						dest: 'dist/fonts/pixelOperator',
@@ -104,7 +105,7 @@ export default [
 		],
 		external: ['react', 'react-dom', 'react/jsx-runtime'],
 	},
-	
+
 	// Bundle TypeScript declaration files
 	{
 		input: 'dist/types/index.d.ts',
