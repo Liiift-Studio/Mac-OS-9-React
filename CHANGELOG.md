@@ -1,5 +1,11 @@
 # @liiift-studio/mac-os9-ui
 
+## 0.2.18
+
+### Patch Changes
+
+- Fix regression where font paths in CSS were incorrect (referencing dist/fonts instead of fonts).
+
 ## 0.2.17
 
 ### Patch Changes

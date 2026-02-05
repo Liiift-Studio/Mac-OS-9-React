@@ -15,48 +15,48 @@
  * ======================================== */
 @font-face {
 	font-family: 'Pixel';
-	src: url("dist/fonts/6c5c10ee.woff2") format('woff2'),
-		url("dist/fonts/4d5fab94.woff") format('woff');
+	src: url("fonts/6c5c10ee.woff2") format('woff2'),
+		url("fonts/4d5fab94.woff") format('woff');
 	font-style: normal;
 	font-weight: normal;
 	font-display: swap;
 }
 @font-face {
 	font-family: 'Pixel';
-	src: url("dist/fonts/d40c137d.woff2") format('woff2'),
-		url("dist/fonts/faac46b5.woff") format('woff');
+	src: url("fonts/d40c137d.woff2") format('woff2'),
+		url("fonts/faac46b5.woff") format('woff');
 	font-style: normal;
 	font-weight: bold;
 	font-display: swap;
 }
 @font-face {
 	font-family: 'Pixel';
-	src: url("dist/fonts/99d0ec4d.woff2") format('woff2'),
-		url("dist/fonts/7b13507a.woff") format('woff');
+	src: url("fonts/99d0ec4d.woff2") format('woff2'),
+		url("fonts/7b13507a.woff") format('woff');
 	font-style: italic;
 	font-weight: bold;
 	font-display: swap;
 }
 @font-face {
 	font-family: 'Pixel';
-	src: url("dist/fonts/c21bb1aa.woff2") format('woff2'),
-		url("dist/fonts/db974009.woff") format('woff');
+	src: url("fonts/c21bb1aa.woff2") format('woff2'),
+		url("fonts/db974009.woff") format('woff');
 	font-style: italic;
 	font-weight: normal;
 	font-display: swap;
 }
 @font-face {
 	font-family: 'PixelSmall';
-	src: url("dist/fonts/b9e24cd1.woff2") format('woff2'),
-		url("dist/fonts/2bc2468e.woff") format('woff');
+	src: url("fonts/b9e24cd1.woff2") format('woff2'),
+		url("fonts/2bc2468e.woff") format('woff');
 	font-style: normal;
 	font-weight: bold;
 	font-display: swap;
 }
 @font-face {
 	font-family: 'PixelSmall';
-	src: url("dist/fonts/cf596b2d.woff2") format('woff2'),
-		url("dist/fonts/3306dfd5.woff") format('woff');
+	src: url("fonts/cf596b2d.woff2") format('woff2'),
+		url("fonts/3306dfd5.woff") format('woff');
 	font-style: normal;
 	font-weight: normal;
 	font-display: swap;

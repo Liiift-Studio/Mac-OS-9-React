@@ -8,7 +8,7 @@ import postcssUrl from 'postcss-url';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import dts from 'rollup-plugin-dts';
 import copy from 'rollup-plugin-copy';
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 
 const packageJson = JSON.parse(readFileSync('./package.json', 'utf-8'));
 
@@ -51,10 +51,9 @@ export default [
 					// Copy font files referenced in CSS
 					postcssUrl({
 						url: 'copy',
+						assetsPath: 'dist/fonts',
 						useHash: true,
 					}),
-					// Check if we need to refine the path handling if using assetsPath relative to root
-					// But usually with extract: 'dist/index.css', assetsPath: 'fonts' should work if relative to 'to'
 				],
 				modules: {
 					// Generate scoped class names
@@ -102,6 +101,23 @@ export default [
 					},
 				],
 			}),
+
+			// Custom plugin to fix CSS paths
+			{
+				name: 'fix-css-font-paths',
+				writeBundle() {
+					try {
+						const cssPath = 'dist/index.css';
+						const content = readFileSync(cssPath, 'utf-8');
+						// Replace "dist/fonts/" with "fonts/" (and handle potential leading ./ or /)
+						const newContent = content.replace(/url\s*\(\s*["']?(?:\.?\/?dist\/)?fonts\//g, 'url("fonts/');
+						writeFileSync(cssPath, newContent);
+						console.log('Fixed font paths in dist/index.css');
+					} catch (e) {
+						console.error('Error fixing font paths:', e);
+					}
+				},
+			},
 		],
 		external: ['react', 'react-dom', 'react/jsx-runtime'],
 	},
