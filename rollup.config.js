@@ -83,6 +83,10 @@ export default [
 			copy({
 				targets: [
 					{
+						src: 'src/fonts/Pixel',
+						dest: 'dist/fonts',
+					},
+					{
 						src: 'src/fonts/pixelOperator/*.ttf',
 						dest: 'dist/fonts/pixelOperator',
 					},

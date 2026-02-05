@@ -5,11 +5,13 @@ Maintaining and improving the Mac OS 9 UI component library, including GitHub Ac
 
 ## Recent Changes
 
-### Font Path Fix (2026-02-04)
-- Fixed incorrect font paths in `src/styles/theme.css`
-- Changed `/font/` to `../fonts/` and `../font/` to `../fonts/` for Pixel font family
-- All @font-face declarations now correctly reference `src/fonts/Pixel/` directory
-- Ensures proper loading of Pixel font (normal, bold, italic variants) and PixelSmall font
+### Font Bundling Fix for npm Package (2026-02-04)
+- Fixed Pixel fonts not being included in published npm package
+- Updated `rollup.config.js` to copy `src/fonts/Pixel/` directory to `dist/fonts/` during build
+- Changed all font paths in `src/styles/theme.css` from `../fonts/` to `./fonts/`
+- This ensures fonts load correctly both in development and when library is consumed from npm
+- All Pixel font variants (normal, bold, italic, small) now bundle properly with the package
+- Resolves "Module not found: Can't resolve '../fonts/Pixel/...'" errors in consuming projects
 
 ### GitHub Actions Workflow Enhancement (2026-01-30)
 - Added manual trigger (`workflow_dispatch`) to the npm publishing workflow
