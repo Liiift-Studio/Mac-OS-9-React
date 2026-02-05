@@ -1,5 +1,20 @@
 # @liiift-studio/mac-os9-ui
 
+## 0.2.22
+
+### Patch Changes
+
+- Add submenu functionality to MenuItem component with hover-to-show support
+- Add new submenu-focused Storybook examples demonstrating the items prop
+- Rename WithSubmenus story to WithSubmenuIndicators for clarity
+- Add comprehensive WithSubmenus story showcasing functional nested menus
+
+## 0.2.21
+
+### Patch Changes
+
+- Fix build configuration where fonts were being copied to a nested `dist/fonts` folder instead of the root `fonts` folder in the distribution.
+
 ## 0.2.20
 
 ### Patch Changes

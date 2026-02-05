@@ -19,10 +19,10 @@ type Story = StoryObj<typeof meta>;
 
 // Simple logo component for examples
 const Logo = () => (
-	<div style={{ 
-		width: '16px', 
-		height: '16px', 
-		backgroundColor: '#000', 
+	<div style={{
+		width: '16px',
+		height: '16px',
+		backgroundColor: '#000',
 		borderRadius: '2px',
 		display: 'flex',
 		alignItems: 'center',
@@ -31,15 +31,15 @@ const Logo = () => (
 		fontSize: '10px',
 		fontWeight: 'bold'
 	}}>
-		
+
 	</div>
 );
 
 // Simple divider component for examples
 const Divider = () => (
-	<div style={{ 
-		width: '1px', 
-		height: '16px', 
+	<div style={{
+		width: '1px',
+		height: '16px',
 		backgroundColor: '#999',
 		alignSelf: 'center'
 	}} />
@@ -47,16 +47,16 @@ const Divider = () => (
 
 // Simple clock component for examples
 const Clock = () => {
-	const [time, setTime] = useState(new Date().toLocaleTimeString('en-US', { 
-		hour: 'numeric', 
-		minute: '2-digit' 
+	const [time, setTime] = useState(new Date().toLocaleTimeString('en-US', {
+		hour: 'numeric',
+		minute: '2-digit'
 	}));
 
 	useEffect(() => {
 		const timer = setInterval(() => {
-			setTime(new Date().toLocaleTimeString('en-US', { 
-				hour: 'numeric', 
-				minute: '2-digit' 
+			setTime(new Date().toLocaleTimeString('en-US', {
+				hour: 'numeric',
+				minute: '2-digit'
 			}));
 		}, 1000);
 		return () => clearInterval(timer);
@@ -73,32 +73,34 @@ export const Default: Story = {
 		const [openMenu, setOpenMenu] = useState<number | undefined>();
 
 		return (
-			<MenuBar
-				openMenuIndex={openMenu}
-				onMenuOpen={setOpenMenu}
-				onMenuClose={() => setOpenMenu(undefined)}
-				menus={[
-					{
-						label: 'File',
-						items: (
-							<>
-								<MenuItem label="New" onClick={() => console.log('New')} />
-								<MenuItem label="Open..." onClick={() => console.log('Open')} />
-								<MenuItem label="Save" onClick={() => console.log('Save')} />
-							</>
-						),
-					},
-					{
-						label: 'Edit',
-						items: (
-							<>
-								<MenuItem label="Undo" onClick={() => console.log('Undo')} />
-								<MenuItem label="Redo" onClick={() => console.log('Redo')} />
-							</>
-						),
-					},
-				]}
-			/>
+			<div style={{ minHeight: '200px' }}>
+				<MenuBar
+					openMenuIndex={openMenu}
+					onMenuOpen={setOpenMenu}
+					onMenuClose={() => setOpenMenu(undefined)}
+					menus={[
+						{
+							label: 'File',
+							items: (
+								<>
+									<MenuItem label="New" onClick={() => console.log('New')} />
+									<MenuItem label="Open..." onClick={() => console.log('Open')} />
+									<MenuItem label="Save" onClick={() => console.log('Save')} />
+								</>
+							),
+						},
+						{
+							label: 'Edit',
+							items: (
+								<>
+									<MenuItem label="Undo" onClick={() => console.log('Undo')} />
+									<MenuItem label="Redo" onClick={() => console.log('Redo')} />
+								</>
+							),
+						},
+					]}
+				/>
+			</div>
 		);
 	},
 };
@@ -111,32 +113,34 @@ export const WithShortcuts: Story = {
 		const [openMenu, setOpenMenu] = useState<number | undefined>();
 
 		return (
-			<MenuBar
-				openMenuIndex={openMenu}
-				onMenuOpen={setOpenMenu}
-				onMenuClose={() => setOpenMenu(undefined)}
-				menus={[
-					{
-						label: 'File',
-						items: (
-							<>
-								<MenuItem label="New" shortcut="⌘N" onClick={() => console.log('New')} />
-								<MenuItem label="Open..." shortcut="⌘O" onClick={() => console.log('Open')} />
-								<MenuItem label="Save" shortcut="⌘S" onClick={() => console.log('Save')} />
-							</>
-						),
-					},
-					{
-						label: 'Edit',
-						items: (
-							<>
-								<MenuItem label="Undo" shortcut="⌘Z" onClick={() => console.log('Undo')} />
-								<MenuItem label="Redo" shortcut="⇧⌘Z" onClick={() => console.log('Redo')} />
-							</>
-						),
-					},
-				]}
-			/>
+			<div style={{ minHeight: '200px' }}>
+				<MenuBar
+					openMenuIndex={openMenu}
+					onMenuOpen={setOpenMenu}
+					onMenuClose={() => setOpenMenu(undefined)}
+					menus={[
+						{
+							label: 'File',
+							items: (
+								<>
+									<MenuItem label="New" shortcut="⌘N" onClick={() => console.log('New')} />
+									<MenuItem label="Open..." shortcut="⌘O" onClick={() => console.log('Open')} />
+									<MenuItem label="Save" shortcut="⌘S" onClick={() => console.log('Save')} />
+								</>
+							),
+						},
+						{
+							label: 'Edit',
+							items: (
+								<>
+									<MenuItem label="Undo" shortcut="⌘Z" onClick={() => console.log('Undo')} />
+									<MenuItem label="Redo" shortcut="⇧⌘Z" onClick={() => console.log('Redo')} />
+								</>
+							),
+						},
+					]}
+				/>
+			</div>
 		);
 	},
 };
@@ -151,30 +155,32 @@ export const WithCheckmarks: Story = {
 		const [showRulers, setShowRulers] = useState(false);
 
 		return (
-			<MenuBar
-				openMenuIndex={openMenu}
-				onMenuOpen={setOpenMenu}
-				onMenuClose={() => setOpenMenu(undefined)}
-				menus={[
-					{
-						label: 'View',
-						items: (
-							<>
-								<MenuItem
-									label="Show Grid"
-									checked={showGrid}
-									onClick={() => setShowGrid(!showGrid)}
-								/>
-								<MenuItem
-									label="Show Rulers"
-									checked={showRulers}
-									onClick={() => setShowRulers(!showRulers)}
-								/>
-							</>
-						),
-					},
-				]}
-			/>
+			<div style={{ minHeight: '200px' }}>
+				<MenuBar
+					openMenuIndex={openMenu}
+					onMenuOpen={setOpenMenu}
+					onMenuClose={() => setOpenMenu(undefined)}
+					menus={[
+						{
+							label: 'View',
+							items: (
+								<>
+									<MenuItem
+										label="Show Grid"
+										checked={showGrid}
+										onClick={() => setShowGrid(!showGrid)}
+									/>
+									<MenuItem
+										label="Show Rulers"
+										checked={showRulers}
+										onClick={() => setShowRulers(!showRulers)}
+									/>
+								</>
+							),
+						},
+					]}
+				/>
+			</div>
 		);
 	},
 };
@@ -187,25 +193,27 @@ export const WithSeparators: Story = {
 		const [openMenu, setOpenMenu] = useState<number | undefined>();
 
 		return (
-			<MenuBar
-				openMenuIndex={openMenu}
-				onMenuOpen={setOpenMenu}
-				onMenuClose={() => setOpenMenu(undefined)}
-				menus={[
-					{
-						label: 'File',
-						items: (
-							<>
-								<MenuItem label="New" onClick={() => console.log('New')} />
-								<MenuItem label="Open..." onClick={() => console.log('Open')} />
-								<MenuItem separator label="Save" onClick={() => console.log('Save')} />
-								<MenuItem label="Save As..." onClick={() => console.log('Save As')} />
-								<MenuItem separator label="Quit" onClick={() => console.log('Quit')} />
-							</>
-						),
-					},
-				]}
-			/>
+			<div style={{ minHeight: '200px' }}>
+				<MenuBar
+					openMenuIndex={openMenu}
+					onMenuOpen={setOpenMenu}
+					onMenuClose={() => setOpenMenu(undefined)}
+					menus={[
+						{
+							label: 'File',
+							items: (
+								<>
+									<MenuItem label="New" onClick={() => console.log('New')} />
+									<MenuItem label="Open..." onClick={() => console.log('Open')} />
+									<MenuItem separator label="Save" onClick={() => console.log('Save')} />
+									<MenuItem label="Save As..." onClick={() => console.log('Save As')} />
+									<MenuItem separator label="Quit" onClick={() => console.log('Quit')} />
+								</>
+							),
+						},
+					]}
+				/>
+			</div>
 		);
 	},
 };
@@ -218,55 +226,144 @@ export const WithDisabledItems: Story = {
 		const [openMenu, setOpenMenu] = useState<number | undefined>();
 
 		return (
-			<MenuBar
-				openMenuIndex={openMenu}
-				onMenuOpen={setOpenMenu}
-				onMenuClose={() => setOpenMenu(undefined)}
-				menus={[
-					{
-						label: 'Edit',
-						items: (
-							<>
-								<MenuItem label="Undo" disabled shortcut="⌘Z" />
-								<MenuItem label="Redo" disabled shortcut="⇧⌘Z" />
-								<MenuItem separator label="Cut" shortcut="⌘X" onClick={() => console.log('Cut')} />
-								<MenuItem label="Copy" shortcut="⌘C" onClick={() => console.log('Copy')} />
-								<MenuItem label="Paste" disabled shortcut="⌘V" />
-							</>
-						),
-					},
-				]}
-			/>
+			<div style={{ minHeight: '200px' }}>
+				<MenuBar
+					openMenuIndex={openMenu}
+					onMenuOpen={setOpenMenu}
+					onMenuClose={() => setOpenMenu(undefined)}
+					menus={[
+						{
+							label: 'Edit',
+							items: (
+								<>
+									<MenuItem label="Undo" disabled shortcut="⌘Z" />
+									<MenuItem label="Redo" disabled shortcut="⇧⌘Z" />
+									<MenuItem separator label="Cut" shortcut="⌘X" onClick={() => console.log('Cut')} />
+									<MenuItem label="Copy" shortcut="⌘C" onClick={() => console.log('Copy')} />
+									<MenuItem label="Paste" disabled shortcut="⌘V" />
+								</>
+							),
+						},
+					]}
+				/>
+			</div>
 		);
 	},
 };
 
 /**
- * Menu with submenu indicators
+ * Menu with submenu indicators (non-functional)
+ */
+export const WithSubmenuIndicators: Story = {
+	render: () => {
+		const [openMenu, setOpenMenu] = useState<number | undefined>();
+
+		return (
+			<div style={{ minHeight: '200px' }}>
+				<MenuBar
+					openMenuIndex={openMenu}
+					onMenuOpen={setOpenMenu}
+					onMenuClose={() => setOpenMenu(undefined)}
+					menus={[
+						{
+							label: 'File',
+							items: (
+								<>
+									<MenuItem label="New" hasSubmenu />
+									<MenuItem label="Open Recent" hasSubmenu />
+									<MenuItem separator label="Save" onClick={() => console.log('Save')} />
+									<MenuItem label="Export" hasSubmenu />
+								</>
+							),
+						},
+					]}
+				/>
+			</div>
+		);
+	},
+};
+
+/**
+ * Menu with functional submenus
+ * Hover over menu items with arrows to see submenus appear
  */
 export const WithSubmenus: Story = {
 	render: () => {
 		const [openMenu, setOpenMenu] = useState<number | undefined>();
 
 		return (
-			<MenuBar
-				openMenuIndex={openMenu}
-				onMenuOpen={setOpenMenu}
-				onMenuClose={() => setOpenMenu(undefined)}
-				menus={[
-					{
-						label: 'File',
-						items: (
-							<>
-								<MenuItem label="New" hasSubmenu />
-								<MenuItem label="Open Recent" hasSubmenu />
-								<MenuItem separator label="Save" onClick={() => console.log('Save')} />
-								<MenuItem label="Export" hasSubmenu />
-							</>
-						),
-					},
-				]}
-			/>
+			<div style={{ minHeight: '300px' }}>
+				<MenuBar
+					openMenuIndex={openMenu}
+					onMenuOpen={setOpenMenu}
+					onMenuClose={() => setOpenMenu(undefined)}
+					menus={[
+						{
+							label: 'File',
+							items: (
+								<>
+									<MenuItem 
+										label="New"
+										items={
+											<>
+												<MenuItem label="Text Document" onClick={() => console.log('New Text')} />
+												<MenuItem label="Spreadsheet" onClick={() => console.log('New Spreadsheet')} />
+												<MenuItem label="Presentation" onClick={() => console.log('New Presentation')} />
+											</>
+										}
+									/>
+									<MenuItem 
+										label="Open Recent"
+										items={
+											<>
+												<MenuItem label="Project A" onClick={() => console.log('Open Project A')} />
+												<MenuItem label="Project B" onClick={() => console.log('Open Project B')} />
+												<MenuItem label="Project C" onClick={() => console.log('Open Project C')} />
+												<MenuItem separator label="Clear Recent" onClick={() => console.log('Clear')} />
+											</>
+										}
+									/>
+									<MenuItem separator label="Save" shortcut="⌘S" onClick={() => console.log('Save')} />
+									<MenuItem 
+										label="Export"
+										items={
+											<>
+												<MenuItem label="PDF" onClick={() => console.log('Export PDF')} />
+												<MenuItem label="PNG" onClick={() => console.log('Export PNG')} />
+												<MenuItem label="SVG" onClick={() => console.log('Export SVG')} />
+											</>
+										}
+									/>
+								</>
+							),
+						},
+						{
+							label: 'Edit',
+							items: (
+								<>
+									<MenuItem label="Undo" shortcut="⌘Z" onClick={() => console.log('Undo')} />
+									<MenuItem label="Redo" shortcut="⇧⌘Z" onClick={() => console.log('Redo')} />
+									<MenuItem separator label="Cut" shortcut="⌘X" onClick={() => console.log('Cut')} />
+									<MenuItem label="Copy" shortcut="⌘C" onClick={() => console.log('Copy')} />
+									<MenuItem label="Paste" shortcut="⌘V" onClick={() => console.log('Paste')} />
+									<MenuItem 
+										separator
+										label="Transform"
+										items={
+											<>
+												<MenuItem label="Rotate 90° CW" onClick={() => console.log('Rotate CW')} />
+												<MenuItem label="Rotate 90° CCW" onClick={() => console.log('Rotate CCW')} />
+												<MenuItem label="Flip Horizontal" onClick={() => console.log('Flip H')} />
+												<MenuItem label="Flip Vertical" onClick={() => console.log('Flip V')} />
+											</>
+										}
+									/>
+								</>
+							),
+						},
+					]}
+				/>
+			</div>
 		);
 	},
 };
@@ -279,33 +376,35 @@ export const WithLogo: Story = {
 		const [openMenu, setOpenMenu] = useState<number | undefined>();
 
 		return (
-			<MenuBar
-				leftContent={<Logo />}
-				openMenuIndex={openMenu}
-				onMenuOpen={setOpenMenu}
-				onMenuClose={() => setOpenMenu(undefined)}
-				menus={[
-					{
-						label: 'File',
-						items: (
-							<>
-								<MenuItem label="New" shortcut="⌘N" onClick={() => console.log('New')} />
-								<MenuItem label="Open..." shortcut="⌘O" onClick={() => console.log('Open')} />
-								<MenuItem label="Save" shortcut="⌘S" onClick={() => console.log('Save')} />
-							</>
-						),
-					},
-					{
-						label: 'Edit',
-						items: (
-							<>
-								<MenuItem label="Undo" shortcut="⌘Z" onClick={() => console.log('Undo')} />
-								<MenuItem label="Redo" shortcut="⇧⌘Z" onClick={() => console.log('Redo')} />
-							</>
-						),
-					},
-				]}
-			/>
+			<div style={{ minHeight: '200px' }}>
+				<MenuBar
+					leftContent={<Logo />}
+					openMenuIndex={openMenu}
+					onMenuOpen={setOpenMenu}
+					onMenuClose={() => setOpenMenu(undefined)}
+					menus={[
+						{
+							label: 'File',
+							items: (
+								<>
+									<MenuItem label="New" shortcut="⌘N" onClick={() => console.log('New')} />
+									<MenuItem label="Open..." shortcut="⌘O" onClick={() => console.log('Open')} />
+									<MenuItem label="Save" shortcut="⌘S" onClick={() => console.log('Save')} />
+								</>
+							),
+						},
+						{
+							label: 'Edit',
+							items: (
+								<>
+									<MenuItem label="Undo" shortcut="⌘Z" onClick={() => console.log('Undo')} />
+									<MenuItem label="Redo" shortcut="⇧⌘Z" onClick={() => console.log('Redo')} />
+								</>
+							),
+						},
+					]}
+				/>
+			</div>
 		);
 	},
 };
@@ -318,28 +417,30 @@ export const WithStatusArea: Story = {
 		const [openMenu, setOpenMenu] = useState<number | undefined>();
 
 		return (
-			<MenuBar
-				openMenuIndex={openMenu}
-				onMenuOpen={setOpenMenu}
-				onMenuClose={() => setOpenMenu(undefined)}
-				menus={[
-					{
-						label: 'File',
-						items: (
-							<>
-								<MenuItem label="New" onClick={() => console.log('New')} />
-								<MenuItem label="Open..." onClick={() => console.log('Open')} />
-								<MenuItem label="Save" onClick={() => console.log('Save')} />
-							</>
-						),
-					},
-			]}
-			rightContent={[
-				<Clock key="clock" />,
-				<Divider key="divider" />,
-				<div key="finder" style={{ fontSize: '12px', fontWeight: 'bold' }}>Finder</div>,
-			]}
-			/>
+			<div style={{ minHeight: '200px' }}>
+				<MenuBar
+					openMenuIndex={openMenu}
+					onMenuOpen={setOpenMenu}
+					onMenuClose={() => setOpenMenu(undefined)}
+					menus={[
+						{
+							label: 'File',
+							items: (
+								<>
+									<MenuItem label="New" onClick={() => console.log('New')} />
+									<MenuItem label="Open..." onClick={() => console.log('Open')} />
+									<MenuItem label="Save" onClick={() => console.log('Save')} />
+								</>
+							),
+						},
+					]}
+					rightContent={[
+						<Clock key="clock" />,
+						<Divider key="divider" />,
+						<div key="finder" style={{ fontSize: '12px', fontWeight: 'bold' }}>Finder</div>,
+					]}
+				/>
+			</div>
 		);
 	},
 };
@@ -352,42 +453,44 @@ export const WithLinkItems: Story = {
 		const [openMenu, setOpenMenu] = useState<number | undefined>();
 
 		return (
-			<MenuBar
-				openMenuIndex={openMenu}
-				onMenuOpen={setOpenMenu}
-				onMenuClose={() => setOpenMenu(undefined)}
-				menus={[
-					{
-						label: 'Home',
-						type: 'link',
-						href: '#home',
-						onClick: () => console.log('Navigate to Home'),
-					},
-					{
-						label: 'About',
-						type: 'link',
-						href: '#about',
-						onClick: () => console.log('Navigate to About'),
-					},
-					{
-						label: 'File',
-						type: 'dropdown',
-						items: (
-							<>
-								<MenuItem label="New" onClick={() => console.log('New')} />
-								<MenuItem label="Open..." onClick={() => console.log('Open')} />
-								<MenuItem label="Save" onClick={() => console.log('Save')} />
-							</>
-						),
-					},
-					{
-						label: 'Contact',
-						type: 'link',
-						href: '#contact',
-						onClick: () => console.log('Navigate to Contact'),
-					},
-				]}
-			/>
+			<div style={{ minHeight: '200px' }}>
+				<MenuBar
+					openMenuIndex={openMenu}
+					onMenuOpen={setOpenMenu}
+					onMenuClose={() => setOpenMenu(undefined)}
+					menus={[
+						{
+							label: 'Home',
+							type: 'link',
+							href: '#home',
+							onClick: () => console.log('Navigate to Home'),
+						},
+						{
+							label: 'About',
+							type: 'link',
+							href: '#about',
+							onClick: () => console.log('Navigate to About'),
+						},
+						{
+							label: 'File',
+							type: 'dropdown',
+							items: (
+								<>
+									<MenuItem label="New" onClick={() => console.log('New')} />
+									<MenuItem label="Open..." onClick={() => console.log('Open')} />
+									<MenuItem label="Save" onClick={() => console.log('Save')} />
+								</>
+							),
+						},
+						{
+							label: 'Contact',
+							type: 'link',
+							href: '#contact',
+							onClick: () => console.log('Navigate to Contact'),
+						},
+					]}
+				/>
+			</div>
 		);
 	},
 };
@@ -400,53 +503,64 @@ export const MacOS9Style: Story = {
 		const [openMenu, setOpenMenu] = useState<number | undefined>();
 
 		return (
-			<MenuBar
-				leftContent={<Logo />}
-				openMenuIndex={openMenu}
-				onMenuOpen={setOpenMenu}
-				onMenuClose={() => setOpenMenu(undefined)}
-				menus={[
-					{
-						label: 'File',
-						items: (
-							<>
-								<MenuItem label="New" shortcut="⌘N" onClick={() => alert('New')} />
-								<MenuItem label="Open..." shortcut="⌘O" onClick={() => alert('Open')} />
-								<MenuItem separator label="Save" shortcut="⌘S" onClick={() => alert('Save')} />
-								<MenuItem label="Save As..." shortcut="⇧⌘S" onClick={() => alert('Save As')} />
-								<MenuItem separator label="Quit" shortcut="⌘Q" onClick={() => alert('Quit')} />
-							</>
-						),
-					},
-					{
-						label: 'Edit',
-						items: (
-							<>
-								<MenuItem label="Undo" disabled shortcut="⌘Z" />
-								<MenuItem label="Redo" disabled shortcut="⇧⌘Z" />
-								<MenuItem separator label="Cut" shortcut="⌘X" onClick={() => {}} />
-								<MenuItem label="Copy" shortcut="⌘C" onClick={() => {}} />
-								<MenuItem label="Paste" shortcut="⌘V" onClick={() => {}} />
-							</>
-						),
-					},
-					{
-						label: 'View',
-						items: (
-							<>
-								<MenuItem label="Zoom In" shortcut="⌘+" onClick={() => {}} />
-								<MenuItem label="Zoom Out" shortcut="⌘-" onClick={() => {}} />
-								<MenuItem label="Actual Size" shortcut="⌘0" onClick={() => {}} />
-							</>
-						),
-					},
-			]}
-			rightContent={[
-				<Clock key="clock" />,
-				<Divider key="divider" />,
-				<div key="finder" style={{ fontSize: '12px', fontWeight: 'bold' }}>Finder</div>,
-			]}
-			/>
+			<div style={{ minHeight: '300px' }}>
+				<MenuBar
+					leftContent={<Logo />}
+					openMenuIndex={openMenu}
+					onMenuOpen={setOpenMenu}
+					onMenuClose={() => setOpenMenu(undefined)}
+					menus={[
+						{
+							label: 'File',
+							items: (
+								<>
+									<MenuItem 
+										label="New"
+										shortcut="⌘N"
+										items={
+											<>
+												<MenuItem label="Document" onClick={() => alert('New Document')} />
+												<MenuItem label="Folder" onClick={() => alert('New Folder')} />
+											</>
+										}
+									/>
+									<MenuItem label="Open..." shortcut="⌘O" onClick={() => alert('Open')} />
+									<MenuItem separator label="Save" shortcut="⌘S" onClick={() => alert('Save')} />
+									<MenuItem label="Save As..." shortcut="⇧⌘S" onClick={() => alert('Save As')} />
+									<MenuItem separator label="Quit" shortcut="⌘Q" onClick={() => alert('Quit')} />
+								</>
+							),
+						},
+						{
+							label: 'Edit',
+							items: (
+								<>
+									<MenuItem label="Undo" disabled shortcut="⌘Z" />
+									<MenuItem label="Redo" disabled shortcut="⇧⌘Z" />
+									<MenuItem separator label="Cut" shortcut="⌘X" onClick={() => { }} />
+									<MenuItem label="Copy" shortcut="⌘C" onClick={() => { }} />
+									<MenuItem label="Paste" shortcut="⌘V" onClick={() => { }} />
+								</>
+							),
+						},
+						{
+							label: 'View',
+							items: (
+								<>
+									<MenuItem label="Zoom In" shortcut="⌘+" onClick={() => { }} />
+									<MenuItem label="Zoom Out" shortcut="⌘-" onClick={() => { }} />
+									<MenuItem label="Actual Size" shortcut="⌘0" onClick={() => { }} />
+								</>
+							),
+						},
+					]}
+					rightContent={[
+						<Clock key="clock" />,
+						<Divider key="divider" />,
+						<div key="finder" style={{ fontSize: '12px', fontWeight: 'bold' }}>Finder</div>,
+					]}
+				/>
+			</div>
 		);
 	},
 };
