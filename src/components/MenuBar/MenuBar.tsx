@@ -320,7 +320,9 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
 										onBlur={() => setFocusedIndex(-1)}
 										aria-disabled={menu.disabled}
 									>
-										{menu.label}
+										<h3>
+											{menu.label}
+										</h3>
 									</a>
 								</div>
 							);
