@@ -22,7 +22,8 @@
 				"default": "./dist/index.cjs"
 			}
 		},
-		"./styles": "./dist/index.css"
+		"./styles": "./dist/index.css",
+		"./fonts/*": "./dist/fonts/*"
 	},
 	"files": [
 		"dist",

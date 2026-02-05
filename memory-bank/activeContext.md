@@ -6,12 +6,13 @@ Maintaining and improving the Mac OS 9 UI component library, including GitHub Ac
 ## Recent Changes
 
 ### Font Bundling Fix for npm Package (2026-02-04)
-- Fixed Pixel fonts not being included in published npm package
-- Updated `rollup.config.js` to copy `src/fonts/Pixel/` directory to `dist/fonts/` during build
-- Changed all font paths in `src/styles/theme.css` from `../fonts/` to `./fonts/`
-- This ensures fonts load correctly both in development and when library is consumed from npm
-- All Pixel font variants (normal, bold, italic, small) now bundle properly with the package
-- Resolves "Module not found: Can't resolve '../fonts/Pixel/...'" errors in consuming projects
+- Fixed Pixel fonts not resolving when library consumed from npm
+- **Build Configuration:** Updated `rollup.config.js` to copy `src/fonts/Pixel/` to `dist/fonts/`
+- **Package Exports:** Added `"./fonts/*": "./dist/fonts/*"` export to package.json for proper module resolution
+- **Font Paths:** Changed all @font-face paths in `src/styles/theme.css` to use `~@liiift-studio/mac-os9-ui/fonts/...`
+- **Why:** Webpack/Next.js tilde syntax resolves fonts from node_modules, enabling proper bundling in consuming projects
+- **Result:** All Pixel font variants (normal, bold, italic, small) now load correctly in npm-installed package
+- Resolves "Module not found: Can't resolve './fonts/Pixel/...'" webpack build errors
 
 ### GitHub Actions Workflow Enhancement (2026-01-30)
 - Added manual trigger (`workflow_dispatch`) to the npm publishing workflow

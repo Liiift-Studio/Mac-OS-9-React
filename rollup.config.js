@@ -62,6 +62,8 @@ export default [
 				autoModules: true,
 				// Process .css and .module.css files
 				test: /\.css$/,
+				// Inline font files as base64 data URLs
+				url: 'inline',
 			}),
 			
 			// Compile TypeScript
