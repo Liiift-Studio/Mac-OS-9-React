@@ -68,10 +68,6 @@ export interface MenuItemProps {
 	 * Whether the item has a submenu indicator (arrow)
 	 * @default false
 	 */
-	/**
-	 * Whether the item has a submenu indicator (arrow)
-	 * @default false
-	 */
 	hasSubmenu?: boolean;
 
 	/**
@@ -160,7 +156,6 @@ export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(
 		};
 
 		return (
-		return (
 			<div
 				className={styles.menuItemContainer}
 				onMouseEnter={() => setIsSubmenuOpen(true)}
@@ -204,10 +199,7 @@ export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(
 
 				{/* Separator line if needed */}
 				{separator && <div className={styles.separatorLine} role="separator" />}
-				{/* Separator line if needed */}
-				{separator && <div className={styles.separatorLine} role="separator" />}
 			</div>
-		);
 		);
 	}
 );
