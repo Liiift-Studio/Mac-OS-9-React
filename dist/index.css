@@ -15,48 +15,48 @@
  * ======================================== */
 @font-face {
 	font-family: 'Pixel';
-	src: url("./fonts/Pixel/Normal/Pixel.woff2") format('woff2'),
-		url("./fonts/Pixel/Normal/Pixel.woff") format('woff');
+	src: url("~@liiift-studio/mac-os9-ui/fonts/Pixel/Normal/Pixel.woff2") format('woff2'),
+		url("~@liiift-studio/mac-os9-ui/fonts/Pixel/Normal/Pixel.woff") format('woff');
 	font-style: normal;
 	font-weight: normal;
 	font-display: swap;
 }
 @font-face {
 	font-family: 'Pixel';
-	src: url("./fonts/Pixel/Normal/Pixel-Bold.woff2") format('woff2'),
-		url("./fonts/Pixel/Normal/Pixel-Bold.woff") format('woff');
+	src: url("~@liiift-studio/mac-os9-ui/fonts/Pixel/Normal/Pixel-Bold.woff2") format('woff2'),
+		url("~@liiift-studio/mac-os9-ui/fonts/Pixel/Normal/Pixel-Bold.woff") format('woff');
 	font-style: normal;
 	font-weight: bold;
 	font-display: swap;
 }
 @font-face {
 	font-family: 'Pixel';
-	src: url("./fonts/Pixel/Italic/Pixel-Bold-Italic.woff2") format('woff2'),
-		url("./fonts/Pixel/Italic/Pixel-Bold-Italic.woff") format('woff');
+	src: url("~@liiift-studio/mac-os9-ui/fonts/Pixel/Italic/Pixel-Bold-Italic.woff2") format('woff2'),
+		url("~@liiift-studio/mac-os9-ui/fonts/Pixel/Italic/Pixel-Bold-Italic.woff") format('woff');
 	font-style: italic;
 	font-weight: bold;
 	font-display: swap;
 }
 @font-face {
 	font-family: 'Pixel';
-	src: url("./fonts/Pixel/Italic/Pixel-Italic.woff2") format('woff2'),
-		url("./fonts/Pixel/Italic/Pixel-Italic.woff") format('woff');
+	src: url("~@liiift-studio/mac-os9-ui/fonts/Pixel/Italic/Pixel-Italic.woff2") format('woff2'),
+		url("~@liiift-studio/mac-os9-ui/fonts/Pixel/Italic/Pixel-Italic.woff") format('woff');
 	font-style: italic;
 	font-weight: normal;
 	font-display: swap;
 }
 @font-face {
 	font-family: 'PixelSmall';
-	src: url("./fonts/Pixel/Small/Pixel-Bold-Small.woff2") format('woff2'),
-		url("./fonts/Pixel/Small/Pixel-Bold-Small.woff") format('woff');
+	src: url("~@liiift-studio/mac-os9-ui/fonts/Pixel/Small/Pixel-Bold-Small.woff2") format('woff2'),
+		url("~@liiift-studio/mac-os9-ui/fonts/Pixel/Small/Pixel-Bold-Small.woff") format('woff');
 	font-style: normal;
 	font-weight: bold;
 	font-display: swap;
 }
 @font-face {
 	font-family: 'PixelSmall';
-	src: url("./fonts/Pixel/Small/Pixel-Small.woff2") format('woff2'),
-		url("./fonts/Pixel/Small/Pixel-Small.woff") format('woff');
+	src: url("~@liiift-studio/mac-os9-ui/fonts/Pixel/Small/Pixel-Small.woff2") format('woff2'),
+		url("~@liiift-studio/mac-os9-ui/fonts/Pixel/Small/Pixel-Small.woff") format('woff');
 	font-style: normal;
 	font-weight: normal;
 	font-display: swap;
