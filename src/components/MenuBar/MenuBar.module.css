@@ -181,6 +181,11 @@
 	animation: menuFadeIn 100ms ease-out;
 }
 
+.dropdown--right {
+	left: auto;
+	right: 0;
+}
+
 @keyframes menuFadeIn {
 	from {
 		opacity: 0;

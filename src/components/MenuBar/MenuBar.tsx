@@ -137,47 +137,65 @@ export interface MenuBarProps {
  * ```
  */
 export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
-	({ 
-		menus, 
-		openMenuIndex, 
-		onMenuOpen, 
-		onMenuClose, 
-		className = '', 
+	({
+		menus,
+		openMenuIndex,
+		onMenuOpen,
+		onMenuClose,
+		className = '',
 		dropdownClassName = '',
 		leftContent,
 		rightContent,
 	}, ref) => {
 		const [menuBarElement, setMenuBarElement] = useState<HTMLDivElement | null>(null);
 		const [focusedIndex, setFocusedIndex] = useState<number>(-1);
+		const [internalOpenIndex, setInternalOpenIndex] = useState<number | undefined>(undefined);
+
+		const isControlled = openMenuIndex !== undefined;
+		const activeOpenIndex = isControlled ? openMenuIndex : internalOpenIndex;
+
+		const handleMenuOpenInternal = (index: number) => {
+			if (!isControlled) {
+				setInternalOpenIndex(index);
+			}
+			onMenuOpen?.(index);
+		};
+
+		const handleMenuCloseInternal = () => {
+			if (!isControlled) {
+				setInternalOpenIndex(undefined);
+			}
+			onMenuClose?.();
+		};
 
 		// Handle click outside to close menu
 		useEffect(() => {
-			if (openMenuIndex === undefined || !menuBarElement) return;
+			if (activeOpenIndex === undefined || !menuBarElement) return;
 
 			const handleClickOutside = (event: MouseEvent) => {
 				if (menuBarElement && !menuBarElement.contains(event.target as Node)) {
-					onMenuClose?.();
+					handleMenuCloseInternal();
 				}
 			};
 
 			document.addEventListener('mousedown', handleClickOutside);
 			return () => document.removeEventListener('mousedown', handleClickOutside);
-		}, [openMenuIndex, onMenuClose, menuBarElement]);
+		}, [activeOpenIndex, onMenuClose, menuBarElement, isControlled]);
 
 		// Handle Escape key to close menu
 		useEffect(() => {
-			if (openMenuIndex === undefined) return;
+			if (activeOpenIndex === undefined) return;
 
 			const handleEscape = (event: KeyboardEvent) => {
 				if (event.key === 'Escape') {
 					event.preventDefault();
-					onMenuClose?.();
+					handleMenuCloseInternal();
 				}
 			};
 
 			document.addEventListener('keydown', handleEscape);
 			return () => document.removeEventListener('keydown', handleEscape);
-		}, [openMenuIndex, onMenuClose]);
+		}, [activeOpenIndex, onMenuClose, isControlled]);
 
 		// Handle keyboard navigation
 		const handleKeyDown = useCallback(
@@ -185,11 +203,11 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
 				switch (event.key) {
 					case 'ArrowLeft':
 						event.preventDefault();
-						if (openMenuIndex !== undefined) {
+						if (activeOpenIndex !== undefined) {
 							// Move to previous menu
-							const prevIndex = openMenuIndex > 0 ? openMenuIndex - 1 : menus.length - 1;
+							const prevIndex = activeOpenIndex > 0 ? activeOpenIndex - 1 : menus.length - 1;
 							if (!menus[prevIndex]?.disabled) {
-								onMenuOpen?.(prevIndex);
+								handleMenuOpenInternal(prevIndex);
 							}
 						} else if (focusedIndex > 0) {
 							setFocusedIndex(focusedIndex - 1);
@@ -198,11 +216,11 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
 
 					case 'ArrowRight':
 						event.preventDefault();
-						if (openMenuIndex !== undefined) {
+						if (activeOpenIndex !== undefined) {
 							// Move to next menu
-							const nextIndex = openMenuIndex < menus.length - 1 ? openMenuIndex + 1 : 0;
+							const nextIndex = activeOpenIndex < menus.length - 1 ? activeOpenIndex + 1 : 0;
 							if (!menus[nextIndex]?.disabled) {
-								onMenuOpen?.(nextIndex);
+								handleMenuOpenInternal(nextIndex);
 							}
 						} else if (focusedIndex < menus.length - 1) {
 							setFocusedIndex(focusedIndex + 1);
@@ -211,11 +229,11 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
 
 					case 'ArrowDown':
 						event.preventDefault();
-						if (openMenuIndex === undefined && focusedIndex >= 0) {
+						if (activeOpenIndex === undefined && focusedIndex >= 0) {
 							// Open the focused menu (only if it's a dropdown)
 							const menu = menus[focusedIndex];
 							if (!menu?.disabled && menu?.type !== 'link') {
-								onMenuOpen?.(focusedIndex);
+								handleMenuOpenInternal(focusedIndex);
 							}
 						}
 						break;
@@ -223,7 +241,7 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
 					case 'Enter':
 					case ' ':
 						event.preventDefault();
-						if (openMenuIndex === undefined && focusedIndex >= 0) {
+						if (activeOpenIndex === undefined && focusedIndex >= 0) {
 							const menu = menus[focusedIndex];
 							if (!menu?.disabled) {
 								if (menu.type === 'link') {
@@ -231,14 +249,14 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
 									menu.onClick?.();
 								} else {
 									// Open the focused dropdown menu
-									onMenuOpen?.(focusedIndex);
+									handleMenuOpenInternal(focusedIndex);
 								}
 							}
 						}
 						break;
 				}
 			},
-			[openMenuIndex, focusedIndex, menus, onMenuOpen, onMenuClose]
+			[activeOpenIndex, focusedIndex, menus, onMenuOpen, onMenuClose, isControlled]
 		);
 
 		// Handle menu button click
@@ -252,12 +270,12 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
 				return;
 			}
 
-			if (openMenuIndex === index) {
+			if (activeOpenIndex === index) {
 				// Clicking the same menu closes it
-				onMenuClose?.();
+				handleMenuCloseInternal();
 			} else {
 				// Open the clicked menu
-				onMenuOpen?.(index);
+				handleMenuOpenInternal(index);
 			}
 		};
 
@@ -291,7 +309,7 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
 				{/* Menu items */}
 				<div className={styles.menusContainer}>
 					{menus.map((menu, index) => {
-						const isOpen = openMenuIndex === index;
+						const isOpen = activeOpenIndex === index;
 						const isFocused = focusedIndex === index;
 						const isDropdown = menu.type !== 'link';
 
@@ -342,7 +360,9 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
 									aria-expanded={isOpen}
 									aria-disabled={menu.disabled}
 								>
-									{menu.label}
+									<h3>
+										{menu.label}
+									</h3>
 								</button>
 
 								{isOpen && isDropdown && menu.items && (
@@ -358,7 +378,7 @@ export const MenuBar = forwardRef<HTMLDivElement, MenuBarProps>(
 				{/* Right content (status area) */}
 				{rightContent && (
 					<div className={styles.rightContent}>
-						{Array.isArray(rightContent) 
+						{Array.isArray(rightContent)
 							? rightContent.map((item, index) => (
 								<React.Fragment key={index}>{item}</React.Fragment>
 							))

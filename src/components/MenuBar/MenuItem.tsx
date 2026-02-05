@@ -1,7 +1,7 @@
 // MenuItem component - Mac OS 9 style
 // Individual menu item for use within MenuBar
 
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useState } from 'react';
 import styles from './MenuItem.module.css';
 
 export interface MenuItemProps {
@@ -68,7 +68,16 @@ export interface MenuItemProps {
 	 * Whether the item has a submenu indicator (arrow)
 	 * @default false
 	 */
+	/**
+	 * Whether the item has a submenu indicator (arrow)
+	 * @default false
+	 */
 	hasSubmenu?: boolean;
+
+	/**
+	 * Submenu items
+	 */
+	items?: React.ReactNode;
 }
 
 /**
@@ -123,9 +132,13 @@ export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(
 			onBlur,
 			className = '',
 			hasSubmenu = false,
+			items,
 		},
 		ref
 	) => {
+		const [isSubmenuOpen, setIsSubmenuOpen] = useState(false);
+		const effectiveHasSubmenu = hasSubmenu || !!items;
+
 		// Class names
 		const menuItemClassNames = [
 			styles.menuItem,
@@ -147,7 +160,13 @@ export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(
 		};
 
 		return (
-			<>
+		return (
+			<div
+				className={styles.menuItemContainer}
+				onMouseEnter={() => setIsSubmenuOpen(true)}
+				onMouseLeave={() => setIsSubmenuOpen(false)}
+				style={{ position: 'relative', width: '100%' }}
+			>
 				<button
 					ref={ref}
 					type="button"
@@ -173,12 +192,22 @@ export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(
 					{shortcut && <span className={styles.shortcut}>{shortcut}</span>}
 
 					{/* Submenu indicator */}
-					{hasSubmenu && <span className={styles.submenuArrow}>▶</span>}
+					{effectiveHasSubmenu && <span className={styles.submenuArrow}>▶</span>}
 				</button>
+
+				{/* Submenu */}
+				{items && isSubmenuOpen && (
+					<div className={styles.submenu} role="menu">
+						{items}
+					</div>
+				)}
 
 				{/* Separator line if needed */}
 				{separator && <div className={styles.separatorLine} role="separator" />}
-			</>
+				{/* Separator line if needed */}
+				{separator && <div className={styles.separatorLine} role="separator" />}
+			</div>
+		);
 		);
 	}
 );

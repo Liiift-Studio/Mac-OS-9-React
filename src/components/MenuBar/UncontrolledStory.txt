@@ -1,0 +1,34 @@
+/**
+ * Uncontrolled MenuBar (self-managed state)
+ */
+export const Uncontrolled: Story = {
+	render: () => {
+		return (
+			<div style={{ minHeight: '200px' }}>
+				<MenuBar
+					menus={[
+						{
+							label: 'File',
+							items: (
+								<>
+									<MenuItem label="New" onClick={() => console.log('New')} />
+									<MenuItem label="Open..." onClick={() => console.log('Open')} />
+									<MenuItem label="Save" onClick={() => console.log('Save')} />
+								</>
+							),
+						},
+						{
+							label: 'Edit',
+							items: (
+								<>
+									<MenuItem label="Undo" onClick={() => console.log('Undo')} />
+									<MenuItem label="Redo" onClick={() => console.log('Redo')} />
+								</>
+							),
+						},
+					]}
+				/>
+			</div>
+		);
+	},
+};

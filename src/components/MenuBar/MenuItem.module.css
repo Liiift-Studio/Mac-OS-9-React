@@ -9,12 +9,12 @@
 	display: flex;
 	align-items: center;
 	gap: var(--spacing-2);
-	
+
 	/* Layout */
 	width: 100%;
 	padding: var(--spacing-1) var(--spacing-3);
 	min-height: 20px;
-	
+
 	/* Text styling */
 	font-family: var(--font-system);
 	font-size: var(--font-size-md);
@@ -22,15 +22,15 @@
 	line-height: var(--line-height-snug);
 	text-align: left;
 	color: var(--color-text);
-	
+
 	/* Remove button defaults */
 	background-color: transparent;
 	border: none;
 	cursor: pointer;
-	
+
 	/* Transitions */
 	transition: background-color 50ms ease;
-	
+
 	/* Prevent text selection */
 	user-select: none;
 }
@@ -109,6 +109,42 @@
 	/* Submenu indicator */
 	font-size: 8px;
 	margin-left: var(--spacing-1);
+}
+
+.submenu {
+	/* Submenu container */
+	position: absolute;
+	top: -4px;
+	left: 100%;
+	z-index: 1001;
+
+	/* Mac OS 9 menu appearance */
+	background-color: var(--color-gray-100);
+	border: var(--border-width-thin) solid var(--color-black);
+
+	/* Drop shadow */
+	box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+
+	/* Sizing */
+	min-width: 200px;
+
+	/* Padding */
+	padding: var(--spacing-1) 0;
+
+	/* Animation */
+	animation: menuFadeIn 100ms ease-out;
+}
+
+@keyframes menuFadeIn {
+	from {
+		opacity: 0;
+		transform: translateX(-4px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
 }
 
 /* ========================================
