@@ -14,17 +14,51 @@
  * Local Font - Pixel Operator
  * ======================================== */
 @font-face {
-	font-family: 'Pixel-Op';
-	src: url('./fonts/pixelOperator/PixelOperator.ttf') format('truetype');
-	font-weight: normal;
+	font-family: 'Pixel';
+	src: url("./fonts/Pixel/Normal/Pixel.woff2") format('woff2'),
+		url("./fonts/Pixel/Normal/Pixel.woff") format('woff');
 	font-style: normal;
+	font-weight: normal;
 	font-display: swap;
 }
 @font-face {
-	font-family: 'Pixel-Op';
-	src: url('./fonts/pixelOperator/PixelOperator-Bold.ttf') format('truetype');
-	font-weight: 700;
+	font-family: 'Pixel';
+	src: url("./fonts/Pixel/Normal/Pixel-Bold.woff2") format('woff2'),
+		url("./fonts/Pixel/Normal/Pixel-Bold.woff") format('woff');
 	font-style: normal;
+	font-weight: bold;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Pixel';
+	src: url("./fonts/Pixel/Italic/Pixel-Bold-Italic.woff2") format('woff2'),
+		url("./fonts/Pixel/Italic/Pixel-Bold-Italic.woff") format('woff');
+	font-style: italic;
+	font-weight: bold;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Pixel';
+	src: url("./fonts/Pixel/Italic/Pixel-Italic.woff2") format('woff2'),
+		url("./fonts/Pixel/Italic/Pixel-Italic.woff") format('woff');
+	font-style: italic;
+	font-weight: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'PixelSmall';
+	src: url("./fonts/Pixel/Small/Pixel-Bold-Small.woff2") format('woff2'),
+		url("./fonts/Pixel/Small/Pixel-Bold-Small.woff") format('woff');
+	font-style: normal;
+	font-weight: bold;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'PixelSmall';
+	src: url("./fonts/Pixel/Small/Pixel-Small.woff2") format('woff2'),
+		url("./fonts/Pixel/Small/Pixel-Small.woff") format('woff');
+	font-style: normal;
+	font-weight: normal;
 	font-display: swap;
 }
 :root {
@@ -77,21 +111,23 @@
 	 * ======================================== */
 	
 	/* Charcoal - Primary system UI font (menus, buttons, dialogs) */
-	--font-system: 'IBM Plex Mono', monospace;
+	--font-system: 'Pixel', Times;
 
 	/* IBM Plex Sans - Body text and secondary UI elements (open-source alternative to Geneva) */
 	--font-body: 'IBM Plex Sans', monospace;
 	
 	/* EB Garamond - Headlines and editorial content (open-source alternative) */
-	--font-display: 'Pixel-Op', monospace;
+	--font-display: 'Pixel', monospace;
 	
 	--font-title: 'EB Garamond', Garamond, Georgia, serif;
 
 	/* IBM Plex Mono - Mac OS 9 monospace font (open-source alternative to Monaco) */
 	--font-mono: 'IBM Plex Mono', monospace;
 	
-	--font-pixel: 'Pixel-Op', monospace;
+	--font-pixel: 'Pixel', monospace;
+	--font-pixel-small: 'PixelSmall', monospace;
 
+	--font-bold: 700
 	/* ========================================
 	 * Typography - Font Sizes
 	 * Mac OS 9 used smaller text (9-12pt typical)
@@ -274,6 +310,9 @@ body {
 	line-height: var(--line-height-normal);
 	color: var(--color-text);
 	background-color: var(--color-background);
+}
+.bold{
+	font-weight: bold;
 }
 /* ========================================
  * Utility Classes
@@ -1662,6 +1701,7 @@ body {
 
 .TextField-module_input::placeholder {
 	color: var(--color-gray-600);
+	font-style: italic;
 	opacity: 1;
 }
 
@@ -3099,7 +3139,7 @@ body {
 
 .Window-module_titleText {
 	/* Title text styling */
-	font-family: var(--font-chicago);
+	font-family: var(--font-display);
 	font-size: var(--font-size-md);
 	font-weight: var(--font-weight-bold);
 	line-height: var(--line-height-snug);
@@ -3324,7 +3364,7 @@ body {
 	/* Container for each menu button and dropdown */
 	position: relative;
 	display: flex;
-	align-items: stretch;
+	align-items: center;
 }
 
 /* ========================================
