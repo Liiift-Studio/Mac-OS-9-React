@@ -216,18 +216,18 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 							<rect y="7" width="131.268" height="1" fill="#999999"/>
 							<rect y="11" width="131.268" height="1" fill="#999999"/>
 						</svg>
-					<div className={styles.titleText}>{title}</div>
-						<svg width="132" height="13" viewBox="0 0 132 13" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-							<rect width="130.517" height="13" fill="#DDDDDD"/>
-							<rect width="1" height="13" fill="#EEEEEE"/>
-							<rect x="130" width="1" height="13" fill="#C5C5C5"/>
-							<rect y="1" width="131.268" height="1" fill="#999999"/>
-							<rect y="5" width="131.268" height="1" fill="#999999"/>
-							<rect y="9" width="131.268" height="1" fill="#999999"/>
-							<rect y="3" width="131.268" height="1" fill="#999999"/>
-							<rect y="7" width="131.268" height="1" fill="#999999"/>
-							<rect y="11" width="131.268" height="1" fill="#999999"/>
-						</svg>
+						<div className={`${styles.titleText} bold`}>{title}</div>
+							<svg width="132" height="13" viewBox="0 0 132 13" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+								<rect width="130.517" height="13" fill="#DDDDDD"/>
+								<rect width="1" height="13" fill="#EEEEEE"/>
+								<rect x="130" width="1" height="13" fill="#C5C5C5"/>
+								<rect y="1" width="131.268" height="1" fill="#999999"/>
+								<rect y="5" width="131.268" height="1" fill="#999999"/>
+								<rect y="9" width="131.268" height="1" fill="#999999"/>
+								<rect y="3" width="131.268" height="1" fill="#999999"/>
+								<rect y="7" width="131.268" height="1" fill="#999999"/>
+								<rect y="11" width="131.268" height="1" fill="#999999"/>
+							</svg>
 						</div>
 
 					</div>

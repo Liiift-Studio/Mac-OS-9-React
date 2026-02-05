@@ -108,6 +108,7 @@
 
 .input::placeholder {
 	color: var(--color-gray-600);
+	font-style: italic;
 	opacity: 1;
 }
 

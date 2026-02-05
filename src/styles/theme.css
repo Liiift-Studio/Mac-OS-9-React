@@ -132,6 +132,7 @@
 	--font-mono: 'IBM Plex Mono', monospace;
 	
 	--font-pixel: 'Pixel', monospace;
+	--font-pixel-small: 'PixelSmall', monospace;
 
 	--font-bold: 700
 	/* ========================================
@@ -324,6 +325,9 @@ body {
 	line-height: var(--line-height-normal);
 	color: var(--color-text);
 	background-color: var(--color-background);
+}
+.bold{
+	font-weight: bold;
 }
 
 /* ========================================
