@@ -1,5 +1,11 @@
 # @liiift-studio/mac-os9-ui
 
+## 0.2.19
+
+### Patch Changes
+
+- Fix NPM publication issue where font files were excluded by gitignore. Added .npmignore to ensure fonts are included in the package.
+
 ## 0.2.18
 
 ### Patch Changes

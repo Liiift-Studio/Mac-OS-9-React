@@ -1,0 +1,28 @@
+# NPM Ignore
+# Overrides .gitignore for package publication to ensure fonts are included
+
+# Development source and docs
+src
+.github
+.changeset
+.storybook
+docs
+memory-bank
+
+# Config files
+rollup.config.js
+tsup.config.ts
+tsconfig.json
+vitest.config.ts
+vitest.setup.ts
+.eslintrc.cjs
+.prettierrc
+.gitignore
+
+# Logs
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Note: We specifically DO NOT ignore *.woff, *.woff2, *.ttf here
+# to ensure they are included in the published package.
