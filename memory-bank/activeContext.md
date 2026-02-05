@@ -5,14 +5,18 @@ Maintaining and improving the Mac OS 9 UI component library, including GitHub Ac
 
 ## Recent Changes
 
-### Font Bundling Fix for npm Package (2026-02-04)
-- Fixed Pixel fonts not resolving when library consumed from npm
-- **Build Configuration:** Updated `rollup.config.js` to copy `src/fonts/Pixel/` to `dist/fonts/`
-- **Package Exports:** Added `"./fonts/*": "./dist/fonts/*"` export to package.json for proper module resolution
-- **Font Paths:** Changed all @font-face paths in `src/styles/theme.css` to use `~@liiift-studio/mac-os9-ui/fonts/...`
-- **Why:** Webpack/Next.js tilde syntax resolves fonts from node_modules, enabling proper bundling in consuming projects
-- **Result:** All Pixel font variants (normal, bold, italic, small) now load correctly in npm-installed package
-- Resolves "Module not found: Can't resolve './fonts/Pixel/...'" webpack build errors
+### Font Bundling Fix for npm Package - Base64 Inline Solution (2026-02-04)
+- **Problem:** Pixel fonts failed to load in consuming projects due to webpack module resolution issues
+- **Root Cause:** pixelOperator fonts never had issues because they were never referenced in CSS; Pixel fonts ARE referenced via @font-face, causing webpack's css-loader to try resolving them as modules
+- **Solution:** Inline all fonts as base64 data URLs in the CSS file
+- **Implementation:**
+  - Installed `postcss-url` plugin for reliable base64 encoding
+  - Configured `postcssUrl({url: 'inline'})` in rollup postcss plugins
+  - Changed font paths back to relative `../fonts/Pixel/...` for build-time resolution
+  - Result: All 6 Pixel font variants (normal, bold, italic + small variants) now embedded in CSS as base64
+- **Trade-offs:** CSS file size increased from 93KB to 237KB (+144KB), but eliminates ALL path resolution issues
+- **Benefits:** Zero configuration for consumers, works in any bundler (webpack, vite, parcel), no external font file dependencies
+- Resolves "Module not found: Can't resolve..." errors permanently
 
 ### GitHub Actions Workflow Enhancement (2026-01-30)
 - Added manual trigger (`workflow_dispatch`) to the npm publishing workflow

@@ -4,6 +4,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
 import postcss from 'rollup-plugin-postcss';
 import postcssImport from 'postcss-import';
+import postcssUrl from 'postcss-url';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import dts from 'rollup-plugin-dts';
 import copy from 'rollup-plugin-copy';
@@ -47,6 +48,10 @@ export default [
 				plugins: [
 					// Process @import statements - MUST be first
 					postcssImport(),
+					// Inline font files as base64 data URLs
+					postcssUrl({
+						url: 'inline',
+					}),
 				],
 				modules: {
 					// Generate scoped class names
@@ -62,8 +67,6 @@ export default [
 				autoModules: true,
 				// Process .css and .module.css files
 				test: /\.css$/,
-				// Inline font files as base64 data URLs
-				url: 'inline',
 			}),
 			
 			// Compile TypeScript
