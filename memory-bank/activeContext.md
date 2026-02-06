@@ -1,9 +1,33 @@
 # Active Context
 
 ## Current Focus
-Maintaining and improving the Mac OS 9 UI component library, including GitHub Actions workflows and developer experience.
+Expanding component customization capabilities with classes prop, render props, and data attributes for fine-grained control over styling and behavior.
 
 ## Recent Changes
+
+### Custom Classes and Element Targeting System (2026-02-06)
+- **Feature:** Comprehensive system for customizing and targeting sub-elements in components
+- **Implementation:**
+  - Added `classes` prop to ListView, FolderList, and Window components
+  - Implemented render props (renderRow, renderCell, renderHeaderCell) for complete rendering control
+  - Added cell-level interaction callbacks (onCellClick, onCellMouseEnter, onCellMouseLeave)
+  - Components now track internal hover state for rows and cells
+  - Automatic data attributes for CSS-only targeting
+  - Created `mergeClasses` utility for class name management
+- **Architecture:**
+  - Three complementary approaches: classes prop (simple), render props (advanced), data attributes (CSS-only)
+  - Fully backwards compatible - all new features are opt-in
+  - Conventional patterns: components manage hover state, callbacks notify parents, render props override completely
+  - Type-safe with comprehensive TypeScript interfaces
+- **Documentation:**
+  - Created comprehensive styling guide (`docs/custom-styling-guide.md`)
+  - Added 9 Storybook stories demonstrating all features
+  - Exported all new types and utilities from main index
+- **Benefits:**
+  - Enables targeting specific elements (header cells, rows, cells, title bars)
+  - Supports hover state control and cell-level actions
+  - Scalable pattern applicable to all future components
+  - Maintains Mac OS 9 aesthetic while allowing customization
 
 ### Font Bundling Fix for npm Package - Base64 Inline Solution (2026-02-04)
 - **Problem:** Pixel fonts failed to load in consuming projects due to webpack module resolution issues

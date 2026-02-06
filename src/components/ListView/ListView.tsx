@@ -4,6 +4,7 @@
 'use client';
 
 import React, { forwardRef, useState, useCallback } from 'react';
+import { mergeClasses } from '../../utils/classNames';
 import styles from './ListView.module.css';
 
 export interface ListColumn {
@@ -47,6 +48,90 @@ export interface ListItem {
 	icon?: React.ReactNode;
 }
 
+/**
+ * Classes for targeting ListView sub-elements
+ */
+export interface ListViewClasses {
+	/** Root container */
+	root?: string;
+	/** Header row container */
+	header?: string;
+	/** Individual header cell */
+	headerCell?: string;
+	/** Body container (scrollable area) */
+	body?: string;
+	/** Individual row */
+	row?: string;
+	/** Individual cell */
+	cell?: string;
+}
+
+/**
+ * Row render prop state
+ */
+export interface RowRenderState {
+	/** Whether this row is selected */
+	isSelected: boolean;
+	/** Whether this row is being hovered */
+	isHovered: boolean;
+	/** Row index in the list */
+	index: number;
+}
+
+/**
+ * Row render prop default props
+ * Spread these on your custom element for accessibility and behavior
+ */
+export interface RowDefaultProps {
+	key: string;
+	className: string;
+	onClick: (e: React.MouseEvent) => void;
+	onDoubleClick: () => void;
+	onMouseEnter: () => void;
+	onMouseLeave: () => void;
+	'data-selected': boolean;
+	'data-index': number;
+	'data-item-id': string;
+}
+
+/**
+ * Cell render prop state
+ */
+export interface CellRenderState {
+	/** Whether this cell is being hovered */
+	isHovered: boolean;
+	/** Whether the row containing this cell is selected */
+	isRowSelected: boolean;
+	/** Column index */
+	columnIndex: number;
+	/** Row index */
+	rowIndex: number;
+}
+
+/**
+ * Header cell render prop state
+ */
+export interface HeaderCellRenderState {
+	/** Whether this column is currently sorted */
+	isSorted: boolean;
+	/** Current sort direction if sorted */
+	sortDirection?: 'asc' | 'desc';
+}
+
+/**
+ * Header cell render prop default props
+ */
+export interface HeaderCellDefaultProps {
+	key: string;
+	className: string;
+	style: React.CSSProperties;
+	onClick: () => void;
+	'data-column': string;
+	'data-sortable': boolean;
+	'data-sorted'?: boolean;
+	'data-sort-direction'?: 'asc' | 'desc';
+}
+
 export interface ListViewProps {
 	/**
 	 * Column definitions
@@ -74,9 +159,14 @@ export interface ListViewProps {
 	onItemOpen?: (item: ListItem) => void;
 
 	/**
-	 * Callback when mouse enters an item
+	 * Callback when mouse enters an item (row-level)
 	 */
 	onItemMouseEnter?: (item: ListItem) => void;
+
+	/**
+	 * Callback when mouse leaves an item (row-level)
+	 */
+	onItemMouseLeave?: (item: ListItem) => void;
 
 	/**
 	 * Callback when column is clicked for sorting
@@ -92,6 +182,77 @@ export interface ListViewProps {
 	 * Height of the list view
 	 */
 	height?: number | string;
+
+	/**
+	 * Custom classes for targeting sub-elements
+	 */
+	classes?: ListViewClasses;
+
+	/**
+	 * Override row rendering
+	 * @param item - The list item
+	 * @param state - Row state (selected, hovered, index)
+	 * @param defaultProps - Props to spread on custom element for accessibility
+	 * @returns Custom row element (fully replaces default)
+	 */
+	renderRow?: (
+		item: ListItem,
+		state: RowRenderState,
+		defaultProps: RowDefaultProps
+	) => React.ReactNode;
+
+	/**
+	 * Override cell rendering
+	 * @param value - Cell value (item[columnKey])
+	 * @param item - Full item object
+	 * @param column - Column definition
+	 * @param state - Cell state (hovered, selected row, indices)
+	 * @returns Custom cell content (fully replaces default)
+	 */
+	renderCell?: (
+		value: any,
+		item: ListItem,
+		column: ListColumn,
+		state: CellRenderState
+	) => React.ReactNode;
+
+	/**
+	 * Override header cell rendering
+	 * @param column - Column definition
+	 * @param state - Header state (sorted, direction)
+	 * @param defaultProps - Props to spread on custom element
+	 * @returns Custom header cell element (fully replaces default)
+	 */
+	renderHeaderCell?: (
+		column: ListColumn,
+		state: HeaderCellRenderState,
+		defaultProps: HeaderCellDefaultProps
+	) => React.ReactNode;
+
+	/**
+	 * Callback when a cell is clicked
+	 */
+	onCellClick?: (
+		item: ListItem,
+		column: ListColumn,
+		event: React.MouseEvent
+	) => void;
+
+	/**
+	 * Callback when mouse enters a cell
+	 */
+	onCellMouseEnter?: (
+		item: ListItem,
+		column: ListColumn
+	) => void;
+
+	/**
+	 * Callback when mouse leaves a cell
+	 */
+	onCellMouseLeave?: (
+		item: ListItem,
+		column: ListColumn
+	) => void;
 }
 
 /**
@@ -127,17 +288,30 @@ export const ListView = forwardRef<HTMLDivElement, ListViewProps>(
 			onSelectionChange,
 			onItemOpen,
 			onItemMouseEnter,
+			onItemMouseLeave,
 			onSort,
 			className = '',
 			height = 'auto',
+			classes,
+			renderRow,
+			renderCell,
+			renderHeaderCell,
+			onCellClick,
+			onCellMouseEnter,
+			onCellMouseLeave,
 		},
 		ref
 	) => {
 		const [sortColumn, setSortColumn] = useState<string | null>(null);
 		const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+		const [hoveredRow, setHoveredRow] = useState<string | null>(null);
+		const [hoveredCell, setHoveredCell] = useState<{
+			rowId: string;
+			columnKey: string;
+		} | null>(null);
 
 		// Class names
-		const classNames = [styles.listView, className].filter(Boolean).join(' ');
+		const classNames = mergeClasses(styles.listView, className, classes?.root);
 
 		// Handle column header click
 		const handleColumnClick = useCallback(
@@ -213,61 +387,179 @@ export const ListView = forwardRef<HTMLDivElement, ListViewProps>(
 		return (
 			<div ref={ref} className={classNames} style={containerStyle}>
 				{/* Column headers */}
-				<div className={styles.header}>
-					{columns.map((column) => (
-						<div
-							key={column.key}
-							className={`${styles.headerCell} ${
-								column.sortable !== false ? styles.sortable : ''
-							}`}
-							style={{
+				<div className={mergeClasses(styles.header, classes?.header)}>
+					{columns.map((column) => {
+						const isSorted = sortColumn === column.key;
+						const headerState: HeaderCellRenderState = {
+							isSorted,
+							sortDirection: isSorted ? sortDirection : undefined,
+						};
+
+						const headerDefaultProps: HeaderCellDefaultProps = {
+							key: column.key,
+							className: mergeClasses(
+								styles.headerCell,
+								column.sortable !== false && styles.sortable,
+								classes?.headerCell
+							),
+							style: {
 								width:
 									typeof column.width === 'number'
 										? `${column.width}px`
 										: column.width,
-							}}
-							onClick={() => handleColumnClick(column.key, column.sortable)}
-						>
-							{column.label}
-							{sortColumn === column.key && (
-								<span className={styles.sortIndicator}>
-									{sortDirection === 'asc' ? '▲' : '▼'}
-								</span>
-							)}
-						</div>
-					))}
+							},
+							onClick: () => handleColumnClick(column.key, column.sortable),
+							'data-column': column.key,
+							'data-sortable': column.sortable !== false,
+							...(isSorted && {
+								'data-sorted': true,
+								'data-sort-direction': sortDirection,
+							}),
+						};
+
+						// Use custom render or default
+						if (renderHeaderCell) {
+							return renderHeaderCell(column, headerState, headerDefaultProps);
+						}
+
+						// Default header cell rendering
+						return (
+							<div {...headerDefaultProps}>
+								{column.label}
+								{isSorted && (
+									<span className={styles.sortIndicator}>
+										{sortDirection === 'asc' ? '▲' : '▼'}
+									</span>
+								)}
+							</div>
+						);
+					})}
 				</div>
 
 				{/* List items */}
-				<div className={styles.body}>
-					{items.map((item) => {
+				<div className={mergeClasses(styles.body, classes?.body)}>
+					{items.map((item, rowIndex) => {
 						const isSelected = selectedIds.includes(item.id);
+						const isHovered = hoveredRow === item.id;
 
+						const rowState: RowRenderState = {
+							isSelected,
+							isHovered,
+							index: rowIndex,
+						};
+
+						const rowDefaultProps: RowDefaultProps = {
+							key: item.id,
+							className: mergeClasses(
+								styles.row,
+								isSelected && styles.selected,
+								classes?.row
+							),
+							onClick: (e) => handleRowClick(item.id, e),
+							onDoubleClick: () => handleRowDoubleClick(item),
+							onMouseEnter: () => {
+								setHoveredRow(item.id);
+								onItemMouseEnter?.(item);
+							},
+							onMouseLeave: () => {
+								setHoveredRow(null);
+								setHoveredCell(null);
+								onItemMouseLeave?.(item);
+							},
+							'data-selected': isSelected,
+							'data-index': rowIndex,
+							'data-item-id': item.id,
+						};
+
+						// Use custom row render or default
+						if (renderRow) {
+							return renderRow(item, rowState, rowDefaultProps);
+						}
+
+						// Default row rendering
 						return (
-							<div
-								key={item.id}
-								className={`${styles.row} ${isSelected ? styles.selected : ''}`}
-								onClick={(e) => handleRowClick(item.id, e)}
-								onDoubleClick={() => handleRowDoubleClick(item)}
-								onMouseEnter={() => handleRowMouseEnter(item)}
-							>
-								{columns.map((column, index) => (
-									<div
-										key={column.key}
-										className={styles.cell}
-										style={{
-											width:
-												typeof column.width === 'number'
-													? `${column.width}px`
-													: column.width,
-										}}
-									>
-										{index === 0 && item.icon && (
-											<span className={styles.icon}>{item.icon}</span>
-										)}
-										{item[column.key]}
-									</div>
-								))}
+							<div {...rowDefaultProps}>
+								{columns.map((column, columnIndex) => {
+									const value = item[column.key];
+									const isCellHovered = 
+										hoveredCell?.rowId === item.id && 
+										hoveredCell?.columnKey === column.key;
+
+									const cellState: CellRenderState = {
+										isHovered: isCellHovered,
+										isRowSelected: isSelected,
+										columnIndex,
+										rowIndex,
+									};
+
+									// Cell event handlers
+									const handleCellClick = (e: React.MouseEvent) => {
+										if (onCellClick) {
+											onCellClick(item, column, e);
+										}
+									};
+
+									const handleCellMouseEnter = () => {
+										setHoveredCell({ rowId: item.id, columnKey: column.key });
+										if (onCellMouseEnter) {
+											onCellMouseEnter(item, column);
+										}
+									};
+
+									const handleCellMouseLeave = () => {
+										setHoveredCell(null);
+										if (onCellMouseLeave) {
+											onCellMouseLeave(item, column);
+										}
+									};
+
+									// Use custom cell render or default
+									if (renderCell) {
+										return (
+											<div
+												key={column.key}
+												className={mergeClasses(styles.cell, classes?.cell)}
+												style={{
+													width:
+														typeof column.width === 'number'
+															? `${column.width}px`
+															: column.width,
+												}}
+												data-column={column.key}
+												data-hovered={isCellHovered}
+												onClick={handleCellClick}
+												onMouseEnter={handleCellMouseEnter}
+												onMouseLeave={handleCellMouseLeave}
+											>
+												{renderCell(value, item, column, cellState)}
+											</div>
+										);
+									}
+
+									// Default cell rendering
+									return (
+										<div
+											key={column.key}
+											className={mergeClasses(styles.cell, classes?.cell)}
+											style={{
+												width:
+													typeof column.width === 'number'
+														? `${column.width}px`
+														: column.width,
+											}}
+											data-column={column.key}
+											data-hovered={isCellHovered}
+											onClick={handleCellClick}
+											onMouseEnter={handleCellMouseEnter}
+											onMouseLeave={handleCellMouseLeave}
+										>
+											{columnIndex === 0 && item.icon && (
+												<span className={styles.icon}>{item.icon}</span>
+											)}
+											{value}
+										</div>
+									);
+								})}
 							</div>
 						);
 					})}

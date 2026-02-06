@@ -14,19 +14,33 @@ export { Radio, type RadioProps } from './components/Radio';
 export { TextField, type TextFieldProps } from './components/TextField';
 export { Select, type SelectProps, type SelectOption } from './components/Select';
 export { Tabs, TabPanel, type TabsProps, type TabPanelProps } from './components/Tabs';
-export { Window, type WindowProps } from './components/Window';
+export { Window, type WindowProps, type WindowClasses } from './components/Window';
 export { Dialog, type DialogProps } from './components/Dialog';
 // export { TitleBar, type TitleBarProps } from './components/TitleBar'; // Hidden - needs visual refinement
 export { MenuBar, MenuItem, MenuDropdown, type MenuBarProps, type MenuItemProps, type Menu, type MenuDropdownProps } from './components/MenuBar';
 export { Scrollbar, type ScrollbarProps } from './components/Scrollbar';
-export { ListView, type ListViewProps, type ListColumn, type ListItem } from './components/ListView';
-export { FolderList, type FolderListProps } from './components/FolderList';
+export { 
+	ListView, 
+	type ListViewProps, 
+	type ListColumn, 
+	type ListItem,
+	type ListViewClasses,
+	type RowRenderState,
+	type RowDefaultProps,
+	type CellRenderState,
+	type HeaderCellRenderState,
+	type HeaderCellDefaultProps
+} from './components/ListView';
+export { FolderList, type FolderListProps, type FolderListClasses } from './components/FolderList';
 
 // Export all icon components from Icon library
 export * from './components/Icon/categories';
 
 // Export design tokens
 export * from './tokens';
+
+// Export utilities
+export { mergeClasses, createClassBuilder } from './utils/classNames';
 
 // Export types
 export type * from './types';

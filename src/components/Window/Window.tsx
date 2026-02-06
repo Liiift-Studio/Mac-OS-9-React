@@ -2,7 +2,26 @@
 // Classic window container with optional title bar
 
 import React, { forwardRef } from 'react';
+import { mergeClasses } from '../../utils/classNames';
 import styles from './Window.module.css';
+
+/**
+ * Classes for targeting Window sub-elements
+ */
+export interface WindowClasses {
+	/** Root container */
+	root?: string;
+	/** Title bar */
+	titleBar?: string;
+	/** Title text */
+	titleText?: string;
+	/** Window controls container */
+	controls?: string;
+	/** Individual control button */
+	controlButton?: string;
+	/** Content area */
+	content?: string;
+}
 
 export interface WindowProps {
 	/**
@@ -48,6 +67,11 @@ export interface WindowProps {
 	 * Custom class name for the content area
 	 */
 	contentClassName?: string;
+
+	/**
+	 * Custom classes for targeting sub-elements
+	 */
+	classes?: WindowClasses;
 
 	/**
 	 * Whether to show window controls (close, minimize, maximize)
@@ -127,6 +151,7 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 			height = 'auto',
 			className = '',
 			contentClassName = '',
+			classes,
 			showControls = true,
 			onClose,
 			onMinimize,
@@ -137,15 +162,14 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 		ref
 	) => {
 		// Class names
-		const windowClassNames = [
+		const windowClassNames = mergeClasses(
 			styles.window,
 			active ? styles['window--active'] : styles['window--inactive'],
 			className,
-		]
-			.filter(Boolean)
-			.join(' ');
+			classes?.root
+		);
 
-		const contentClassNames = [styles.content, contentClassName].filter(Boolean).join(' ');
+		const contentClassNames = mergeClasses(styles.content, contentClassName, classes?.content);
 
 		// Window style
 		const windowStyle: React.CSSProperties = {};
@@ -164,15 +188,16 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 
 			if (title) {
 				return (
-					<div className={styles.titleBar} data-numControls={
-						[onClose, onMinimize, onMaximize].filter(Boolean).length
-					}>
+					<div 
+						className={mergeClasses(styles.titleBar, classes?.titleBar)} 
+						data-numControls={[onClose, onMinimize, onMaximize].filter(Boolean).length}
+					>
 						{showControls && (
-							<div className={styles.controls}>
+							<div className={mergeClasses(styles.controls, classes?.controls)}>
 								{onClose && (
 								<button
 									type="button"
-									className={styles.controlButton}
+									className={mergeClasses(styles.controlButton, classes?.controlButton)}
 									onClick={onClose}
 									aria-label="Close"
 									title="Close"
@@ -183,7 +208,7 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 								{onMinimize && (
 									<button
 										type="button"
-										className={styles.controlButton}
+										className={mergeClasses(styles.controlButton, classes?.controlButton)}
 										onClick={onMinimize}
 										aria-label="Minimize"
 										title="Minimize"
@@ -194,7 +219,7 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 								{onMaximize && (
 									<button
 										type="button"
-										className={styles.controlButton}
+										className={mergeClasses(styles.controlButton, classes?.controlButton)}
 										onClick={onMaximize}
 										aria-label="Maximize"
 										title="Maximize"
@@ -216,7 +241,7 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 							<rect y="7" width="131.268" height="1" fill="#999999"/>
 							<rect y="11" width="131.268" height="1" fill="#999999"/>
 						</svg>
-						<div className={`${styles.titleText} bold`}>{title}</div>
+						<div className={mergeClasses(styles.titleText, classes?.titleText, 'bold')}>{title}</div>
 							<svg width="132" height="13" viewBox="0 0 132 13" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
 								<rect width="130.517" height="13" fill="#DDDDDD"/>
 								<rect width="1" height="13" fill="#EEEEEE"/>

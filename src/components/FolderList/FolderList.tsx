@@ -5,10 +5,44 @@
 
 import React, { forwardRef, useState } from 'react';
 import { Window, WindowProps } from '../Window/Window';
-import { ListView, ListColumn, ListItem } from '../ListView/ListView';
+import { 
+	ListView, 
+	ListColumn, 
+	ListItem,
+	ListViewClasses,
+	RowRenderState,
+	RowDefaultProps,
+	CellRenderState,
+	HeaderCellRenderState,
+	HeaderCellDefaultProps
+} from '../ListView/ListView';
 import styles from './FolderList.module.css';
 
-export interface FolderListProps extends Omit<WindowProps, 'children'> {
+/**
+ * Classes for targeting FolderList sub-elements
+ */
+export interface FolderListClasses {
+	/** Root window container */
+	root?: string;
+	/** Window component */
+	window?: string;
+	/** Title bar */
+	titleBar?: string;
+	/** ListView container */
+	listView?: string;
+	/** ListView header */
+	header?: string;
+	/** ListView header cell */
+	headerCell?: string;
+	/** ListView body */
+	body?: string;
+	/** ListView row */
+	row?: string;
+	/** ListView cell */
+	cell?: string;
+}
+
+export interface FolderListProps extends Omit<WindowProps, 'children' | 'classes'> {
 	/**
 	 * Column definitions for the list
 	 * @default [{ key: 'name', label: 'Name' }, { key: 'modified', label: 'Date Modified' }, { key: 'size', label: 'Size' }]
@@ -36,9 +70,14 @@ export interface FolderListProps extends Omit<WindowProps, 'children'> {
 	onItemOpen?: (item: ListItem) => void;
 
 	/**
-	 * Callback when mouse enters an item
+	 * Callback when mouse enters an item (row-level)
 	 */
 	onItemMouseEnter?: (item: ListItem) => void;
+
+	/**
+	 * Callback when mouse leaves an item (row-level)
+	 */
+	onItemMouseLeave?: (item: ListItem) => void;
 
 	/**
 	 * Callback when column header is clicked for sorting
@@ -55,6 +94,77 @@ export interface FolderListProps extends Omit<WindowProps, 'children'> {
 	 * @default 400
 	 */
 	listHeight?: number | string;
+
+	/**
+	 * Custom classes for targeting sub-elements
+	 */
+	classes?: FolderListClasses;
+
+	/**
+	 * Override row rendering
+	 * @param item - The list item
+	 * @param state - Row state (selected, hovered, index)
+	 * @param defaultProps - Props to spread on custom element for accessibility
+	 * @returns Custom row element (fully replaces default)
+	 */
+	renderRow?: (
+		item: ListItem,
+		state: RowRenderState,
+		defaultProps: RowDefaultProps
+	) => React.ReactNode;
+
+	/**
+	 * Override cell rendering
+	 * @param value - Cell value (item[columnKey])
+	 * @param item - Full item object
+	 * @param column - Column definition
+	 * @param state - Cell state (hovered, selected row, indices)
+	 * @returns Custom cell content (fully replaces default)
+	 */
+	renderCell?: (
+		value: any,
+		item: ListItem,
+		column: ListColumn,
+		state: CellRenderState
+	) => React.ReactNode;
+
+	/**
+	 * Override header cell rendering
+	 * @param column - Column definition
+	 * @param state - Header state (sorted, direction)
+	 * @param defaultProps - Props to spread on custom element
+	 * @returns Custom header cell element (fully replaces default)
+	 */
+	renderHeaderCell?: (
+		column: ListColumn,
+		state: HeaderCellRenderState,
+		defaultProps: HeaderCellDefaultProps
+	) => React.ReactNode;
+
+	/**
+	 * Callback when a cell is clicked
+	 */
+	onCellClick?: (
+		item: ListItem,
+		column: ListColumn,
+		event: React.MouseEvent
+	) => void;
+
+	/**
+	 * Callback when mouse enters a cell
+	 */
+	onCellMouseEnter?: (
+		item: ListItem,
+		column: ListColumn
+	) => void;
+
+	/**
+	 * Callback when mouse leaves a cell
+	 */
+	onCellMouseLeave?: (
+		item: ListItem,
+		column: ListColumn
+	) => void;
 }
 
 /**
@@ -92,19 +202,38 @@ export const FolderList = forwardRef<HTMLDivElement, FolderListProps>(
 			onSelectionChange,
 			onItemOpen,
 			onItemMouseEnter,
+			onItemMouseLeave,
 			onSort,
 			onMouseEnter,
 			listHeight = 400,
+			classes,
+			renderRow,
+			renderCell,
+			renderHeaderCell,
+			onCellClick,
+			onCellMouseEnter,
+			onCellMouseLeave,
 			...windowProps
 		},
 		ref
 	) => {
+		// Build ListView classes from FolderList classes
+		const listViewClasses: ListViewClasses | undefined = classes ? {
+			root: classes.listView,
+			header: classes.header,
+			headerCell: classes.headerCell,
+			body: classes.body,
+			row: classes.row,
+			cell: classes.cell,
+		} : undefined;
+
 		// Window content with ListView
 		return (
 			<Window 
 				ref={ref} 
 				contentClassName={styles.folderListContent} 
 				onMouseEnter={onMouseEnter}
+				className={classes?.root}
 				{...windowProps}
 			>
 				<ListView
@@ -114,9 +243,17 @@ export const FolderList = forwardRef<HTMLDivElement, FolderListProps>(
 					onSelectionChange={onSelectionChange}
 					onItemOpen={onItemOpen}
 					onItemMouseEnter={onItemMouseEnter}
+					onItemMouseLeave={onItemMouseLeave}
 					onSort={onSort}
 					height={listHeight}
 					className={styles.listView}
+					classes={listViewClasses}
+					renderRow={renderRow}
+					renderCell={renderCell}
+					renderHeaderCell={renderHeaderCell}
+					onCellClick={onCellClick}
+					onCellMouseEnter={onCellMouseEnter}
+					onCellMouseLeave={onCellMouseLeave}
 				/>
 			</Window>
 		);

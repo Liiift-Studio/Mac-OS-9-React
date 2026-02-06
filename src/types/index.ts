@@ -1,15 +1,44 @@
 // Common types used across the Mac OS 9 UI library
 
 /**
- * Base component props that all components should extend
+ * Generic classes object for targeting sub-elements within components
+ * Components extend this with specific element keys
  */
-export interface BaseComponentProps {
-	/** Additional CSS class name */
+export interface ComponentClasses {
+	root?: string;
+	[key: string]: string | undefined;
+}
+
+/**
+ * Base component props that all components should extend
+ * @template TClasses - Specific classes type for the component
+ */
+export interface BaseComponentProps<TClasses extends ComponentClasses = ComponentClasses> {
+	/** Additional CSS class name for root element */
 	className?: string;
 	/** Inline styles */
 	style?: React.CSSProperties;
+	/** Custom classes for targeting sub-elements */
+	classes?: TClasses;
 	/** Test ID for testing purposes */
 	'data-testid'?: string;
+}
+
+/**
+ * Common render state interface for render prop patterns
+ * Provides information about element state for conditional rendering
+ */
+export interface RenderState {
+	/** Whether the element is being hovered */
+	isHovered?: boolean;
+	/** Whether the element is selected */
+	isSelected?: boolean;
+	/** Whether the element is in active state (e.g., pressed) */
+	isActive?: boolean;
+	/** Whether the element has keyboard focus */
+	isFocused?: boolean;
+	/** Whether the element is disabled */
+	isDisabled?: boolean;
 }
 
 /**

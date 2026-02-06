@@ -1,5 +1,24 @@
 # @liiift-studio/mac-os9-ui
 
+## Unreleased
+
+### Minor Changes
+
+- Add comprehensive custom styling and element targeting system
+  - **New `classes` prop** on ListView, FolderList, and Window components for targeting sub-elements
+  - **Render props** (renderRow, renderCell, renderHeaderCell) for complete rendering control
+  - **Cell-level interactions** with onCellClick, onCellMouseEnter, and onCellMouseLeave callbacks
+  - **Automatic data attributes** for CSS-only targeting without JavaScript
+  - **Internal hover state tracking** for rows and cells
+  - All features are fully backwards compatible and opt-in
+
+### Patch Changes
+
+- Add `mergeClasses` and `createClassBuilder` utility functions for class name management
+- Export new TypeScript interfaces: ListViewClasses, FolderListClasses, WindowClasses, RowRenderState, RowDefaultProps, CellRenderState, HeaderCellRenderState, HeaderCellDefaultProps
+- Add comprehensive Storybook documentation with 9 new stories demonstrating all customization approaches
+- Add detailed styling guide documentation in `docs/custom-styling-guide.md`
+
 ## 0.2.22
 
 ### Patch Changes
