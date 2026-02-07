@@ -18,6 +18,12 @@
 - Export new TypeScript interfaces: ListViewClasses, FolderListClasses, WindowClasses, RowRenderState, RowDefaultProps, CellRenderState, HeaderCellRenderState, HeaderCellDefaultProps
 - Add comprehensive Storybook documentation with 9 new stories demonstrating all customization approaches
 - Add detailed styling guide documentation in `docs/custom-styling-guide.md`
+- Improve responsive typography with mobile-first approach
+  - Mobile base: 14px (optimal for small screens)
+  - Small mobile (480px+): 15px
+  - Tablet (768px+): 16px
+  - Desktop (1024px+): 16px
+  - Large desktop (1440px+): 18px
 
 ## 0.2.22
 
