@@ -1,10 +1,12 @@
 // Window component stories
 
 import type { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 import { Window } from './Window';
 import { Button } from '../Button/Button';
 import { TextField } from '../TextField/TextField';
 import { Checkbox } from '../Checkbox/Checkbox';
+import { WindowPosition } from '../../types';
 
 const meta = {
 	title: 'Components/Window',
@@ -326,6 +328,166 @@ export const MultipleWindows: Story = {
 					<p>This window is active and in front.</p>
 				</Window>
 			</div>
+		</div>
+	),
+};
+
+/**
+ * Draggable window (uncontrolled)
+ * Click and drag the title bar to move the window around.
+ * The window stays in normal flow until you first drag it.
+ */
+export const Draggable: Story = {
+	args: {
+		children: <></>,
+	},
+	render: () => (
+		<div style={{ position: 'relative', width: '800px', height: '600px', border: '1px dashed #ccc' }}>
+			<p style={{ position: 'absolute', top: '10px', left: '10px', color: '#666', fontSize: '12px' }}>
+				Container area - drag the window by its title bar
+			</p>
+			<Window
+				title="Draggable Window"
+				width={400}
+				height={250}
+				draggable={true}
+				onClose={() => alert('Close')}
+			>
+				<div>
+					<p><strong>Try dragging this window!</strong></p>
+					<p>Click and hold the title bar, then move your mouse to drag.</p>
+					<p>The window starts in normal document flow but becomes absolutely positioned once you drag it.</p>
+					<p style={{ marginTop: '16px', fontSize: '12px', color: '#666' }}>
+						Notice the grab cursor when hovering over the title bar.
+					</p>
+				</div>
+			</Window>
+		</div>
+	),
+};
+
+/**
+ * Draggable window with initial position
+ * Window is positioned absolutely from the start.
+ */
+export const DraggableWithInitialPosition: Story = {
+	args: {
+		children: <></>,
+	},
+	render: () => (
+		<div style={{ position: 'relative', width: '800px', height: '600px', border: '1px dashed #ccc' }}>
+			<Window
+				title="Positioned Window"
+				width={350}
+				height={200}
+				draggable={true}
+				defaultPosition={{ x: 100, y: 80 }}
+				onClose={() => alert('Close')}
+			>
+				<div>
+					<p><strong>This window starts at a specific position.</strong></p>
+					<p>It's absolutely positioned from the start at x:100, y:80.</p>
+					<p>Drag it anywhere you like!</p>
+				</div>
+			</Window>
+		</div>
+	),
+};
+
+/**
+ * Controlled draggable window
+ * Demonstrates controlled position with state management.
+ */
+export const DraggableControlled: Story = {
+	args: {
+		children: <></>,
+	},
+	render: () => {
+		const [position, setPosition] = useState<WindowPosition>({ x: 50, y: 50 });
+		
+		return (
+			<div>
+				<div style={{ marginBottom: '16px', padding: '12px', background: '#f5f5f5', borderRadius: '4px' }}>
+					<p style={{ marginBottom: '8px' }}>
+						<strong>Controlled Position:</strong> x: {position.x}px, y: {position.y}px
+					</p>
+					<div style={{ display: 'flex', gap: '8px' }}>
+						<Button onClick={() => setPosition({ x: 0, y: 0 })}>Top Left</Button>
+						<Button onClick={() => setPosition({ x: 200, y: 100 })}>Center</Button>
+						<Button onClick={() => setPosition({ x: 400, y: 50 })}>Right</Button>
+					</div>
+				</div>
+				<div style={{ position: 'relative', width: '800px', height: '500px', border: '1px dashed #ccc' }}>
+					<Window
+						title="Controlled Window"
+						width={350}
+						height={200}
+						draggable={true}
+						position={position}
+						onPositionChange={setPosition}
+						onClose={() => alert('Close')}
+					>
+						<div>
+							<p><strong>This window's position is controlled.</strong></p>
+							<p>The parent component tracks and can change the position.</p>
+							<p>Try the buttons above or drag the window!</p>
+						</div>
+					</Window>
+				</div>
+			</div>
+		);
+	},
+};
+
+/**
+ * Multiple draggable windows
+ * Demonstrates multiple windows that can be dragged independently.
+ */
+export const MultipleDraggableWindows: Story = {
+	args: {
+		children: <></>,
+	},
+	render: () => (
+		<div style={{ position: 'relative', width: '900px', height: '600px', border: '1px dashed #ccc' }}>
+			<Window
+				title="Window 1"
+				width={300}
+				height={200}
+				draggable={true}
+				defaultPosition={{ x: 50, y: 50 }}
+				onClose={() => alert('Close Window 1')}
+			>
+				<div>
+					<p><strong>Window 1</strong></p>
+					<p>Drag me around!</p>
+				</div>
+			</Window>
+			<Window
+				title="Window 2"
+				width={300}
+				height={200}
+				draggable={true}
+				defaultPosition={{ x: 250, y: 150 }}
+				onClose={() => alert('Close Window 2')}
+			>
+				<div>
+					<p><strong>Window 2</strong></p>
+					<p>You can drag all windows independently.</p>
+				</div>
+			</Window>
+			<Window
+				title="Window 3"
+				width={300}
+				height={200}
+				draggable={true}
+				defaultPosition={{ x: 450, y: 100 }}
+				onClose={() => alert('Close Window 3')}
+			>
+				<div>
+					<p><strong>Window 3</strong></p>
+					<p>Just like a real desktop!</p>
+				</div>
+			</Window>
 		</div>
 	),
 };

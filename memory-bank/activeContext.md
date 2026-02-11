@@ -1,9 +1,44 @@
 # Active Context
 
 ## Current Focus
-Expanding component customization capabilities with classes prop, render props, and data attributes for fine-grained control over styling and behavior.
+Expanding component interactivity with draggable windows feature for authentic Mac OS 9 desktop experience.
 
 ## Recent Changes
+
+### Draggable Windows Feature (2026-02-11)
+- **Feature:** Added optional drag functionality to Window and FolderList components
+- **Implementation:**
+  - Added `draggable` boolean prop to enable/disable drag by title bar
+  - Window stays in normal document flow until first dragged, then becomes absolutely positioned
+  - Supports both controlled and uncontrolled position management
+  - Added `defaultPosition` prop for initial positioning (uncontrolled)
+  - Added `position` and `onPositionChange` props for controlled positioning
+  - Internal drag state managed with React hooks (useState, useRef, useEffect)
+  - Mouse event handlers attached to title bar for drag initiation
+  - Document-level event listeners for drag tracking with proper cleanup
+  - Added WindowPosition type to common types exports
+- **User Experience:**
+  - Title bar shows grab cursor when hovering (draggable enabled)
+  - Cursor changes to grabbing during active drag
+  - Clicking window control buttons doesn't initiate drag
+  - Drag offset calculated from initial mouse position on title bar
+- **CSS Changes:**
+  - Added `.window--draggable` class for dragged windows
+  - Added `.titleBar--draggable` class for grab cursor
+  - Added `.titleBar--dragging` class for grabbing cursor during drag
+- **Documentation:**
+  - Created 4 new Storybook stories demonstrating draggable features
+  - Updated Window component JSDoc with draggable examples
+  - FolderList automatically inherits draggable functionality via props spreading
+- **Architecture:**
+  - Opt-in feature (draggable defaults to false)
+  - No breaking changes to existing components
+  - Follows controlled/uncontrolled pattern consistent with React best practices
+  - Position state can be managed by parent or internally
+- **Future Enhancements (Not Implemented):**
+  - Drag boundary constraints (prevent dragging outside viewport/container)
+  - Z-index management (bringing windows to front on click)
+  - Snap-to-grid or snap-to-edge behaviors
 
 ### Custom Classes and Element Targeting System (2026-02-06)
 - **Feature:** Comprehensive system for customizing and targeting sub-elements in components

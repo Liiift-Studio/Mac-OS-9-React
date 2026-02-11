@@ -42,6 +42,11 @@
 	z-index: 1;
 }
 
+.window--draggable {
+	/* Draggable window - absolute positioning applied inline */
+	/* Position and coordinates are set via inline styles when dragged */
+}
+
 /* ========================================
  * Title Bar
  * ======================================== */
@@ -137,6 +142,17 @@
 	 */
 	/* Prevent interaction */
 	pointer-events: none;
+}
+
+/* Title Bar Draggable States */
+.titleBar--draggable {
+	/* Draggable title bar - show grab cursor */
+	cursor: grab;
+}
+
+.titleBar--dragging {
+	/* Title bar while being dragged - show grabbing cursor */
+	cursor: grabbing;
 }
 
 /* ========================================

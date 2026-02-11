@@ -5,6 +5,7 @@
 
 import React, { forwardRef, useState } from 'react';
 import { Window, WindowProps } from '../Window/Window';
+import { WindowPosition } from '../../types';
 import { 
 	ListView, 
 	ListColumn, 
@@ -48,6 +49,31 @@ export interface FolderListProps extends Omit<WindowProps, 'children' | 'classes
 	 * @default [{ key: 'name', label: 'Name' }, { key: 'modified', label: 'Date Modified' }, { key: 'size', label: 'Size' }]
 	 */
 	columns?: ListColumn[];
+
+	/**
+	 * Whether the folder list window can be dragged by its title bar
+	 * Window starts in normal flow and becomes absolutely positioned when dragged
+	 * @default false
+	 */
+	draggable?: boolean;
+
+	/**
+	 * Initial position for draggable folder lists (uncontrolled)
+	 * Only used when draggable is true
+	 */
+	defaultPosition?: WindowPosition;
+
+	/**
+	 * Controlled position for draggable folder lists
+	 * Only used when draggable is true
+	 */
+	position?: WindowPosition;
+
+	/**
+	 * Callback when folder list position changes (during drag)
+	 * Only called when draggable is true
+	 */
+	onPositionChange?: (position: WindowPosition) => void;
 
 	/**
 	 * Items to display in the list
@@ -175,6 +201,7 @@ export interface FolderListProps extends Omit<WindowProps, 'children' | 'classes
  * 
  * @example
  * ```tsx
+ * // Basic folder list
  * <FolderList
  *   title="My Documents"
  *   items={[
@@ -184,8 +211,14 @@ export interface FolderListProps extends Omit<WindowProps, 'children' | 'classes
  *   selectedIds={['1']}
  *   onSelectionChange={(ids) => console.log('Selected:', ids)}
  *   onItemOpen={(item) => console.log('Open:', item.name)}
- *   onItemMouseEnter={(item) => console.log('Hovering:', item.name)}
- *   onMouseEnter={(e) => console.log('Mouse entered folder list')}
+ * />
+ * 
+ * // Draggable folder list
+ * <FolderList
+ *   title="My Documents"
+ *   items={items}
+ *   draggable
+ *   defaultPosition={{ x: 100, y: 100 }}
  * />
  * ```
  */

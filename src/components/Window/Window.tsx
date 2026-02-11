@@ -1,8 +1,9 @@
 // Window component - Mac OS 9 style
 // Classic window container with optional title bar
 
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useState, useRef, useEffect, useCallback } from 'react';
 import { mergeClasses } from '../../utils/classNames';
+import { WindowPosition } from '../../types';
 import styles from './Window.module.css';
 
 /**
@@ -104,6 +105,31 @@ export interface WindowProps {
 	 * @default false
 	 */
 	resizable?: boolean;
+
+	/**
+	 * Whether the window can be dragged by its title bar
+	 * Window starts in normal flow and becomes absolutely positioned when dragged
+	 * @default false
+	 */
+	draggable?: boolean;
+
+	/**
+	 * Initial position for draggable windows (uncontrolled)
+	 * Only used when draggable is true
+	 */
+	defaultPosition?: WindowPosition;
+
+	/**
+	 * Controlled position for draggable windows
+	 * Only used when draggable is true
+	 */
+	position?: WindowPosition;
+
+	/**
+	 * Callback when window position changes (during drag)
+	 * Only called when draggable is true
+	 */
+	onPositionChange?: (position: WindowPosition) => void;
 }
 
 /**
@@ -117,6 +143,7 @@ export interface WindowProps {
  * - Active/inactive states
  * - Composable with custom TitleBar component
  * - Flexible sizing
+ * - Draggable windows (optional) - drag by title bar
  * 
  * @example
  * ```tsx
@@ -138,6 +165,31 @@ export interface WindowProps {
  * >
  *   <p>Content</p>
  * </Window>
+ * 
+ * // Draggable window (uncontrolled)
+ * <Window title="Draggable" draggable>
+ *   <p>Drag me by the title bar!</p>
+ * </Window>
+ * 
+ * // Draggable window with initial position
+ * <Window 
+ *   title="Positioned"
+ *   draggable
+ *   defaultPosition={{ x: 100, y: 100 }}
+ * >
+ *   <p>Starts at a specific position</p>
+ * </Window>
+ * 
+ * // Controlled draggable window
+ * const [pos, setPos] = useState({ x: 0, y: 0 });
+ * <Window
+ *   title="Controlled"
+ *   draggable
+ *   position={pos}
+ *   onPositionChange={setPos}
+ * >
+ *   <p>Parent controls position</p>
+ * </Window>
  * ```
  */
 export const Window = forwardRef<HTMLDivElement, WindowProps>(
@@ -158,18 +210,115 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 			onMaximize,
 			onMouseEnter,
 			resizable = false,
+			draggable = false,
+			defaultPosition,
+			position: controlledPosition,
+			onPositionChange,
 		},
 		ref
 	) => {
+		// Drag state management
+		const [internalPosition, setInternalPosition] = useState<WindowPosition | null>(
+			defaultPosition || null
+		);
+		const [isDragging, setIsDragging] = useState(false);
+		const [hasBeenDragged, setHasBeenDragged] = useState(
+			!!(defaultPosition || controlledPosition)
+		);
+		const dragStartRef = useRef<{ x: number; y: number } | null>(null);
+
+		// Use controlled position if provided, otherwise use internal state
+		const currentPosition = controlledPosition || internalPosition;
+
+		// Handle mouse down on title bar to start dragging
+		const handleTitleBarMouseDown = useCallback(
+			(event: React.MouseEvent<HTMLDivElement>) => {
+				if (!draggable) return;
+
+				// Don't start drag if clicking on buttons
+				if ((event.target as HTMLElement).closest('button')) {
+					return;
+				}
+
+				event.preventDefault();
+
+				const windowElement = (event.currentTarget as HTMLElement).closest(
+					`.${styles.window}`
+				) as HTMLElement;
+
+				if (!windowElement) return;
+
+				const rect = windowElement.getBoundingClientRect();
+
+				// Store drag start info
+				dragStartRef.current = {
+					x: event.clientX - rect.left,
+					y: event.clientY - rect.top,
+				};
+
+				setIsDragging(true);
+			},
+			[draggable]
+		);
+
+		// Handle mouse move during drag
+		useEffect(() => {
+			if (!isDragging || !dragStartRef.current) return;
+
+			const handleMouseMove = (event: MouseEvent) => {
+				event.preventDefault();
+
+				if (!dragStartRef.current) return;
+
+				const newPosition: WindowPosition = {
+					x: event.clientX - dragStartRef.current.x,
+					y: event.clientY - dragStartRef.current.y,
+				};
+
+				// Update position
+				if (controlledPosition && onPositionChange) {
+					onPositionChange(newPosition);
+				} else {
+					setInternalPosition(newPosition);
+				}
+
+				// Mark as dragged
+				if (!hasBeenDragged) {
+					setHasBeenDragged(true);
+				}
+			};
+
+			const handleMouseUp = () => {
+				setIsDragging(false);
+				dragStartRef.current = null;
+			};
+
+			document.addEventListener('mousemove', handleMouseMove);
+			document.addEventListener('mouseup', handleMouseUp);
+
+			return () => {
+				document.removeEventListener('mousemove', handleMouseMove);
+				document.removeEventListener('mouseup', handleMouseUp);
+			};
+		}, [isDragging, controlledPosition, onPositionChange, hasBeenDragged]);
+
 		// Class names
 		const windowClassNames = mergeClasses(
 			styles.window,
 			active ? styles['window--active'] : styles['window--inactive'],
+			draggable && hasBeenDragged && styles['window--draggable'],
 			className,
 			classes?.root
 		);
 
 		const contentClassNames = mergeClasses(styles.content, contentClassName, classes?.content);
+
+		const titleBarClassNames = mergeClasses(
+			styles.titleBar,
+			draggable && styles['titleBar--draggable'],
+			isDragging && styles['titleBar--dragging'],
+			classes?.titleBar
+		);
 
 		// Window style
 		const windowStyle: React.CSSProperties = {};
@@ -178,6 +327,13 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 		}
 		if (height !== 'auto') {
 			windowStyle.height = typeof height === 'number' ? `${height}px` : height;
+		}
+
+		// Apply position if draggable and has been dragged
+		if (draggable && hasBeenDragged && currentPosition) {
+			windowStyle.position = 'absolute';
+			windowStyle.left = `${currentPosition.x}px`;
+			windowStyle.top = `${currentPosition.y}px`;
 		}
 
 		// Render title bar if title provided and no custom titleBar
@@ -189,8 +345,9 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 			if (title) {
 				return (
 					<div 
-						className={mergeClasses(styles.titleBar, classes?.titleBar)} 
+						className={titleBarClassNames} 
 						data-numControls={[onClose, onMinimize, onMaximize].filter(Boolean).length}
+						onMouseDown={handleTitleBarMouseDown}
 					>
 						{showControls && (
 							<div className={mergeClasses(styles.controls, classes?.controls)}>

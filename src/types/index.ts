@@ -57,6 +57,14 @@ export type Size = 'small' | 'medium' | 'large';
 export type State = 'default' | 'hover' | 'active' | 'disabled' | 'focused';
 
 /**
+ * Window position for draggable windows
+ */
+export interface WindowPosition {
+	x: number;
+	y: number;
+}
+
+/**
  * Component ref types
  */
 export type ButtonRef = HTMLButtonElement;
