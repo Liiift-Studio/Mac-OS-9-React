@@ -249,11 +249,16 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 				if (!windowElement) return;
 
 				const rect = windowElement.getBoundingClientRect();
+				
+				// Get the parent container to calculate position relative to it
+				const parent = windowElement.offsetParent as HTMLElement;
+				const parentRect = parent ? parent.getBoundingClientRect() : { left: 0, top: 0 };
 
-				// Store drag start info
+				// Store drag start info - offset from mouse to window position within parent
+				// This accounts for the parent's coordinate system
 				dragStartRef.current = {
-					x: event.clientX - rect.left,
-					y: event.clientY - rect.top,
+					x: event.clientX - (rect.left - parentRect.left),
+					y: event.clientY - (rect.top - parentRect.top),
 				};
 
 				setIsDragging(true);
@@ -270,9 +275,28 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 
 				if (!dragStartRef.current) return;
 
+				// Get the window element to find its parent
+				const windowElements = document.querySelectorAll(`.${styles.window}`);
+				let windowElement: HTMLElement | null = null;
+				
+				// Find the dragging window (the one with position absolute or the first one)
+				for (const el of Array.from(windowElements)) {
+					const htmlEl = el as HTMLElement;
+					if (htmlEl.style.position === 'absolute' || windowElements.length === 1) {
+						windowElement = htmlEl;
+						break;
+					}
+				}
+
+				if (!windowElement) return;
+
+				// Get parent container to calculate position relative to it
+				const parent = windowElement.offsetParent as HTMLElement;
+				const parentRect = parent ? parent.getBoundingClientRect() : { left: 0, top: 0 };
+
 				const newPosition: WindowPosition = {
-					x: event.clientX - dragStartRef.current.x,
-					y: event.clientY - dragStartRef.current.y,
+					x: event.clientX - parentRect.left - dragStartRef.current.x,
+					y: event.clientY - parentRect.top - dragStartRef.current.y,
 				};
 
 				// Update position

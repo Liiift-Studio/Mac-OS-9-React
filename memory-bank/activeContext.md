@@ -22,6 +22,7 @@ Expanding component interactivity with draggable windows feature for authentic M
   - Cursor changes to grabbing during active drag
   - Clicking window control buttons doesn't initiate drag
   - Drag offset calculated from initial mouse position on title bar
+  - Window follows cursor precisely at click point (no offset)
 - **CSS Changes:**
   - Added `.window--draggable` class for dragged windows
   - Added `.titleBar--draggable` class for grab cursor
@@ -35,6 +36,10 @@ Expanding component interactivity with draggable windows feature for authentic M
   - No breaking changes to existing components
   - Follows controlled/uncontrolled pattern consistent with React best practices
   - Position state can be managed by parent or internally
+- **Bug Fixes:**
+  - Fixed ~30px mouse position offset issue by calculating positions relative to parent container's coordinate system
+  - Uses `offsetParent` to properly account for container positioning and CSS filter effects
+  - Both `handleTitleBarMouseDown` and `handleMouseMove` now calculate relative to parent bounds
 - **Future Enhancements (Not Implemented):**
   - Drag boundary constraints (prevent dragging outside viewport/container)
   - Z-index management (bringing windows to front on click)
