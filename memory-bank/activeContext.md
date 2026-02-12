@@ -5,9 +5,9 @@ Expanding component interactivity with draggable windows feature for authentic M
 
 ## Recent Changes
 
-### Draggable Windows Feature (2026-02-11)
-- **Feature:** Added optional drag functionality to Window and FolderList components
-- **Implementation:**
+### Draggable and Resizable Windows Feature (2026-02-11)
+- **Feature:** Added optional drag and resize functionality to Window and FolderList components
+- **Drag Implementation:**
   - Added `draggable` boolean prop to enable/disable drag by title bar
   - Window stays in normal document flow until first dragged, then becomes absolutely positioned
   - Supports both controlled and uncontrolled position management
@@ -17,33 +17,50 @@ Expanding component interactivity with draggable windows feature for authentic M
   - Mouse event handlers attached to title bar for drag initiation
   - Document-level event listeners for drag tracking with proper cleanup
   - Added WindowPosition type to common types exports
+- **Resize Implementation:**
+  - Fully functional window resizing via resize handle in bottom-right corner
+  - Added `onResize` callback to track size changes during resize
+  - Added `minWidth`, `minHeight`, `maxWidth`, `maxHeight` props for size constraints
+  - Default minimum size: 200×100px (can be customized)
+  - Internal resize state managed with React hooks
+  - Mouse event handlers on resize handle for resize initiation
+  - Document-level event listeners during resize with proper cleanup
+  - Real-time dimension updates during resize operation
 - **User Experience:**
-  - Title bar shows grab cursor when hovering (draggable enabled)
-  - Cursor changes to grabbing during active drag
-  - Clicking window control buttons doesn't initiate drag
-  - Drag offset calculated from initial mouse position on title bar
-  - Window follows cursor precisely at click point (no offset)
+  - Drag: Title bar shows grab cursor when hovering (draggable enabled)
+  - Drag: Cursor changes to grabbing during active drag
+  - Drag: Clicking window control buttons doesn't initiate drag
+  - Drag: Window follows cursor precisely at click point (no offset)
+  - Resize: Resize handle shows nwse-resize cursor
+  - Resize: Smooth visual feedback during resize
+  - Resize: Respects min/max size constraints
+  - Both features can be enabled simultaneously
 - **CSS Changes:**
   - Added `.window--draggable` class for dragged windows
   - Added `.titleBar--draggable` class for grab cursor
   - Added `.titleBar--dragging` class for grabbing cursor during drag
+  - Resize handle already had `.resizeHandle` class with proper cursor
 - **Documentation:**
-  - Created 4 new Storybook stories demonstrating draggable features
-  - Updated Window component JSDoc with draggable examples
-  - FolderList automatically inherits draggable functionality via props spreading
+  - Created 7 Storybook stories total (4 drag, 3 resize, 1 combined)
+  - Updated Window component JSDoc with draggable and resizable examples
+  - FolderList automatically inherits both draggable and resizable functionality
+  - Updated changeset with comprehensive feature descriptions
 - **Architecture:**
-  - Opt-in feature (draggable defaults to false)
+  - Both features are opt-in (default to false)
   - No breaking changes to existing components
   - Follows controlled/uncontrolled pattern consistent with React best practices
-  - Position state can be managed by parent or internally
+  - State can be managed by parent or internally for both features
+  - Can use windows with drag only, resize only, or both simultaneously
 - **Bug Fixes:**
   - Fixed ~30px mouse position offset issue by calculating positions relative to parent container's coordinate system
   - Uses `offsetParent` to properly account for container positioning and CSS filter effects
   - Both `handleTitleBarMouseDown` and `handleMouseMove` now calculate relative to parent bounds
+  - Resize handle properly prevents event propagation to avoid conflicts with drag
 - **Future Enhancements (Not Implemented):**
   - Drag boundary constraints (prevent dragging outside viewport/container)
   - Z-index management (bringing windows to front on click)
   - Snap-to-grid or snap-to-edge behaviors
+  - Aspect ratio locking during resize
 
 ### Custom Classes and Element Targeting System (2026-02-06)
 - **Feature:** Comprehensive system for customizing and targeting sub-elements in components

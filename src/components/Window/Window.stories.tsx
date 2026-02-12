@@ -248,6 +248,7 @@ export const ScrollableContent: Story = {
 
 /**
  * Window with resize handle
+ * Click and drag the resize handle in the bottom-right corner to resize.
  */
 export const Resizable: Story = {
 	args: {
@@ -255,15 +256,94 @@ export const Resizable: Story = {
 		width: 400,
 		height: 300,
 		resizable: true,
+		minWidth: 250,
+		minHeight: 150,
 		onClose: () => alert('Close'),
 		children: (
 			<div>
-				<p>This window has a resize handle in the bottom-right corner.</p>
-				<p>Look for the diagonal lines in the corner.</p>
-				<p>(Note: actual resizing functionality would be implemented by the consumer.)</p>
+				<p><strong>Try resizing this window!</strong></p>
+				<p>Click and drag the resize handle in the bottom-right corner (diagonal lines).</p>
+				<p>Minimum size: 250x150px</p>
+				<p>Resize dynamically updates the window dimensions.</p>
 			</div>
 		),
 	},
+};
+
+/**
+ * Resizable window with size constraints
+ * Demonstrates min/max width and height constraints.
+ */
+export const ResizableWithConstraints: Story = {
+	args: {
+		children: <></>,
+	},
+	render: () => {
+		const [size, setSize] = useState({ width: 400, height: 300 });
+		
+		return (
+			<div>
+				<div style={{ marginBottom: '16px', padding: '12px', background: '#f5f5f5', borderRadius: '4px' }}>
+					<p style={{ marginBottom: '8px' }}>
+						<strong>Current Size:</strong> {size.width}px × {size.height}px
+					</p>
+					<p style={{ fontSize: '12px', color: '#666' }}>
+						Min: 300×200px | Max: 600×500px
+					</p>
+				</div>
+				<Window
+					title="Constrained Resize"
+					width={size.width}
+					height={size.height}
+					resizable={true}
+					minWidth={300}
+					minHeight={200}
+					maxWidth={600}
+					maxHeight={500}
+					onResize={setSize}
+					onClose={() => alert('Close')}
+				>
+					<div>
+						<p><strong>This window has size constraints.</strong></p>
+						<p>Try resizing beyond the min/max bounds - it won't go past them!</p>
+						<p>The parent component tracks the size via onResize callback.</p>
+					</div>
+				</Window>
+			</div>
+		);
+	},
+};
+
+/**
+ * Draggable and resizable window
+ * Combines both drag and resize functionality.
+ */
+export const DraggableAndResizable: Story = {
+	args: {
+		children: <></>,
+	},
+	render: () => (
+		<div style={{ position: 'relative', width: '900px', height: '600px', border: '1px dashed #ccc' }}>
+			<Window
+				title="Drag & Resize Me"
+				width={400}
+				height={300}
+				draggable={true}
+				resizable={true}
+				defaultPosition={{ x: 50, y: 50 }}
+				minWidth={250}
+				minHeight={150}
+				onClose={() => alert('Close')}
+			>
+				<div>
+					<p><strong>This window is both draggable AND resizable!</strong></p>
+					<p>Drag it by the title bar to move it around.</p>
+					<p>Drag the bottom-right corner to resize it.</p>
+					<p>Just like a real Mac OS 9 window!</p>
+				</div>
+			</Window>
+		</div>
+	),
 };
 
 /**

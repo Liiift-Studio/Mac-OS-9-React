@@ -107,6 +107,34 @@ export interface WindowProps {
 	resizable?: boolean;
 
 	/**
+	 * Minimum width when resizing
+	 * @default 200
+	 */
+	minWidth?: number;
+
+	/**
+	 * Minimum height when resizing
+	 * @default 100
+	 */
+	minHeight?: number;
+
+	/**
+	 * Maximum width when resizing
+	 */
+	maxWidth?: number;
+
+	/**
+	 * Maximum height when resizing
+	 */
+	maxHeight?: number;
+
+	/**
+	 * Callback when window is resized
+	 * Only called when resizable is true
+	 */
+	onResize?: (size: { width: number; height: number }) => void;
+
+	/**
 	 * Whether the window can be dragged by its title bar
 	 * Window starts in normal flow and becomes absolutely positioned when dragged
 	 * @default false
@@ -210,6 +238,11 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 			onMaximize,
 			onMouseEnter,
 			resizable = false,
+			minWidth = 200,
+			minHeight = 100,
+			maxWidth,
+			maxHeight,
+			onResize,
 			draggable = false,
 			defaultPosition,
 			position: controlledPosition,
@@ -227,8 +260,20 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 		);
 		const dragStartRef = useRef<{ x: number; y: number } | null>(null);
 
+		// Resize state management
+		const [internalSize, setInternalSize] = useState<{ width: number | string; height: number | string }>({
+			width,
+			height,
+		});
+		const [isResizing, setIsResizing] = useState(false);
+		const resizeStartRef = useRef<{ width: number; height: number; mouseX: number; mouseY: number } | null>(null);
+
 		// Use controlled position if provided, otherwise use internal state
 		const currentPosition = controlledPosition || internalPosition;
+
+		// Use internal size state for resize tracking
+		const currentWidth = isResizing ? internalSize.width : width;
+		const currentHeight = isResizing ? internalSize.height : height;
 
 		// Handle mouse down on title bar to start dragging
 		const handleTitleBarMouseDown = useCallback(
@@ -265,6 +310,84 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 			},
 			[draggable]
 		);
+
+		// Handle mouse down on resize handle to start resizing
+		const handleResizeMouseDown = useCallback(
+			(event: React.MouseEvent<HTMLDivElement>) => {
+				if (!resizable) return;
+
+				event.preventDefault();
+				event.stopPropagation();
+
+				const windowElement = (event.currentTarget as HTMLElement).closest(
+					`.${styles.window}`
+				) as HTMLElement;
+
+				if (!windowElement) return;
+
+				const rect = windowElement.getBoundingClientRect();
+
+				// Store resize start info
+				resizeStartRef.current = {
+					width: rect.width,
+					height: rect.height,
+					mouseX: event.clientX,
+					mouseY: event.clientY,
+				};
+
+				setIsResizing(true);
+			},
+			[resizable]
+		);
+
+		// Handle mouse move during resize
+		useEffect(() => {
+			if (!isResizing || !resizeStartRef.current) return;
+
+			const handleMouseMove = (event: MouseEvent) => {
+				event.preventDefault();
+
+				if (!resizeStartRef.current) return;
+
+				// Calculate delta
+				const deltaX = event.clientX - resizeStartRef.current.mouseX;
+				const deltaY = event.clientY - resizeStartRef.current.mouseY;
+
+				// Calculate new size
+				let newWidth = resizeStartRef.current.width + deltaX;
+				let newHeight = resizeStartRef.current.height + deltaY;
+
+				// Apply constraints
+				if (newWidth < minWidth) newWidth = minWidth;
+				if (newHeight < minHeight) newHeight = minHeight;
+				if (maxWidth && newWidth > maxWidth) newWidth = maxWidth;
+				if (maxHeight && newHeight > maxHeight) newHeight = maxHeight;
+
+				// Update size
+				setInternalSize({
+					width: newWidth,
+					height: newHeight,
+				});
+
+				// Call callback if provided
+				if (onResize) {
+					onResize({ width: newWidth, height: newHeight });
+				}
+			};
+
+			const handleMouseUp = () => {
+				setIsResizing(false);
+				resizeStartRef.current = null;
+			};
+
+			document.addEventListener('mousemove', handleMouseMove);
+			document.addEventListener('mouseup', handleMouseUp);
+
+			return () => {
+				document.removeEventListener('mousemove', handleMouseMove);
+				document.removeEventListener('mouseup', handleMouseUp);
+			};
+		}, [isResizing, minWidth, minHeight, maxWidth, maxHeight, onResize]);
 
 		// Handle mouse move during drag
 		useEffect(() => {
@@ -346,11 +469,15 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 
 		// Window style
 		const windowStyle: React.CSSProperties = {};
-		if (width !== 'auto') {
-			windowStyle.width = typeof width === 'number' ? `${width}px` : width;
+		
+		// Apply width - use currentWidth during resize, otherwise use prop
+		if (currentWidth !== 'auto') {
+			windowStyle.width = typeof currentWidth === 'number' ? `${currentWidth}px` : currentWidth;
 		}
-		if (height !== 'auto') {
-			windowStyle.height = typeof height === 'number' ? `${height}px` : height;
+		
+		// Apply height - use currentHeight during resize, otherwise use prop
+		if (currentHeight !== 'auto') {
+			windowStyle.height = typeof currentHeight === 'number' ? `${currentHeight}px` : currentHeight;
 		}
 
 		// Apply position if draggable and has been dragged
@@ -452,7 +579,13 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 			>
 				{renderTitleBar()}
 				<div className={contentClassNames}>{children}</div>
-			{resizable && <div className={styles.resizeHandle} aria-hidden="true" />}
+				{resizable && (
+					<div 
+						className={styles.resizeHandle} 
+						onMouseDown={handleResizeMouseDown}
+						aria-hidden="true"
+					/>
+				)}
 			</div>
 		);
 	}
