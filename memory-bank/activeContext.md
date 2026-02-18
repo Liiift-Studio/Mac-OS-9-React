@@ -1,9 +1,31 @@
 # Active Context
 
 ## Current Focus
-Expanding component interactivity with draggable windows feature for authentic Mac OS 9 desktop experience.
+Library architecture improvements for better integration into consumer applications.
 
 ## Recent Changes
+
+### Global Styles Separation (2026-02-18) - v0.3.0
+- **Problem:** Main stylesheet (`theme.css`) included global `html` and `body` styles that overrode consumer applications' base styles
+- **Solution:** Separated global element styles into optional `base.css` file
+- **Implementation:**
+  - Removed `html`, `body`, and universal box-sizing reset from `theme.css`
+  - Created new `src/styles/base.css` with all global element styles
+  - Updated rollup config to build `base.css` as separate entry point
+  - Added `./base` export to package.json exports
+  - Updated Storybook to import both theme.css and base.css
+  - Updated documentation (README, custom-styling-guide)
+- **Migration Path:**
+  - Main stylesheet import remains required: `import '@liiift-studio/mac-os9-ui/styles'`
+  - Optional base styles import: `import '@liiift-studio/mac-os9-ui/base'`
+- **Benefits:**
+  - Library no longer pollutes consumer global styles
+  - Easier integration into existing projects
+  - Users control their own base styles
+  - Opt-in full Mac OS 9 experience
+- **Breaking-ish Change:** Marked as minor version (0.3.0) since API unchanged, but behavior changes for existing users
+- **Changeset:** Created comprehensive changeset with migration guide
+- **Build Output:** Successfully builds both `dist/index.css` (no body styles) and `dist/base.css` (global styles)
 
 ### Draggable and Resizable Windows Feature (2026-02-11)
 - **Feature:** Added optional drag and resize functionality to Window and FolderList components
