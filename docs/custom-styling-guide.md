@@ -4,6 +4,7 @@ This guide explains how to customize and target sub-elements within Mac OS 9 UI 
 
 ## Table of Contents
 
+- [Styling Setup](#styling-setup)
 - [Overview](#overview)
 - [Three Approaches](#three-approaches)
   - [1. Classes Prop (Simple Styling)](#1-classes-prop-simple-styling)
@@ -13,6 +14,40 @@ This guide explains how to customize and target sub-elements within Mac OS 9 UI 
 - [Examples](#examples)
 - [Migration Guide](#migration-guide)
 - [Best Practices](#best-practices)
+
+## Styling Setup
+
+### Basic Styles (Required)
+
+Import the component styles once in your application:
+
+```tsx
+import '@liiift-studio/mac-os9-ui/styles';
+```
+
+This includes:
+- CSS custom properties (design tokens)
+- Font declarations
+- Component styles
+- Utility classes
+
+### Optional Global Styles
+
+For the full Mac OS 9 experience with global HTML/body styles:
+
+```tsx
+import '@liiift-studio/mac-os9-ui/styles';  // Required
+import '@liiift-studio/mac-os9-ui/base';    // Optional
+```
+
+The optional `base` styles include:
+- Universal box-sizing reset
+- Responsive typography on `<html>`
+- Body margin, padding, font-family, and colors
+
+**Important:** Only import `/base` if you want these global styles applied to your entire application. The library is designed to integrate cleanly without overriding your project's base styles.
+
+---
 
 ## Overview
 

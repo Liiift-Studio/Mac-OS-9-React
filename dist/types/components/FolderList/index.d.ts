@@ -1,2 +1,2 @@
 export { FolderList, FolderList as default } from './FolderList';
-export type { FolderListProps } from './FolderList';
+export type { FolderListProps, FolderListClasses } from './FolderList';

@@ -1,0 +1,90 @@
+/**
+ * Optional Base Styles for Mac OS 9 UI
+ * 
+ * This file contains global element styles (html, body, box-sizing reset)
+ * that create the full Mac OS 9 experience.
+ * 
+ * IMPORTANT: Only import this if you want these styles applied globally
+ * to your entire application.
+ * 
+ * Usage:
+ *   import '@liiift-studio/mac-os9-ui/styles';  // Required
+ *   import '@liiift-studio/mac-os9-ui/base';    // Optional global styles
+ * 
+ * What this includes:
+ * - Universal box-sizing reset
+ * - Responsive typography scaling on <html>
+ * - Base body styles (margin, padding, font, color)
+ */
+
+/* ========================================
+ * Universal Box Sizing
+ * ======================================== */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+/* ========================================
+ * HTML Base Styles
+ * Mobile-first responsive typography
+ * ======================================== */
+html {
+	/* Mobile/default: 14px base - optimal for mobile devices */
+	font-size: 14px;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+ * Responsive Typography
+ * Scale base font size at different breakpoints
+ * Following mobile-first best practices:
+ * - Mobile: 14px (better for small screens, maintains Mac OS 9 small text aesthetic)
+ * - Tablet: 16px (standard web default)
+ * - Desktop: 16px (comfortable for productivity)
+ * - Large Desktop: 18px (takes advantage of larger screens)
+ * ======================================== */
+
+/* Small mobile: 480px+ */
+@media (min-width: 480px) {
+	html {
+		font-size: 15px;
+	}
+}
+
+/* Tablet: 768px+ */
+@media (min-width: 768px) {
+	html {
+		font-size: 16px;
+	}
+}
+
+/* Desktop: 1024px+ */
+@media (min-width: 1024px) {
+	html {
+		font-size: 16px;
+	}
+}
+
+/* Large Desktop/XL: 1440px+ */
+@media (min-width: 1440px) {
+	html {
+		font-size: 18px;
+	}
+}
+
+/* ========================================
+ * Body Base Styles
+ * Mac OS 9 default appearance
+ * ======================================== */
+body {
+	margin: 0;
+	padding: 0;
+	font-family: var(--font-system);
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-normal);
+	color: var(--color-text);
+	background-color: var(--color-background);
+}

@@ -1,4 +1,22 @@
 import React from 'react';
+import { WindowPosition } from '../../types';
+/**
+ * Classes for targeting Window sub-elements
+ */
+export interface WindowClasses {
+    /** Root container */
+    root?: string;
+    /** Title bar */
+    titleBar?: string;
+    /** Title text */
+    titleText?: string;
+    /** Window controls container */
+    controls?: string;
+    /** Individual control button */
+    controlButton?: string;
+    /** Content area */
+    content?: string;
+}
 export interface WindowProps {
     /**
      * Window content
@@ -37,6 +55,10 @@ export interface WindowProps {
      */
     contentClassName?: string;
     /**
+     * Custom classes for targeting sub-elements
+     */
+    classes?: WindowClasses;
+    /**
      * Whether to show window controls (close, minimize, maximize)
      * @default true
      */
@@ -62,6 +84,53 @@ export interface WindowProps {
      * @default false
      */
     resizable?: boolean;
+    /**
+     * Minimum width when resizing
+     * @default 200
+     */
+    minWidth?: number;
+    /**
+     * Minimum height when resizing
+     * @default 100
+     */
+    minHeight?: number;
+    /**
+     * Maximum width when resizing
+     */
+    maxWidth?: number;
+    /**
+     * Maximum height when resizing
+     */
+    maxHeight?: number;
+    /**
+     * Callback when window is resized
+     * Only called when resizable is true
+     */
+    onResize?: (size: {
+        width: number;
+        height: number;
+    }) => void;
+    /**
+     * Whether the window can be dragged by its title bar
+     * Window starts in normal flow and becomes absolutely positioned when dragged
+     * @default false
+     */
+    draggable?: boolean;
+    /**
+     * Initial position for draggable windows (uncontrolled)
+     * Only used when draggable is true
+     */
+    defaultPosition?: WindowPosition;
+    /**
+     * Controlled position for draggable windows
+     * Only used when draggable is true
+     */
+    position?: WindowPosition;
+    /**
+     * Callback when window position changes (during drag)
+     * Only called when draggable is true
+     */
+    onPositionChange?: (position: WindowPosition) => void;
 }
 /**
  * Mac OS 9 style Window component
@@ -74,6 +143,7 @@ export interface WindowProps {
  * - Active/inactive states
  * - Composable with custom TitleBar component
  * - Flexible sizing
+ * - Draggable windows (optional) - drag by title bar
  *
  * @example
  * ```tsx
@@ -94,6 +164,31 @@ export interface WindowProps {
  *   onMinimize={() => console.log('Minimize')}
  * >
  *   <p>Content</p>
+ * </Window>
+ *
+ * // Draggable window (uncontrolled)
+ * <Window title="Draggable" draggable>
+ *   <p>Drag me by the title bar!</p>
+ * </Window>
+ *
+ * // Draggable window with initial position
+ * <Window
+ *   title="Positioned"
+ *   draggable
+ *   defaultPosition={{ x: 100, y: 100 }}
+ * >
+ *   <p>Starts at a specific position</p>
+ * </Window>
+ *
+ * // Controlled draggable window
+ * const [pos, setPos] = useState({ x: 0, y: 0 });
+ * <Window
+ *   title="Controlled"
+ *   draggable
+ *   position={pos}
+ *   onPositionChange={setPos}
+ * >
+ *   <p>Parent controls position</p>
  * </Window>
  * ```
  */

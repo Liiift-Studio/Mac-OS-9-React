@@ -718,7 +718,45 @@ const Tabs = ({ children, defaultActiveTab = 0, activeTab: controlledActiveTab, 
 };
 Tabs.displayName = 'Tabs';
 
-var styles$6 = {"window":"Window-module_window","window--active":"Window-module_window--active","window--inactive":"Window-module_window--inactive","titleBar":"Window-module_titleBar","titleCenter":"Window-module_titleCenter","controls":"Window-module_controls","controlButton":"Window-module_controlButton","closeBox":"Window-module_closeBox","minimizeBox":"Window-module_minimizeBox","maximizeBox":"Window-module_maximizeBox","titleText":"Window-module_titleText","content":"Window-module_content","resizeHandle":"Window-module_resizeHandle"};
+// Utility for merging CSS class names
+// Filters out falsy values and joins valid class names with spaces
+/**
+ * Merges multiple class names into a single string
+ * Filters out undefined, null, false, and empty strings
+ *
+ * @param classes - Class names to merge
+ * @returns Merged class name string
+ *
+ * @example
+ * ```ts
+ * mergeClasses('base', isActive && 'active', undefined, 'custom')
+ * // Returns: "base active custom"
+ * ```
+ */
+const mergeClasses = (...classes) => {
+    return classes.filter(Boolean).join(' ');
+};
+/**
+ * Creates a class name builder function with a base class
+ * Useful for component-level class management
+ *
+ * @param baseClass - Base class name
+ * @returns Function that merges additional classes with base
+ *
+ * @example
+ * ```ts
+ * const cn = createClassBuilder('button');
+ * cn('primary', isDisabled && 'disabled')
+ * // Returns: "button primary disabled"
+ * ```
+ */
+const createClassBuilder = (baseClass) => {
+    return (...additionalClasses) => {
+        return mergeClasses(baseClass, ...additionalClasses);
+    };
+};
+
+var styles$6 = {"window":"Window-module_window","window--active":"Window-module_window--active","window--inactive":"Window-module_window--inactive","window--draggable":"Window-module_window--draggable","titleBar":"Window-module_titleBar","titleCenter":"Window-module_titleCenter","titleBar--draggable":"Window-module_titleBar--draggable","titleBar--dragging":"Window-module_titleBar--dragging","controls":"Window-module_controls","controlButton":"Window-module_controlButton","closeBox":"Window-module_closeBox","minimizeBox":"Window-module_minimizeBox","maximizeBox":"Window-module_maximizeBox","titleText":"Window-module_titleText","content":"Window-module_content","resizeHandle":"Window-module_resizeHandle"};
 
 /**
  * Mac OS 9 style Window component
@@ -731,6 +769,7 @@ var styles$6 = {"window":"Window-module_window","window--active":"Window-module_
  * - Active/inactive states
  * - Composable with custom TitleBar component
  * - Flexible sizing
+ * - Draggable windows (optional) - drag by title bar
  *
  * @example
  * ```tsx
@@ -752,25 +791,208 @@ var styles$6 = {"window":"Window-module_window","window--active":"Window-module_
  * >
  *   <p>Content</p>
  * </Window>
+ *
+ * // Draggable window (uncontrolled)
+ * <Window title="Draggable" draggable>
+ *   <p>Drag me by the title bar!</p>
+ * </Window>
+ *
+ * // Draggable window with initial position
+ * <Window
+ *   title="Positioned"
+ *   draggable
+ *   defaultPosition={{ x: 100, y: 100 }}
+ * >
+ *   <p>Starts at a specific position</p>
+ * </Window>
+ *
+ * // Controlled draggable window
+ * const [pos, setPos] = useState({ x: 0, y: 0 });
+ * <Window
+ *   title="Controlled"
+ *   draggable
+ *   position={pos}
+ *   onPositionChange={setPos}
+ * >
+ *   <p>Parent controls position</p>
+ * </Window>
  * ```
  */
-const Window = React.forwardRef(({ children, title, titleBar, active = true, width = 'auto', height = 'auto', className = '', contentClassName = '', showControls = true, onClose, onMinimize, onMaximize, onMouseEnter, resizable = false, }, ref) => {
+const Window = React.forwardRef(({ children, title, titleBar, active = true, width = 'auto', height = 'auto', className = '', contentClassName = '', classes, showControls = true, onClose, onMinimize, onMaximize, onMouseEnter, resizable = false, minWidth = 200, minHeight = 100, maxWidth, maxHeight, onResize, draggable = false, defaultPosition, position: controlledPosition, onPositionChange, }, ref) => {
+    // Drag state management
+    const [internalPosition, setInternalPosition] = React.useState(defaultPosition || null);
+    const [isDragging, setIsDragging] = React.useState(false);
+    const [hasBeenDragged, setHasBeenDragged] = React.useState(!!(defaultPosition || controlledPosition));
+    const dragStartRef = React.useRef(null);
+    // Resize state management
+    const [internalSize, setInternalSize] = React.useState({
+        width,
+        height,
+    });
+    const [isResizing, setIsResizing] = React.useState(false);
+    const resizeStartRef = React.useRef(null);
+    // Use controlled position if provided, otherwise use internal state
+    const currentPosition = controlledPosition || internalPosition;
+    // Use internal size state for resize tracking
+    const currentWidth = isResizing ? internalSize.width : width;
+    const currentHeight = isResizing ? internalSize.height : height;
+    // Handle mouse down on title bar to start dragging
+    const handleTitleBarMouseDown = React.useCallback((event) => {
+        if (!draggable)
+            return;
+        // Don't start drag if clicking on buttons
+        if (event.target.closest('button')) {
+            return;
+        }
+        event.preventDefault();
+        const windowElement = event.currentTarget.closest(`.${styles$6.window}`);
+        if (!windowElement)
+            return;
+        const rect = windowElement.getBoundingClientRect();
+        // Get the parent container to calculate position relative to it
+        const parent = windowElement.offsetParent;
+        const parentRect = parent ? parent.getBoundingClientRect() : { left: 0, top: 0 };
+        // Store drag start info - offset from mouse to window position within parent
+        // This accounts for the parent's coordinate system
+        dragStartRef.current = {
+            x: event.clientX - (rect.left - parentRect.left),
+            y: event.clientY - (rect.top - parentRect.top),
+        };
+        setIsDragging(true);
+    }, [draggable]);
+    // Handle mouse down on resize handle to start resizing
+    const handleResizeMouseDown = React.useCallback((event) => {
+        if (!resizable)
+            return;
+        event.preventDefault();
+        event.stopPropagation();
+        const windowElement = event.currentTarget.closest(`.${styles$6.window}`);
+        if (!windowElement)
+            return;
+        const rect = windowElement.getBoundingClientRect();
+        // Store resize start info
+        resizeStartRef.current = {
+            width: rect.width,
+            height: rect.height,
+            mouseX: event.clientX,
+            mouseY: event.clientY,
+        };
+        setIsResizing(true);
+    }, [resizable]);
+    // Handle mouse move during resize
+    React.useEffect(() => {
+        if (!isResizing || !resizeStartRef.current)
+            return;
+        const handleMouseMove = (event) => {
+            event.preventDefault();
+            if (!resizeStartRef.current)
+                return;
+            // Calculate delta
+            const deltaX = event.clientX - resizeStartRef.current.mouseX;
+            const deltaY = event.clientY - resizeStartRef.current.mouseY;
+            // Calculate new size
+            let newWidth = resizeStartRef.current.width + deltaX;
+            let newHeight = resizeStartRef.current.height + deltaY;
+            // Apply constraints
+            if (newWidth < minWidth)
+                newWidth = minWidth;
+            if (newHeight < minHeight)
+                newHeight = minHeight;
+            if (maxWidth && newWidth > maxWidth)
+                newWidth = maxWidth;
+            if (maxHeight && newHeight > maxHeight)
+                newHeight = maxHeight;
+            // Update size
+            setInternalSize({
+                width: newWidth,
+                height: newHeight,
+            });
+            // Call callback if provided
+            if (onResize) {
+                onResize({ width: newWidth, height: newHeight });
+            }
+        };
+        const handleMouseUp = () => {
+            setIsResizing(false);
+            resizeStartRef.current = null;
+        };
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+        return () => {
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [isResizing, minWidth, minHeight, maxWidth, maxHeight, onResize]);
+    // Handle mouse move during drag
+    React.useEffect(() => {
+        if (!isDragging || !dragStartRef.current)
+            return;
+        const handleMouseMove = (event) => {
+            event.preventDefault();
+            if (!dragStartRef.current)
+                return;
+            // Get the window element to find its parent
+            const windowElements = document.querySelectorAll(`.${styles$6.window}`);
+            let windowElement = null;
+            // Find the dragging window (the one with position absolute or the first one)
+            for (const el of Array.from(windowElements)) {
+                const htmlEl = el;
+                if (htmlEl.style.position === 'absolute' || windowElements.length === 1) {
+                    windowElement = htmlEl;
+                    break;
+                }
+            }
+            if (!windowElement)
+                return;
+            // Get parent container to calculate position relative to it
+            const parent = windowElement.offsetParent;
+            const parentRect = parent ? parent.getBoundingClientRect() : { left: 0, top: 0 };
+            const newPosition = {
+                x: event.clientX - parentRect.left - dragStartRef.current.x,
+                y: event.clientY - parentRect.top - dragStartRef.current.y,
+            };
+            // Update position
+            if (controlledPosition && onPositionChange) {
+                onPositionChange(newPosition);
+            }
+            else {
+                setInternalPosition(newPosition);
+            }
+            // Mark as dragged
+            if (!hasBeenDragged) {
+                setHasBeenDragged(true);
+            }
+        };
+        const handleMouseUp = () => {
+            setIsDragging(false);
+            dragStartRef.current = null;
+        };
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+        return () => {
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [isDragging, controlledPosition, onPositionChange, hasBeenDragged]);
     // Class names
-    const windowClassNames = [
-        styles$6.window,
-        active ? styles$6['window--active'] : styles$6['window--inactive'],
-        className,
-    ]
-        .filter(Boolean)
-        .join(' ');
-    const contentClassNames = [styles$6.content, contentClassName].filter(Boolean).join(' ');
+    const windowClassNames = mergeClasses(styles$6.window, active ? styles$6['window--active'] : styles$6['window--inactive'], draggable && hasBeenDragged && styles$6['window--draggable'], className, classes?.root);
+    const contentClassNames = mergeClasses(styles$6.content, contentClassName, classes?.content);
+    const titleBarClassNames = mergeClasses(styles$6.titleBar, draggable && styles$6['titleBar--draggable'], isDragging && styles$6['titleBar--dragging'], classes?.titleBar);
     // Window style
     const windowStyle = {};
-    if (width !== 'auto') {
-        windowStyle.width = typeof width === 'number' ? `${width}px` : width;
+    // Apply width - use currentWidth during resize, otherwise use prop
+    if (currentWidth !== 'auto') {
+        windowStyle.width = typeof currentWidth === 'number' ? `${currentWidth}px` : currentWidth;
     }
-    if (height !== 'auto') {
-        windowStyle.height = typeof height === 'number' ? `${height}px` : height;
+    // Apply height - use currentHeight during resize, otherwise use prop
+    if (currentHeight !== 'auto') {
+        windowStyle.height = typeof currentHeight === 'number' ? `${currentHeight}px` : currentHeight;
+    }
+    // Apply position if draggable and has been dragged
+    if (draggable && hasBeenDragged && currentPosition) {
+        windowStyle.position = 'absolute';
+        windowStyle.left = `${currentPosition.x}px`;
+        windowStyle.top = `${currentPosition.y}px`;
     }
     // Render title bar if title provided and no custom titleBar
     const renderTitleBar = () => {
@@ -778,11 +1000,11 @@ const Window = React.forwardRef(({ children, title, titleBar, active = true, wid
             return titleBar;
         }
         if (title) {
-            return (jsxRuntime.jsxs("div", { className: styles$6.titleBar, "data-numControls": [onClose, onMinimize, onMaximize].filter(Boolean).length, children: [showControls && (jsxRuntime.jsxs("div", { className: styles$6.controls, children: [onClose && (jsxRuntime.jsx("button", { type: "button", className: styles$6.controlButton, onClick: onClose, "aria-label": "Close", title: "Close", children: jsxRuntime.jsx("div", { className: styles$6.closeBox }) })), onMinimize && (jsxRuntime.jsx("button", { type: "button", className: styles$6.controlButton, onClick: onMinimize, "aria-label": "Minimize", title: "Minimize", children: jsxRuntime.jsx("div", { className: styles$6.minimizeBox }) })), onMaximize && (jsxRuntime.jsx("button", { type: "button", className: styles$6.controlButton, onClick: onMaximize, "aria-label": "Maximize", title: "Maximize", children: jsxRuntime.jsx("div", { className: styles$6.maximizeBox }) }))] })), jsxRuntime.jsxs("div", { className: styles$6.titleCenter, children: [jsxRuntime.jsxs("svg", { width: "132", height: "13", viewBox: "0 0 132 13", fill: "none", preserveAspectRatio: "none", xmlns: "http://www.w3.org/2000/svg", children: [jsxRuntime.jsx("rect", { width: "130.517", height: "13", fill: "#DDDDDD" }), jsxRuntime.jsx("rect", { width: "1", height: "13", fill: "#EEEEEE" }), jsxRuntime.jsx("rect", { x: "130", width: "1", height: "13", fill: "#C5C5C5" }), jsxRuntime.jsx("rect", { y: "1", width: "131.268", height: "1", fill: "#999999" }), jsxRuntime.jsx("rect", { y: "5", width: "131.268", height: "1", fill: "#999999" }), jsxRuntime.jsx("rect", { y: "9", width: "131.268", height: "1", fill: "#999999" }), jsxRuntime.jsx("rect", { y: "3", width: "131.268", height: "1", fill: "#999999" }), jsxRuntime.jsx("rect", { y: "7", width: "131.268", height: "1", fill: "#999999" }), jsxRuntime.jsx("rect", { y: "11", width: "131.268", height: "1", fill: "#999999" })] }), jsxRuntime.jsx("div", { className: `${styles$6.titleText} bold`, children: title }), jsxRuntime.jsxs("svg", { width: "132", height: "13", viewBox: "0 0 132 13", fill: "none", preserveAspectRatio: "none", xmlns: "http://www.w3.org/2000/svg", children: [jsxRuntime.jsx("rect", { width: "130.517", height: "13", fill: "#DDDDDD" }), jsxRuntime.jsx("rect", { width: "1", height: "13", fill: "#EEEEEE" }), jsxRuntime.jsx("rect", { x: "130", width: "1", height: "13", fill: "#C5C5C5" }), jsxRuntime.jsx("rect", { y: "1", width: "131.268", height: "1", fill: "#999999" }), jsxRuntime.jsx("rect", { y: "5", width: "131.268", height: "1", fill: "#999999" }), jsxRuntime.jsx("rect", { y: "9", width: "131.268", height: "1", fill: "#999999" }), jsxRuntime.jsx("rect", { y: "3", width: "131.268", height: "1", fill: "#999999" }), jsxRuntime.jsx("rect", { y: "7", width: "131.268", height: "1", fill: "#999999" }), jsxRuntime.jsx("rect", { y: "11", width: "131.268", height: "1", fill: "#999999" })] })] })] }));
+            return (jsxRuntime.jsxs("div", { className: titleBarClassNames, "data-numControls": [onClose, onMinimize, onMaximize].filter(Boolean).length, onMouseDown: handleTitleBarMouseDown, children: [showControls && (jsxRuntime.jsxs("div", { className: mergeClasses(styles$6.controls, classes?.controls), children: [onClose && (jsxRuntime.jsx("button", { type: "button", className: mergeClasses(styles$6.controlButton, classes?.controlButton), onClick: onClose, "aria-label": "Close", title: "Close", children: jsxRuntime.jsx("div", { className: styles$6.closeBox }) })), onMinimize && (jsxRuntime.jsx("button", { type: "button", className: mergeClasses(styles$6.controlButton, classes?.controlButton), onClick: onMinimize, "aria-label": "Minimize", title: "Minimize", children: jsxRuntime.jsx("div", { className: styles$6.minimizeBox }) })), onMaximize && (jsxRuntime.jsx("button", { type: "button", className: mergeClasses(styles$6.controlButton, classes?.controlButton), onClick: onMaximize, "aria-label": "Maximize", title: "Maximize", children: jsxRuntime.jsx("div", { className: styles$6.maximizeBox }) }))] })), jsxRuntime.jsxs("div", { className: styles$6.titleCenter, children: [jsxRuntime.jsxs("svg", { width: "132", height: "13", viewBox: "0 0 132 13", fill: "none", preserveAspectRatio: "none", xmlns: "http://www.w3.org/2000/svg", children: [jsxRuntime.jsx("rect", { width: "130.517", height: "13", fill: "#DDDDDD" }), jsxRuntime.jsx("rect", { width: "1", height: "13", fill: "#EEEEEE" }), jsxRuntime.jsx("rect", { x: "130", width: "1", height: "13", fill: "#C5C5C5" }), jsxRuntime.jsx("rect", { y: "1", width: "131.268", height: "1", fill: "#999999" }), jsxRuntime.jsx("rect", { y: "5", width: "131.268", height: "1", fill: "#999999" }), jsxRuntime.jsx("rect", { y: "9", width: "131.268", height: "1", fill: "#999999" }), jsxRuntime.jsx("rect", { y: "3", width: "131.268", height: "1", fill: "#999999" }), jsxRuntime.jsx("rect", { y: "7", width: "131.268", height: "1", fill: "#999999" }), jsxRuntime.jsx("rect", { y: "11", width: "131.268", height: "1", fill: "#999999" })] }), jsxRuntime.jsx("div", { className: mergeClasses(styles$6.titleText, classes?.titleText, 'bold'), children: title }), jsxRuntime.jsxs("svg", { width: "132", height: "13", viewBox: "0 0 132 13", fill: "none", preserveAspectRatio: "none", xmlns: "http://www.w3.org/2000/svg", children: [jsxRuntime.jsx("rect", { width: "130.517", height: "13", fill: "#DDDDDD" }), jsxRuntime.jsx("rect", { width: "1", height: "13", fill: "#EEEEEE" }), jsxRuntime.jsx("rect", { x: "130", width: "1", height: "13", fill: "#C5C5C5" }), jsxRuntime.jsx("rect", { y: "1", width: "131.268", height: "1", fill: "#999999" }), jsxRuntime.jsx("rect", { y: "5", width: "131.268", height: "1", fill: "#999999" }), jsxRuntime.jsx("rect", { y: "9", width: "131.268", height: "1", fill: "#999999" }), jsxRuntime.jsx("rect", { y: "3", width: "131.268", height: "1", fill: "#999999" }), jsxRuntime.jsx("rect", { y: "7", width: "131.268", height: "1", fill: "#999999" }), jsxRuntime.jsx("rect", { y: "11", width: "131.268", height: "1", fill: "#999999" })] })] })] }));
         }
         return null;
     };
-    return (jsxRuntime.jsxs("div", { ref: ref, className: windowClassNames, style: windowStyle, onMouseEnter: onMouseEnter, children: [renderTitleBar(), jsxRuntime.jsx("div", { className: contentClassNames, children: children }), resizable && jsxRuntime.jsx("div", { className: styles$6.resizeHandle, "aria-hidden": "true" })] }));
+    return (jsxRuntime.jsxs("div", { ref: ref, className: windowClassNames, style: windowStyle, onMouseEnter: onMouseEnter, children: [renderTitleBar(), jsxRuntime.jsx("div", { className: contentClassNames, children: children }), resizable && (jsxRuntime.jsx("div", { className: styles$6.resizeHandle, onMouseDown: handleResizeMouseDown, "aria-hidden": "true" }))] }));
 });
 Window.displayName = 'Window';
 
@@ -915,7 +1137,7 @@ const Dialog = React.forwardRef(({ open = false, onClose, closeOnBackdropClick =
 });
 Dialog.displayName = 'Dialog';
 
-var styles$4 = {"menuBar":"MenuBar-module_menuBar","leftContent":"MenuBar-module_leftContent","menusContainer":"MenuBar-module_menusContainer","menuContainer":"MenuBar-module_menuContainer","rightContent":"MenuBar-module_rightContent","menuButton":"MenuBar-module_menuButton","menuButton--disabled":"MenuBar-module_menuButton--disabled","menuButton--open":"MenuBar-module_menuButton--open","dropdown":"MenuBar-module_dropdown"};
+var styles$4 = {"menuBar":"MenuBar-module_menuBar","leftContent":"MenuBar-module_leftContent","menusContainer":"MenuBar-module_menusContainer","menuContainer":"MenuBar-module_menuContainer","rightContent":"MenuBar-module_rightContent","menuButton":"MenuBar-module_menuButton","menuButton--disabled":"MenuBar-module_menuButton--disabled","menuButton--open":"MenuBar-module_menuButton--open","dropdown":"MenuBar-module_dropdown","dropdown--right":"MenuBar-module_dropdown--right"};
 
 /**
  * Mac OS 9 style MenuBar component
@@ -972,41 +1194,56 @@ var styles$4 = {"menuBar":"MenuBar-module_menuBar","leftContent":"MenuBar-module
 const MenuBar = React.forwardRef(({ menus, openMenuIndex, onMenuOpen, onMenuClose, className = '', dropdownClassName = '', leftContent, rightContent, }, ref) => {
     const [menuBarElement, setMenuBarElement] = React.useState(null);
     const [focusedIndex, setFocusedIndex] = React.useState(-1);
+    const [internalOpenIndex, setInternalOpenIndex] = React.useState(undefined);
+    const isControlled = openMenuIndex !== undefined;
+    const activeOpenIndex = isControlled ? openMenuIndex : internalOpenIndex;
+    const handleMenuOpenInternal = (index) => {
+        if (!isControlled) {
+            setInternalOpenIndex(index);
+        }
+        onMenuOpen?.(index);
+    };
+    const handleMenuCloseInternal = () => {
+        if (!isControlled) {
+            setInternalOpenIndex(undefined);
+        }
+        onMenuClose?.();
+    };
     // Handle click outside to close menu
     React.useEffect(() => {
-        if (openMenuIndex === undefined || !menuBarElement)
+        if (activeOpenIndex === undefined || !menuBarElement)
             return;
         const handleClickOutside = (event) => {
             if (menuBarElement && !menuBarElement.contains(event.target)) {
-                onMenuClose?.();
+                handleMenuCloseInternal();
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [openMenuIndex, onMenuClose, menuBarElement]);
+    }, [activeOpenIndex, onMenuClose, menuBarElement, isControlled]);
     // Handle Escape key to close menu
     React.useEffect(() => {
-        if (openMenuIndex === undefined)
+        if (activeOpenIndex === undefined)
             return;
         const handleEscape = (event) => {
             if (event.key === 'Escape') {
                 event.preventDefault();
-                onMenuClose?.();
+                handleMenuCloseInternal();
             }
         };
         document.addEventListener('keydown', handleEscape);
         return () => document.removeEventListener('keydown', handleEscape);
-    }, [openMenuIndex, onMenuClose]);
+    }, [activeOpenIndex, onMenuClose, isControlled]);
     // Handle keyboard navigation
     const handleKeyDown = React.useCallback((event) => {
         switch (event.key) {
             case 'ArrowLeft':
                 event.preventDefault();
-                if (openMenuIndex !== undefined) {
+                if (activeOpenIndex !== undefined) {
                     // Move to previous menu
-                    const prevIndex = openMenuIndex > 0 ? openMenuIndex - 1 : menus.length - 1;
+                    const prevIndex = activeOpenIndex > 0 ? activeOpenIndex - 1 : menus.length - 1;
                     if (!menus[prevIndex]?.disabled) {
-                        onMenuOpen?.(prevIndex);
+                        handleMenuOpenInternal(prevIndex);
                     }
                 }
                 else if (focusedIndex > 0) {
@@ -1015,11 +1252,11 @@ const MenuBar = React.forwardRef(({ menus, openMenuIndex, onMenuOpen, onMenuClos
                 break;
             case 'ArrowRight':
                 event.preventDefault();
-                if (openMenuIndex !== undefined) {
+                if (activeOpenIndex !== undefined) {
                     // Move to next menu
-                    const nextIndex = openMenuIndex < menus.length - 1 ? openMenuIndex + 1 : 0;
+                    const nextIndex = activeOpenIndex < menus.length - 1 ? activeOpenIndex + 1 : 0;
                     if (!menus[nextIndex]?.disabled) {
-                        onMenuOpen?.(nextIndex);
+                        handleMenuOpenInternal(nextIndex);
                     }
                 }
                 else if (focusedIndex < menus.length - 1) {
@@ -1028,18 +1265,18 @@ const MenuBar = React.forwardRef(({ menus, openMenuIndex, onMenuOpen, onMenuClos
                 break;
             case 'ArrowDown':
                 event.preventDefault();
-                if (openMenuIndex === undefined && focusedIndex >= 0) {
+                if (activeOpenIndex === undefined && focusedIndex >= 0) {
                     // Open the focused menu (only if it's a dropdown)
                     const menu = menus[focusedIndex];
                     if (!menu?.disabled && menu?.type !== 'link') {
-                        onMenuOpen?.(focusedIndex);
+                        handleMenuOpenInternal(focusedIndex);
                     }
                 }
                 break;
             case 'Enter':
             case ' ':
                 event.preventDefault();
-                if (openMenuIndex === undefined && focusedIndex >= 0) {
+                if (activeOpenIndex === undefined && focusedIndex >= 0) {
                     const menu = menus[focusedIndex];
                     if (!menu?.disabled) {
                         if (menu.type === 'link') {
@@ -1048,13 +1285,13 @@ const MenuBar = React.forwardRef(({ menus, openMenuIndex, onMenuOpen, onMenuClos
                         }
                         else {
                             // Open the focused dropdown menu
-                            onMenuOpen?.(focusedIndex);
+                            handleMenuOpenInternal(focusedIndex);
                         }
                     }
                 }
                 break;
         }
-    }, [openMenuIndex, focusedIndex, menus, onMenuOpen, onMenuClose]);
+    }, [activeOpenIndex, focusedIndex, menus, onMenuOpen, onMenuClose, isControlled]);
     // Handle menu button click
     const handleMenuClick = (index) => {
         const menu = menus[index];
@@ -1065,13 +1302,13 @@ const MenuBar = React.forwardRef(({ menus, openMenuIndex, onMenuOpen, onMenuClos
             menu.onClick?.();
             return;
         }
-        if (openMenuIndex === index) {
+        if (activeOpenIndex === index) {
             // Clicking the same menu closes it
-            onMenuClose?.();
+            handleMenuCloseInternal();
         }
         else {
             // Open the clicked menu
-            onMenuOpen?.(index);
+            handleMenuOpenInternal(index);
         }
     };
     // Class names
@@ -1088,7 +1325,7 @@ const MenuBar = React.forwardRef(({ menus, openMenuIndex, onMenuOpen, onMenuClos
         }
     }, [ref]);
     return (jsxRuntime.jsxs("div", { ref: handleRef, className: menuBarClassNames, role: "menubar", onKeyDown: handleKeyDown, children: [leftContent && (jsxRuntime.jsx("div", { className: styles$4.leftContent, children: leftContent })), jsxRuntime.jsx("div", { className: styles$4.menusContainer, children: menus.map((menu, index) => {
-                    const isOpen = openMenuIndex === index;
+                    const isOpen = activeOpenIndex === index;
                     const isDropdown = menu.type !== 'link';
                     const menuButtonClassNames = [
                         styles$4.menuButton,
@@ -1104,17 +1341,17 @@ const MenuBar = React.forwardRef(({ menus, openMenuIndex, onMenuOpen, onMenuClos
                                         e.preventDefault();
                                         menu.onClick();
                                     }
-                                }, onFocus: () => setFocusedIndex(index), onBlur: () => setFocusedIndex(-1), "aria-disabled": menu.disabled, children: menu.label }) }, index));
+                                }, onFocus: () => setFocusedIndex(index), onBlur: () => setFocusedIndex(-1), "aria-disabled": menu.disabled, children: jsxRuntime.jsx("h3", { children: menu.label }) }) }, index));
                     }
                     // Standard dropdown menu or link without href
-                    return (jsxRuntime.jsxs("div", { className: styles$4.menuContainer, children: [jsxRuntime.jsx("button", { type: "button", className: menuButtonClassNames, onClick: () => handleMenuClick(index), onFocus: () => setFocusedIndex(index), onBlur: () => setFocusedIndex(-1), disabled: menu.disabled, "aria-haspopup": isDropdown ? 'true' : undefined, "aria-expanded": isOpen, "aria-disabled": menu.disabled, children: menu.label }), isOpen && isDropdown && menu.items && (jsxRuntime.jsx("div", { className: dropdownClassNames, role: "menu", children: menu.items }))] }, index));
+                    return (jsxRuntime.jsxs("div", { className: styles$4.menuContainer, children: [jsxRuntime.jsx("button", { type: "button", className: menuButtonClassNames, onClick: () => handleMenuClick(index), onFocus: () => setFocusedIndex(index), onBlur: () => setFocusedIndex(-1), disabled: menu.disabled, "aria-haspopup": isDropdown ? 'true' : undefined, "aria-expanded": isOpen, "aria-disabled": menu.disabled, children: jsxRuntime.jsx("h3", { children: menu.label }) }), isOpen && isDropdown && menu.items && (jsxRuntime.jsx("div", { className: dropdownClassNames, role: "menu", children: menu.items }))] }, index));
                 }) }), rightContent && (jsxRuntime.jsx("div", { className: styles$4.rightContent, children: Array.isArray(rightContent)
                     ? rightContent.map((item, index) => (jsxRuntime.jsx(React.Fragment, { children: item }, index)))
                     : rightContent }))] }));
 });
 MenuBar.displayName = 'MenuBar';
 
-var styles$3 = {"menuItem":"MenuItem-module_menuItem","menuItem--disabled":"MenuItem-module_menuItem--disabled","menuItem--selected":"MenuItem-module_menuItem--selected","menuItem--separator":"MenuItem-module_menuItem--separator","checkmark":"MenuItem-module_checkmark","icon":"MenuItem-module_icon","label":"MenuItem-module_label","shortcut":"MenuItem-module_shortcut","submenuArrow":"MenuItem-module_submenuArrow","separatorLine":"MenuItem-module_separatorLine"};
+var styles$3 = {"menuItem":"MenuItem-module_menuItem","menuItem--disabled":"MenuItem-module_menuItem--disabled","menuItem--selected":"MenuItem-module_menuItem--selected","menuItem--separator":"MenuItem-module_menuItem--separator","checkmark":"MenuItem-module_checkmark","icon":"MenuItem-module_icon","label":"MenuItem-module_label","shortcut":"MenuItem-module_shortcut","submenuArrow":"MenuItem-module_submenuArrow","submenu":"MenuItem-module_submenu","separatorLine":"MenuItem-module_separatorLine"};
 
 /**
  * Mac OS 9 style MenuItem component
@@ -1153,7 +1390,9 @@ var styles$3 = {"menuItem":"MenuItem-module_menuItem","menuItem--disabled":"Menu
  * <MenuItem label="Recent Files" hasSubmenu />
  * ```
  */
-const MenuItem = React.forwardRef(({ label, shortcut, disabled = false, selected = false, separator = false, checked = false, icon, onClick, onFocus, onBlur, className = '', hasSubmenu = false, }, ref) => {
+const MenuItem = React.forwardRef(({ label, shortcut, disabled = false, selected = false, separator = false, checked = false, icon, onClick, onFocus, onBlur, className = '', hasSubmenu = false, items, }, ref) => {
+    const [isSubmenuOpen, setIsSubmenuOpen] = React.useState(false);
+    const effectiveHasSubmenu = hasSubmenu || !!items;
     // Class names
     const menuItemClassNames = [
         styles$3.menuItem,
@@ -1172,9 +1411,65 @@ const MenuItem = React.forwardRef(({ label, shortcut, disabled = false, selected
         }
         onClick?.(event);
     };
-    return (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [jsxRuntime.jsxs("button", { ref: ref, type: "button", className: menuItemClassNames, onClick: handleClick, onFocus: onFocus, onBlur: onBlur, disabled: disabled, role: "menuitem", "aria-disabled": disabled, "aria-checked": checked ? 'true' : undefined, children: [jsxRuntime.jsx("span", { className: styles$3.checkmark, children: checked && '✓' }), icon && jsxRuntime.jsx("span", { className: styles$3.icon, children: icon }), jsxRuntime.jsx("span", { className: styles$3.label, children: label }), shortcut && jsxRuntime.jsx("span", { className: styles$3.shortcut, children: shortcut }), hasSubmenu && jsxRuntime.jsx("span", { className: styles$3.submenuArrow, children: "\u25B6" })] }), separator && jsxRuntime.jsx("div", { className: styles$3.separatorLine, role: "separator" })] }));
+    return (jsxRuntime.jsxs("div", { className: styles$3.menuItemContainer, onMouseEnter: () => setIsSubmenuOpen(true), onMouseLeave: () => setIsSubmenuOpen(false), style: { position: 'relative', width: '100%' }, children: [jsxRuntime.jsxs("button", { ref: ref, type: "button", className: menuItemClassNames, onClick: handleClick, onFocus: onFocus, onBlur: onBlur, disabled: disabled, role: "menuitem", "aria-disabled": disabled, "aria-checked": checked ? 'true' : undefined, children: [jsxRuntime.jsx("span", { className: styles$3.checkmark, children: checked && '✓' }), icon && jsxRuntime.jsx("span", { className: styles$3.icon, children: icon }), jsxRuntime.jsx("span", { className: styles$3.label, children: label }), shortcut && jsxRuntime.jsx("span", { className: styles$3.shortcut, children: shortcut }), effectiveHasSubmenu && jsxRuntime.jsx("span", { className: styles$3.submenuArrow, children: "\u25B6" })] }), items && isSubmenuOpen && (jsxRuntime.jsx("div", { className: styles$3.submenu, role: "menu", children: items })), separator && jsxRuntime.jsx("div", { className: styles$3.separatorLine, role: "separator" })] }));
 });
 MenuItem.displayName = 'MenuItem';
+
+/**
+ * Mac OS 9 style MenuDropdown component
+ *
+ * A standalone dropdown menu that shares the styling of the MenuBar.
+ * Useful for placing menus in the status area (rightContent) or other parts of the app.
+ */
+const MenuDropdown = ({ label, items, disabled = false, className = '', dropdownClassName = '', align = 'left', }) => {
+    const [isOpen, setIsOpen] = React.useState(false);
+    const containerRef = React.useRef(null);
+    // Handle click outside to close menu
+    React.useEffect(() => {
+        if (!isOpen)
+            return;
+        const handleClickOutside = (event) => {
+            if (containerRef.current && !containerRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [isOpen]);
+    // Handle Escape key to close menu
+    React.useEffect(() => {
+        if (!isOpen)
+            return;
+        const handleEscape = (event) => {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener('keydown', handleEscape);
+        return () => document.removeEventListener('keydown', handleEscape);
+    }, [isOpen]);
+    const handleToggle = () => {
+        if (!disabled) {
+            setIsOpen(!isOpen);
+        }
+    };
+    const menuContainerClassNames = [
+        styles$4.menuContainer,
+        className
+    ].filter(Boolean).join(' ');
+    const menuButtonClassNames = [
+        styles$4.menuButton,
+        isOpen ? styles$4['menuButton--open'] : '',
+        disabled ? styles$4['menuButton--disabled'] : '',
+    ].filter(Boolean).join(' ');
+    const dropdownClassNames = [
+        styles$4.dropdown,
+        align === 'right' ? styles$4['dropdown--right'] : '',
+        dropdownClassName
+    ].filter(Boolean).join(' ');
+    return (jsxRuntime.jsxs("div", { ref: containerRef, className: menuContainerClassNames, children: [jsxRuntime.jsx("button", { type: "button", className: menuButtonClassNames, onClick: handleToggle, disabled: disabled, "aria-haspopup": "true", "aria-expanded": isOpen, "aria-disabled": disabled, children: typeof label === 'string' ? jsxRuntime.jsx("h3", { children: label }) : label }), isOpen && (jsxRuntime.jsx("div", { className: dropdownClassNames, role: "menu", onClick: () => setIsOpen(false), children: items }))] }));
+};
 
 var styles$2 = {"scrollbar":"Scrollbar-module_scrollbar","scrollbar--vertical":"Scrollbar-module_scrollbar--vertical","scrollbar--horizontal":"Scrollbar-module_scrollbar--horizontal","scrollbar--disabled":"Scrollbar-module_scrollbar--disabled","arrow":"Scrollbar-module_arrow","arrowIcon":"Scrollbar-module_arrowIcon","arrow--start":"Scrollbar-module_arrow--start","arrow--end":"Scrollbar-module_arrow--end","track":"Scrollbar-module_track","thumb":"Scrollbar-module_thumb"};
 
@@ -1311,11 +1606,13 @@ var styles$1 = {"listView":"ListView-module_listView","header":"ListView-module_
  * />
  * ```
  */
-const ListView = React.forwardRef(({ columns, items, selectedIds = [], onSelectionChange, onItemOpen, onItemMouseEnter, onSort, className = '', height = 'auto', }, ref) => {
+const ListView = React.forwardRef(({ columns, items, selectedIds = [], onSelectionChange, onItemOpen, onItemMouseEnter, onItemMouseLeave, onSort, className = '', height = 'auto', classes, renderRow, renderCell, renderHeaderCell, onCellClick, onCellMouseEnter, onCellMouseLeave, }, ref) => {
     const [sortColumn, setSortColumn] = React.useState(null);
     const [sortDirection, setSortDirection] = React.useState('asc');
+    const [hoveredRow, setHoveredRow] = React.useState(null);
+    const [hoveredCell, setHoveredCell] = React.useState(null);
     // Class names
-    const classNames = [styles$1.listView, className].filter(Boolean).join(' ');
+    const classNames = mergeClasses(styles$1.listView, className, classes?.root);
     // Handle column header click
     const handleColumnClick = React.useCallback((columnKey, sortable = true) => {
         if (!sortable || !onSort)
@@ -1360,7 +1657,7 @@ const ListView = React.forwardRef(({ columns, items, selectedIds = [], onSelecti
         }
     }, [onItemOpen]);
     // Handle row mouse enter
-    const handleRowMouseEnter = React.useCallback((item) => {
+    React.useCallback((item) => {
         if (onItemMouseEnter) {
             onItemMouseEnter(item);
         }
@@ -1370,17 +1667,108 @@ const ListView = React.forwardRef(({ columns, items, selectedIds = [], onSelecti
     if (height !== 'auto') {
         containerStyle.height = typeof height === 'number' ? `${height}px` : height;
     }
-    return (jsxRuntime.jsxs("div", { ref: ref, className: classNames, style: containerStyle, children: [jsxRuntime.jsx("div", { className: styles$1.header, children: columns.map((column) => (jsxRuntime.jsxs("div", { className: `${styles$1.headerCell} ${column.sortable !== false ? styles$1.sortable : ''}`, style: {
-                        width: typeof column.width === 'number'
-                            ? `${column.width}px`
-                            : column.width,
-                    }, onClick: () => handleColumnClick(column.key, column.sortable), children: [column.label, sortColumn === column.key && (jsxRuntime.jsx("span", { className: styles$1.sortIndicator, children: sortDirection === 'asc' ? '▲' : '▼' }))] }, column.key))) }), jsxRuntime.jsx("div", { className: styles$1.body, children: items.map((item) => {
+    return (jsxRuntime.jsxs("div", { ref: ref, className: classNames, style: containerStyle, children: [jsxRuntime.jsx("div", { className: mergeClasses(styles$1.header, classes?.header), children: columns.map((column) => {
+                    const isSorted = sortColumn === column.key;
+                    const headerState = {
+                        isSorted,
+                        sortDirection: isSorted ? sortDirection : undefined,
+                    };
+                    const headerDefaultProps = {
+                        key: column.key,
+                        className: mergeClasses(styles$1.headerCell, column.sortable !== false && styles$1.sortable, classes?.headerCell),
+                        style: {
+                            width: typeof column.width === 'number'
+                                ? `${column.width}px`
+                                : column.width,
+                        },
+                        onClick: () => handleColumnClick(column.key, column.sortable),
+                        'data-column': column.key,
+                        'data-sortable': column.sortable !== false,
+                        ...(isSorted && {
+                            'data-sorted': true,
+                            'data-sort-direction': sortDirection,
+                        }),
+                    };
+                    // Use custom render or default
+                    if (renderHeaderCell) {
+                        return renderHeaderCell(column, headerState, headerDefaultProps);
+                    }
+                    // Default header cell rendering
+                    return (jsxRuntime.jsxs("div", { ...headerDefaultProps, children: [column.label, isSorted && (jsxRuntime.jsx("span", { className: styles$1.sortIndicator, children: sortDirection === 'asc' ? '▲' : '▼' }))] }));
+                }) }), jsxRuntime.jsx("div", { className: mergeClasses(styles$1.body, classes?.body), children: items.map((item, rowIndex) => {
                     const isSelected = selectedIds.includes(item.id);
-                    return (jsxRuntime.jsx("div", { className: `${styles$1.row} ${isSelected ? styles$1.selected : ''}`, onClick: (e) => handleRowClick(item.id, e), onDoubleClick: () => handleRowDoubleClick(item), onMouseEnter: () => handleRowMouseEnter(item), children: columns.map((column, index) => (jsxRuntime.jsxs("div", { className: styles$1.cell, style: {
-                                width: typeof column.width === 'number'
-                                    ? `${column.width}px`
-                                    : column.width,
-                            }, children: [index === 0 && item.icon && (jsxRuntime.jsx("span", { className: styles$1.icon, children: item.icon })), item[column.key]] }, column.key))) }, item.id));
+                    const isHovered = hoveredRow === item.id;
+                    const rowState = {
+                        isSelected,
+                        isHovered,
+                        index: rowIndex,
+                    };
+                    const rowDefaultProps = {
+                        key: item.id,
+                        className: mergeClasses(styles$1.row, isSelected && styles$1.selected, classes?.row),
+                        onClick: (e) => handleRowClick(item.id, e),
+                        onDoubleClick: () => handleRowDoubleClick(item),
+                        onMouseEnter: () => {
+                            setHoveredRow(item.id);
+                            onItemMouseEnter?.(item);
+                        },
+                        onMouseLeave: () => {
+                            setHoveredRow(null);
+                            setHoveredCell(null);
+                            onItemMouseLeave?.(item);
+                        },
+                        'data-selected': isSelected,
+                        'data-index': rowIndex,
+                        'data-item-id': item.id,
+                    };
+                    // Use custom row render or default
+                    if (renderRow) {
+                        return renderRow(item, rowState, rowDefaultProps);
+                    }
+                    // Default row rendering
+                    return (jsxRuntime.jsx("div", { ...rowDefaultProps, children: columns.map((column, columnIndex) => {
+                            const value = item[column.key];
+                            const isCellHovered = hoveredCell?.rowId === item.id &&
+                                hoveredCell?.columnKey === column.key;
+                            const cellState = {
+                                isHovered: isCellHovered,
+                                isRowSelected: isSelected,
+                                columnIndex,
+                                rowIndex,
+                            };
+                            // Cell event handlers
+                            const handleCellClick = (e) => {
+                                if (onCellClick) {
+                                    onCellClick(item, column, e);
+                                }
+                            };
+                            const handleCellMouseEnter = () => {
+                                setHoveredCell({ rowId: item.id, columnKey: column.key });
+                                if (onCellMouseEnter) {
+                                    onCellMouseEnter(item, column);
+                                }
+                            };
+                            const handleCellMouseLeave = () => {
+                                setHoveredCell(null);
+                                if (onCellMouseLeave) {
+                                    onCellMouseLeave(item, column);
+                                }
+                            };
+                            // Use custom cell render or default
+                            if (renderCell) {
+                                return (jsxRuntime.jsx("div", { className: mergeClasses(styles$1.cell, classes?.cell), style: {
+                                        width: typeof column.width === 'number'
+                                            ? `${column.width}px`
+                                            : column.width,
+                                    }, "data-column": column.key, "data-hovered": isCellHovered, onClick: handleCellClick, onMouseEnter: handleCellMouseEnter, onMouseLeave: handleCellMouseLeave, children: renderCell(value, item, column, cellState) }, column.key));
+                            }
+                            // Default cell rendering
+                            return (jsxRuntime.jsxs("div", { className: mergeClasses(styles$1.cell, classes?.cell), style: {
+                                    width: typeof column.width === 'number'
+                                        ? `${column.width}px`
+                                        : column.width,
+                                }, "data-column": column.key, "data-hovered": isCellHovered, onClick: handleCellClick, onMouseEnter: handleCellMouseEnter, onMouseLeave: handleCellMouseLeave, children: [columnIndex === 0 && item.icon && (jsxRuntime.jsx("span", { className: styles$1.icon, children: item.icon })), value] }, column.key));
+                        }) }));
                 }) })] }));
 });
 ListView.displayName = 'ListView';
@@ -1397,6 +1785,7 @@ var styles = {"folderListContent":"FolderList-module_folderListContent","listVie
  *
  * @example
  * ```tsx
+ * // Basic folder list
  * <FolderList
  *   title="My Documents"
  *   items={[
@@ -1406,8 +1795,14 @@ var styles = {"folderListContent":"FolderList-module_folderListContent","listVie
  *   selectedIds={['1']}
  *   onSelectionChange={(ids) => console.log('Selected:', ids)}
  *   onItemOpen={(item) => console.log('Open:', item.name)}
- *   onItemMouseEnter={(item) => console.log('Hovering:', item.name)}
- *   onMouseEnter={(e) => console.log('Mouse entered folder list')}
+ * />
+ *
+ * // Draggable folder list
+ * <FolderList
+ *   title="My Documents"
+ *   items={items}
+ *   draggable
+ *   defaultPosition={{ x: 100, y: 100 }}
  * />
  * ```
  */
@@ -1415,9 +1810,18 @@ const FolderList = React.forwardRef(({ columns = [
     { key: 'name', label: 'Name', width: '40%' },
     { key: 'modified', label: 'Date Modified', width: '30%' },
     { key: 'size', label: 'Size', width: '30%' },
-], items, selectedIds, onSelectionChange, onItemOpen, onItemMouseEnter, onSort, onMouseEnter, listHeight = 400, ...windowProps }, ref) => {
+], items, selectedIds, onSelectionChange, onItemOpen, onItemMouseEnter, onItemMouseLeave, onSort, onMouseEnter, listHeight = 400, classes, renderRow, renderCell, renderHeaderCell, onCellClick, onCellMouseEnter, onCellMouseLeave, ...windowProps }, ref) => {
+    // Build ListView classes from FolderList classes
+    const listViewClasses = classes ? {
+        root: classes.listView,
+        header: classes.header,
+        headerCell: classes.headerCell,
+        body: classes.body,
+        row: classes.row,
+        cell: classes.cell,
+    } : undefined;
     // Window content with ListView
-    return (jsxRuntime.jsx(Window, { ref: ref, contentClassName: styles.folderListContent, onMouseEnter: onMouseEnter, ...windowProps, children: jsxRuntime.jsx(ListView, { columns: columns, items: items, selectedIds: selectedIds, onSelectionChange: onSelectionChange, onItemOpen: onItemOpen, onItemMouseEnter: onItemMouseEnter, onSort: onSort, height: listHeight, className: styles.listView }) }));
+    return (jsxRuntime.jsx(Window, { ref: ref, contentClassName: styles.folderListContent, onMouseEnter: onMouseEnter, className: classes?.root, ...windowProps, children: jsxRuntime.jsx(ListView, { columns: columns, items: items, selectedIds: selectedIds, onSelectionChange: onSelectionChange, onItemOpen: onItemOpen, onItemMouseEnter: onItemMouseEnter, onItemMouseLeave: onItemMouseLeave, onSort: onSort, height: listHeight, className: styles.listView, classes: listViewClasses, renderRow: renderRow, renderCell: renderCell, renderHeaderCell: renderHeaderCell, onCellClick: onCellClick, onCellMouseEnter: onCellMouseEnter, onCellMouseLeave: onCellMouseLeave }) }));
 });
 FolderList.displayName = 'FolderList';
 
@@ -1649,6 +2053,7 @@ exports.IconButton = IconButton;
 exports.IconLibrary = IconLibrary;
 exports.ListView = ListView;
 exports.MenuBar = MenuBar;
+exports.MenuDropdown = MenuDropdown;
 exports.MenuItem = MenuItem;
 exports.Radio = Radio;
 exports.Scrollbar = Scrollbar;
@@ -1659,6 +2064,8 @@ exports.TextField = TextField;
 exports.Window = Window;
 exports.borders = borders;
 exports.colors = colors;
+exports.createClassBuilder = createClassBuilder;
+exports.mergeClasses = mergeClasses;
 exports.shadows = shadows;
 exports.spacing = spacing;
 exports.tokens = tokens;

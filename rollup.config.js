@@ -127,6 +127,24 @@ export default [
 		external: ['react', 'react-dom', 'react/jsx-runtime'],
 	},
 
+	// Build base.css separately (optional global styles)
+	{
+		input: 'src/styles/base.css',
+		output: {
+			file: 'dist/base.css',
+		},
+		plugins: [
+			postcss({
+				plugins: [
+					postcssImport(),
+				],
+				extract: true,
+				minimize: false,
+				sourceMap: true,
+			}),
+		],
+	},
+
 	// Bundle TypeScript declaration files
 	{
 		input: 'dist/types/index.d.ts',

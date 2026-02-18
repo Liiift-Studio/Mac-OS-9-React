@@ -47,16 +47,16 @@
 }
 @font-face {
 	font-family: 'PixelSmall';
-	src: url("fonts/b9e24cd1.woff2") format('woff2'),
-		url("fonts/2bc2468e.woff") format('woff');
+	src: url("fonts/9f492b6d.woff2") format('woff2'),
+		url("fonts/65e59833.woff") format('woff');
 	font-style: normal;
 	font-weight: bold;
 	font-display: swap;
 }
 @font-face {
 	font-family: 'PixelSmall';
-	src: url("fonts/cf596b2d.woff2") format('woff2'),
-		url("fonts/3306dfd5.woff") format('woff');
+	src: url("fonts/e45380e5.woff2") format('woff2'),
+		url("fonts/6fb9ec6b.woff") format('woff');
 	font-style: normal;
 	font-weight: normal;
 	font-display: swap;
@@ -266,57 +266,18 @@
 	--transition-timing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 }
 /* ========================================
- * Base Styles
+ * Note on Base Styles
  * ======================================== */
-*,
-*::before,
-*::after {
-	box-sizing: border-box;
-}
-html {
-	/* Set base font size for rem calculations */
-	/* Mobile/default: 16px base */
-	font-size: 16px;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-}
-/* ========================================
- * Responsive Typography
- * Scale base font size at different breakpoints
- * ======================================== */
-/* Tablet: 768px+ */
-@media (min-width: 768px) {
-	html {
-		font-size: 17px;
-	}
-}
-/* Desktop: 1024px+ */
-@media (min-width: 1024px) {
-	html {
-		font-size: 18px;
-	}
-}
-/* Large Desktop/XL: 1440px+ */
-@media (min-width: 1440px) {
-	html {
-		font-size: 20px;
-	}
-}
-body {
-	margin: 0;
-	padding: 0;
-	font-family: var(--font-system);
-	font-size: var(--font-size-md);
-	line-height: var(--line-height-normal);
-	color: var(--color-text);
-	background-color: var(--color-background);
-}
-.bold{
-	font-weight: bold;
-}
+/* Global element styles (html, body, box-sizing) have been moved to base.css
+ * to prevent overriding consuming applications' styles.
+ * Import '@liiift-studio/mac-os9-ui/base' if you want those global styles. */
 /* ========================================
  * Utility Classes
  * ======================================== */
+/* Text utilities */
+.bold {
+	font-weight: bold;
+}
 /* Bevel effects */
 .bevel {
 	box-shadow: var(--shadow-bevel);
@@ -2920,6 +2881,11 @@ body {
 	z-index: 1;
 }
 
+.Window-module_window--draggable {
+	/* Draggable window - absolute positioning applied inline */
+	/* Position and coordinates are set via inline styles when dragged */
+}
+
 /* ========================================
  * Title Bar
  * ======================================== */
@@ -3022,6 +2988,18 @@ body {
 	 */
 	/* Prevent interaction */
 	pointer-events: none;
+}
+
+/* Title Bar Draggable States */
+
+.Window-module_titleBar--draggable {
+	/* Draggable title bar - show grab cursor */
+	cursor: grab;
+}
+
+.Window-module_titleBar--dragging {
+	/* Title bar while being dragged - show grabbing cursor */
+	cursor: grabbing;
 }
 
 /* ========================================
@@ -3407,6 +3385,10 @@ body {
 	font-weight: var(--font-weight-bold);
 	line-height: var(--line-height-snug);
 	color: var(--color-text);
+	height: 100%;
+	display: flex;
+	align-items: center;
+	
 	text-align: center;
 	white-space: nowrap;
 	
@@ -3480,6 +3462,11 @@ body {
 	animation: MenuBar-module_menuFadeIn 100ms ease-out;
 }
 
+.MenuBar-module_dropdown--right {
+	left: auto;
+	right: 0;
+}
+
 @keyframes MenuBar-module_menuFadeIn {
 	from {
 		opacity: 0;
@@ -3535,12 +3522,12 @@ body {
 	display: flex;
 	align-items: center;
 	gap: var(--spacing-2);
-	
+
 	/* Layout */
 	width: 100%;
 	padding: var(--spacing-1) var(--spacing-3);
 	min-height: 20px;
-	
+
 	/* Text styling */
 	font-family: var(--font-system);
 	font-size: var(--font-size-md);
@@ -3548,15 +3535,15 @@ body {
 	line-height: var(--line-height-snug);
 	text-align: left;
 	color: var(--color-text);
-	
+
 	/* Remove button defaults */
 	background-color: transparent;
 	border: none;
 	cursor: pointer;
-	
+
 	/* Transitions */
 	transition: background-color 50ms ease;
-	
+
 	/* Prevent text selection */
 	user-select: none;
 }
@@ -3635,6 +3622,42 @@ body {
 	/* Submenu indicator */
 	font-size: 8px;
 	margin-left: var(--spacing-1);
+}
+
+.MenuItem-module_submenu {
+	/* Submenu container */
+	position: absolute;
+	top: -4px;
+	left: 100%;
+	z-index: 1001;
+
+	/* Mac OS 9 menu appearance */
+	background-color: var(--color-gray-100);
+	border: var(--border-width-thin) solid var(--color-black);
+
+	/* Drop shadow */
+	box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+
+	/* Sizing */
+	min-width: 200px;
+
+	/* Padding */
+	padding: var(--spacing-1) 0;
+
+	/* Animation */
+	animation: MenuItem-module_menuFadeIn 100ms ease-out;
+}
+
+@keyframes MenuItem-module_menuFadeIn {
+	from {
+		opacity: 0;
+		transform: translateX(-4px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
 }
 
 /* ========================================

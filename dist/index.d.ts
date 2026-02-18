@@ -813,6 +813,89 @@ interface TabsProps {
  */
 declare const Tabs: React__default.FC<TabsProps>;
 
+/**
+ * Generic classes object for targeting sub-elements within components
+ * Components extend this with specific element keys
+ */
+interface ComponentClasses {
+    root?: string;
+    [key: string]: string | undefined;
+}
+/**
+ * Base component props that all components should extend
+ * @template TClasses - Specific classes type for the component
+ */
+interface BaseComponentProps<TClasses extends ComponentClasses = ComponentClasses> {
+    /** Additional CSS class name for root element */
+    className?: string;
+    /** Inline styles */
+    style?: React.CSSProperties;
+    /** Custom classes for targeting sub-elements */
+    classes?: TClasses;
+    /** Test ID for testing purposes */
+    'data-testid'?: string;
+}
+/**
+ * Common render state interface for render prop patterns
+ * Provides information about element state for conditional rendering
+ */
+interface RenderState {
+    /** Whether the element is being hovered */
+    isHovered?: boolean;
+    /** Whether the element is selected */
+    isSelected?: boolean;
+    /** Whether the element is in active state (e.g., pressed) */
+    isActive?: boolean;
+    /** Whether the element has keyboard focus */
+    isFocused?: boolean;
+    /** Whether the element is disabled */
+    isDisabled?: boolean;
+}
+/**
+ * Common variant types for Mac OS 9 components
+ */
+type Variant = 'default' | 'primary' | 'secondary';
+/**
+ * Common size types
+ */
+type Size = 'small' | 'medium' | 'large';
+/**
+ * Common state types
+ */
+type State = 'default' | 'hover' | 'active' | 'disabled' | 'focused';
+/**
+ * Window position for draggable windows
+ */
+interface WindowPosition {
+    x: number;
+    y: number;
+}
+/**
+ * Component ref types
+ */
+type ButtonRef = HTMLButtonElement;
+type InputRef = HTMLInputElement;
+type SelectRef = HTMLSelectElement;
+type TextAreaRef = HTMLTextAreaElement;
+type DivRef = HTMLDivElement;
+
+/**
+ * Classes for targeting Window sub-elements
+ */
+interface WindowClasses {
+    /** Root container */
+    root?: string;
+    /** Title bar */
+    titleBar?: string;
+    /** Title text */
+    titleText?: string;
+    /** Window controls container */
+    controls?: string;
+    /** Individual control button */
+    controlButton?: string;
+    /** Content area */
+    content?: string;
+}
 interface WindowProps {
     /**
      * Window content
@@ -851,6 +934,10 @@ interface WindowProps {
      */
     contentClassName?: string;
     /**
+     * Custom classes for targeting sub-elements
+     */
+    classes?: WindowClasses;
+    /**
      * Whether to show window controls (close, minimize, maximize)
      * @default true
      */
@@ -876,6 +963,53 @@ interface WindowProps {
      * @default false
      */
     resizable?: boolean;
+    /**
+     * Minimum width when resizing
+     * @default 200
+     */
+    minWidth?: number;
+    /**
+     * Minimum height when resizing
+     * @default 100
+     */
+    minHeight?: number;
+    /**
+     * Maximum width when resizing
+     */
+    maxWidth?: number;
+    /**
+     * Maximum height when resizing
+     */
+    maxHeight?: number;
+    /**
+     * Callback when window is resized
+     * Only called when resizable is true
+     */
+    onResize?: (size: {
+        width: number;
+        height: number;
+    }) => void;
+    /**
+     * Whether the window can be dragged by its title bar
+     * Window starts in normal flow and becomes absolutely positioned when dragged
+     * @default false
+     */
+    draggable?: boolean;
+    /**
+     * Initial position for draggable windows (uncontrolled)
+     * Only used when draggable is true
+     */
+    defaultPosition?: WindowPosition;
+    /**
+     * Controlled position for draggable windows
+     * Only used when draggable is true
+     */
+    position?: WindowPosition;
+    /**
+     * Callback when window position changes (during drag)
+     * Only called when draggable is true
+     */
+    onPositionChange?: (position: WindowPosition) => void;
 }
 /**
  * Mac OS 9 style Window component
@@ -888,6 +1022,7 @@ interface WindowProps {
  * - Active/inactive states
  * - Composable with custom TitleBar component
  * - Flexible sizing
+ * - Draggable windows (optional) - drag by title bar
  *
  * @example
  * ```tsx
@@ -908,6 +1043,31 @@ interface WindowProps {
  *   onMinimize={() => console.log('Minimize')}
  * >
  *   <p>Content</p>
+ * </Window>
+ *
+ * // Draggable window (uncontrolled)
+ * <Window title="Draggable" draggable>
+ *   <p>Drag me by the title bar!</p>
+ * </Window>
+ *
+ * // Draggable window with initial position
+ * <Window
+ *   title="Positioned"
+ *   draggable
+ *   defaultPosition={{ x: 100, y: 100 }}
+ * >
+ *   <p>Starts at a specific position</p>
+ * </Window>
+ *
+ * // Controlled draggable window
+ * const [pos, setPos] = useState({ x: 0, y: 0 });
+ * <Window
+ *   title="Controlled"
+ *   draggable
+ *   position={pos}
+ *   onPositionChange={setPos}
+ * >
+ *   <p>Parent controls position</p>
  * </Window>
  * ```
  */
@@ -1156,6 +1316,10 @@ interface MenuItemProps {
      * @default false
      */
     hasSubmenu?: boolean;
+    /**
+     * Submenu items
+     */
+    items?: React__default.ReactNode;
 }
 /**
  * Mac OS 9 style MenuItem component
@@ -1195,6 +1359,42 @@ interface MenuItemProps {
  * ```
  */
 declare const MenuItem: React__default.ForwardRefExoticComponent<MenuItemProps & React__default.RefAttributes<HTMLButtonElement>>;
+
+interface MenuDropdownProps {
+    /**
+     * Menu label (displayed in the menu bar/button)
+     */
+    label: React__default.ReactNode;
+    /**
+     * Menu items (content of the dropdown)
+     */
+    items: React__default.ReactNode;
+    /**
+     * Whether the menu is disabled
+     * @default false
+     */
+    disabled?: boolean;
+    /**
+     * Custom class name for the menu container
+     */
+    className?: string;
+    /**
+     * Custom class name for menu dropdown
+     */
+    dropdownClassName?: string;
+    /**
+     * Alignment of the dropdown menu
+     * @default 'left'
+     */
+    align?: 'left' | 'right';
+}
+/**
+ * Mac OS 9 style MenuDropdown component
+ *
+ * A standalone dropdown menu that shares the styling of the MenuBar.
+ * Useful for placing menus in the status area (rightContent) or other parts of the app.
+ */
+declare const MenuDropdown: React__default.FC<MenuDropdownProps>;
 
 interface ScrollbarProps {
     /**
@@ -1277,6 +1477,84 @@ interface ListItem {
      */
     icon?: React__default.ReactNode;
 }
+/**
+ * Classes for targeting ListView sub-elements
+ */
+interface ListViewClasses {
+    /** Root container */
+    root?: string;
+    /** Header row container */
+    header?: string;
+    /** Individual header cell */
+    headerCell?: string;
+    /** Body container (scrollable area) */
+    body?: string;
+    /** Individual row */
+    row?: string;
+    /** Individual cell */
+    cell?: string;
+}
+/**
+ * Row render prop state
+ */
+interface RowRenderState {
+    /** Whether this row is selected */
+    isSelected: boolean;
+    /** Whether this row is being hovered */
+    isHovered: boolean;
+    /** Row index in the list */
+    index: number;
+}
+/**
+ * Row render prop default props
+ * Spread these on your custom element for accessibility and behavior
+ */
+interface RowDefaultProps {
+    key: string;
+    className: string;
+    onClick: (e: React__default.MouseEvent) => void;
+    onDoubleClick: () => void;
+    onMouseEnter: () => void;
+    onMouseLeave: () => void;
+    'data-selected': boolean;
+    'data-index': number;
+    'data-item-id': string;
+}
+/**
+ * Cell render prop state
+ */
+interface CellRenderState {
+    /** Whether this cell is being hovered */
+    isHovered: boolean;
+    /** Whether the row containing this cell is selected */
+    isRowSelected: boolean;
+    /** Column index */
+    columnIndex: number;
+    /** Row index */
+    rowIndex: number;
+}
+/**
+ * Header cell render prop state
+ */
+interface HeaderCellRenderState {
+    /** Whether this column is currently sorted */
+    isSorted: boolean;
+    /** Current sort direction if sorted */
+    sortDirection?: 'asc' | 'desc';
+}
+/**
+ * Header cell render prop default props
+ */
+interface HeaderCellDefaultProps {
+    key: string;
+    className: string;
+    style: React__default.CSSProperties;
+    onClick: () => void;
+    'data-column': string;
+    'data-sortable': boolean;
+    'data-sorted'?: boolean;
+    'data-sort-direction'?: 'asc' | 'desc';
+}
 interface ListViewProps {
     /**
      * Column definitions
@@ -1299,9 +1577,13 @@ interface ListViewProps {
      */
     onItemOpen?: (item: ListItem) => void;
     /**
-     * Callback when mouse enters an item
+     * Callback when mouse enters an item (row-level)
      */
     onItemMouseEnter?: (item: ListItem) => void;
+    /**
+     * Callback when mouse leaves an item (row-level)
+     */
+    onItemMouseLeave?: (item: ListItem) => void;
     /**
      * Callback when column is clicked for sorting
      */
@@ -1314,6 +1596,47 @@ interface ListViewProps {
      * Height of the list view
      */
     height?: number | string;
+    /**
+     * Custom classes for targeting sub-elements
+     */
+    classes?: ListViewClasses;
+    /**
+     * Override row rendering
+     * @param item - The list item
+     * @param state - Row state (selected, hovered, index)
+     * @param defaultProps - Props to spread on custom element for accessibility
+     * @returns Custom row element (fully replaces default)
+     */
+    renderRow?: (item: ListItem, state: RowRenderState, defaultProps: RowDefaultProps) => React__default.ReactNode;
+    /**
+     * Override cell rendering
+     * @param value - Cell value (item[columnKey])
+     * @param item - Full item object
+     * @param column - Column definition
+     * @param state - Cell state (hovered, selected row, indices)
+     * @returns Custom cell content (fully replaces default)
+     */
+    renderCell?: (value: any, item: ListItem, column: ListColumn, state: CellRenderState) => React__default.ReactNode;
+    /**
+     * Override header cell rendering
+     * @param column - Column definition
+     * @param state - Header state (sorted, direction)
+     * @param defaultProps - Props to spread on custom element
+     * @returns Custom header cell element (fully replaces default)
+     */
+    renderHeaderCell?: (column: ListColumn, state: HeaderCellRenderState, defaultProps: HeaderCellDefaultProps) => React__default.ReactNode;
+    /**
+     * Callback when a cell is clicked
+     */
+    onCellClick?: (item: ListItem, column: ListColumn, event: React__default.MouseEvent) => void;
+    /**
+     * Callback when mouse enters a cell
+     */
+    onCellMouseEnter?: (item: ListItem, column: ListColumn) => void;
+    /**
+     * Callback when mouse leaves a cell
+     */
+    onCellMouseLeave?: (item: ListItem, column: ListColumn) => void;
 }
 /**
  * Mac OS 9 style ListView component
@@ -1341,12 +1664,56 @@ interface ListViewProps {
  */
 declare const ListView: React__default.ForwardRefExoticComponent<ListViewProps & React__default.RefAttributes<HTMLDivElement>>;
 
-interface FolderListProps extends Omit<WindowProps, 'children'> {
+/**
+ * Classes for targeting FolderList sub-elements
+ */
+interface FolderListClasses {
+    /** Root window container */
+    root?: string;
+    /** Window component */
+    window?: string;
+    /** Title bar */
+    titleBar?: string;
+    /** ListView container */
+    listView?: string;
+    /** ListView header */
+    header?: string;
+    /** ListView header cell */
+    headerCell?: string;
+    /** ListView body */
+    body?: string;
+    /** ListView row */
+    row?: string;
+    /** ListView cell */
+    cell?: string;
+}
+interface FolderListProps extends Omit<WindowProps, 'children' | 'classes'> {
     /**
      * Column definitions for the list
      * @default [{ key: 'name', label: 'Name' }, { key: 'modified', label: 'Date Modified' }, { key: 'size', label: 'Size' }]
      */
     columns?: ListColumn[];
+    /**
+     * Whether the folder list window can be dragged by its title bar
+     * Window starts in normal flow and becomes absolutely positioned when dragged
+     * @default false
+     */
+    draggable?: boolean;
+    /**
+     * Initial position for draggable folder lists (uncontrolled)
+     * Only used when draggable is true
+     */
+    defaultPosition?: WindowPosition;
+    /**
+     * Controlled position for draggable folder lists
+     * Only used when draggable is true
+     */
+    position?: WindowPosition;
+    /**
+     * Callback when folder list position changes (during drag)
+     * Only called when draggable is true
+     */
+    onPositionChange?: (position: WindowPosition) => void;
     /**
      * Items to display in the list
      */
@@ -1364,9 +1731,13 @@ interface FolderListProps extends Omit<WindowProps, 'children'> {
      */
     onItemOpen?: (item: ListItem) => void;
     /**
-     * Callback when mouse enters an item
+     * Callback when mouse enters an item (row-level)
      */
     onItemMouseEnter?: (item: ListItem) => void;
+    /**
+     * Callback when mouse leaves an item (row-level)
+     */
+    onItemMouseLeave?: (item: ListItem) => void;
     /**
      * Callback when column header is clicked for sorting
      */
@@ -1380,6 +1751,47 @@ interface FolderListProps extends Omit<WindowProps, 'children'> {
      * @default 400
      */
     listHeight?: number | string;
+    /**
+     * Custom classes for targeting sub-elements
+     */
+    classes?: FolderListClasses;
+    /**
+     * Override row rendering
+     * @param item - The list item
+     * @param state - Row state (selected, hovered, index)
+     * @param defaultProps - Props to spread on custom element for accessibility
+     * @returns Custom row element (fully replaces default)
+     */
+    renderRow?: (item: ListItem, state: RowRenderState, defaultProps: RowDefaultProps) => React__default.ReactNode;
+    /**
+     * Override cell rendering
+     * @param value - Cell value (item[columnKey])
+     * @param item - Full item object
+     * @param column - Column definition
+     * @param state - Cell state (hovered, selected row, indices)
+     * @returns Custom cell content (fully replaces default)
+     */
+    renderCell?: (value: any, item: ListItem, column: ListColumn, state: CellRenderState) => React__default.ReactNode;
+    /**
+     * Override header cell rendering
+     * @param column - Column definition
+     * @param state - Header state (sorted, direction)
+     * @param defaultProps - Props to spread on custom element
+     * @returns Custom header cell element (fully replaces default)
+     */
+    renderHeaderCell?: (column: ListColumn, state: HeaderCellRenderState, defaultProps: HeaderCellDefaultProps) => React__default.ReactNode;
+    /**
+     * Callback when a cell is clicked
+     */
+    onCellClick?: (item: ListItem, column: ListColumn, event: React__default.MouseEvent) => void;
+    /**
+     * Callback when mouse enters a cell
+     */
+    onCellMouseEnter?: (item: ListItem, column: ListColumn) => void;
+    /**
+     * Callback when mouse leaves a cell
+     */
+    onCellMouseLeave?: (item: ListItem, column: ListColumn) => void;
 }
 /**
  * Mac OS 9 style FolderList component
@@ -1389,6 +1801,7 @@ interface FolderListProps extends Omit<WindowProps, 'children'> {
  *
  * @example
  * ```tsx
+ * // Basic folder list
  * <FolderList
  *   title="My Documents"
  *   items={[
@@ -1398,8 +1811,14 @@ interface FolderListProps extends Omit<WindowProps, 'children'> {
  *   selectedIds={['1']}
  *   onSelectionChange={(ids) => console.log('Selected:', ids)}
  *   onItemOpen={(item) => console.log('Open:', item.name)}
- *   onItemMouseEnter={(item) => console.log('Hovering:', item.name)}
- *   onMouseEnter={(e) => console.log('Mouse entered folder list')}
+ * />
+ *
+ * // Draggable folder list
+ * <FolderList
+ *   title="My Documents"
+ *   items={items}
+ *   draggable
+ *   defaultPosition={{ x: 100, y: 100 }}
  * />
  * ```
  */
@@ -1743,36 +2162,34 @@ declare const tokens: {
 };
 
 /**
- * Base component props that all components should extend
+ * Merges multiple class names into a single string
+ * Filters out undefined, null, false, and empty strings
+ *
+ * @param classes - Class names to merge
+ * @returns Merged class name string
+ *
+ * @example
+ * ```ts
+ * mergeClasses('base', isActive && 'active', undefined, 'custom')
+ * // Returns: "base active custom"
+ * ```
  */
-interface BaseComponentProps {
-    /** Additional CSS class name */
-    className?: string;
-    /** Inline styles */
-    style?: React.CSSProperties;
-    /** Test ID for testing purposes */
-    'data-testid'?: string;
-}
+declare const mergeClasses: (...classes: (string | undefined | false | null)[]) => string;
 /**
- * Common variant types for Mac OS 9 components
+ * Creates a class name builder function with a base class
+ * Useful for component-level class management
+ *
+ * @param baseClass - Base class name
+ * @returns Function that merges additional classes with base
+ *
+ * @example
+ * ```ts
+ * const cn = createClassBuilder('button');
+ * cn('primary', isDisabled && 'disabled')
+ * // Returns: "button primary disabled"
+ * ```
  */
-type Variant = 'default' | 'primary' | 'secondary';
-/**
- * Common size types
- */
-type Size = 'small' | 'medium' | 'large';
-/**
- * Common state types
- */
-type State = 'default' | 'hover' | 'active' | 'disabled' | 'focused';
-/**
- * Component ref types
- */
-type ButtonRef = HTMLButtonElement;
-type InputRef = HTMLInputElement;
-type SelectRef = HTMLSelectElement;
-type TextAreaRef = HTMLTextAreaElement;
-type DivRef = HTMLDivElement;
+declare const createClassBuilder: (baseClass: string) => (...additionalClasses: (string | undefined | false | null)[]) => string;
 
-export { Button, Checkbox, Dialog, DividerIcon, FolderList, Icon, IconButton, IconLibrary, ListView, MenuBar, MenuItem, Radio, Scrollbar, Select, TabPanel, Tabs, TextField, Window, borders, colors, shadows, spacing, tokens, transitions, typography, zIndex };
-export type { BaseComponentProps, ButtonProps, ButtonRef, CheckboxProps, DialogProps, DivRef, FolderListProps, IconButtonProps, IconLibraryProps, IconName, IconProps, InputRef, ListColumn, ListItem, ListViewProps, Menu, MenuBarProps, MenuItemProps, RadioProps, ScrollbarProps, SelectOption, SelectProps, SelectRef, Size, State, TabPanelProps, TabsProps, TextAreaRef, TextFieldProps, Variant, WindowProps };
+export { Button, Checkbox, Dialog, DividerIcon, FolderList, Icon, IconButton, IconLibrary, ListView, MenuBar, MenuDropdown, MenuItem, Radio, Scrollbar, Select, TabPanel, Tabs, TextField, Window, borders, colors, createClassBuilder, mergeClasses, shadows, spacing, tokens, transitions, typography, zIndex };
+export type { BaseComponentProps, ButtonProps, ButtonRef, CellRenderState, CheckboxProps, ComponentClasses, DialogProps, DivRef, FolderListClasses, FolderListProps, HeaderCellDefaultProps, HeaderCellRenderState, IconButtonProps, IconLibraryProps, IconName, IconProps, InputRef, ListColumn, ListItem, ListViewClasses, ListViewProps, Menu, MenuBarProps, MenuDropdownProps, MenuItemProps, RadioProps, RenderState, RowDefaultProps, RowRenderState, ScrollbarProps, SelectOption, SelectProps, SelectRef, Size, State, TabPanelProps, TabsProps, TextAreaRef, TextFieldProps, Variant, WindowClasses, WindowPosition, WindowProps };

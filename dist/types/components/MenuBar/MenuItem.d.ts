@@ -53,6 +53,10 @@ export interface MenuItemProps {
      * @default false
      */
     hasSubmenu?: boolean;
+    /**
+     * Submenu items
+     */
+    items?: React.ReactNode;
 }
 /**
  * Mac OS 9 style MenuItem component

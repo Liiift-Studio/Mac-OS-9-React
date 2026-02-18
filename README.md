@@ -177,16 +177,43 @@ function MyComponent() {
 
 ## Styling
 
-Import the styles **once** in your application's entry point:
+### Basic Setup
+
+Import the component styles **once** in your application's entry point:
 
 ```tsx
 // In your app's main file (e.g., main.tsx, _app.tsx, index.tsx)
 import '@liiift-studio/mac-os9-ui/styles';
 ```
 
+This provides:
+- CSS custom properties (design tokens/variables)
+- Font declarations (Pixel font family)
+- Component styles
+- Utility classes
+
 This needs to be done only once at the root of your application. All components will then have the correct Mac OS 9 styles applied.
 
-All components use CSS Modules internally, so styles are scoped and won't conflict with your application's CSS. The theme variables and global styles are extracted to a separate CSS file for optimal caching and performance.
+### Optional Global Styles
+
+If you want the **full Mac OS 9 experience** with global styles applied to your entire application (body background, typography, box-sizing reset), you can optionally import the base styles:
+
+```tsx
+// In your app's main file
+import '@liiift-studio/mac-os9-ui/styles';  // Required
+import '@liiift-studio/mac-os9-ui/base';    // Optional global styles
+```
+
+The optional base styles include:
+- Universal `box-sizing: border-box` reset
+- Responsive typography scaling on `<html>`
+- Body styles (margin, padding, font-family, colors)
+
+**Note:** Only import `/base` if you want these global styles. The library is designed to work without polluting your application's global styles, making it easier to integrate into existing projects.
+
+### CSS Modules
+
+All components use CSS Modules internally, so styles are scoped and won't conflict with your application's CSS. The theme variables and component styles are extracted to separate CSS files for optimal caching and performance.
 
 ## TypeScript Support
 
