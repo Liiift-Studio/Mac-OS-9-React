@@ -250,6 +250,10 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 		},
 		ref
 	) => {
+		// Ref to store the window element being dragged
+		// This avoids the need for DOM queries during mousemove
+		const dragWindowRef = useRef<HTMLElement | null>(null);
+
 		// Drag state management
 		const [internalPosition, setInternalPosition] = useState<WindowPosition | null>(
 			defaultPosition || null
@@ -292,6 +296,9 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 				) as HTMLElement;
 
 				if (!windowElement) return;
+
+				// Store the window element reference for use during drag
+				dragWindowRef.current = windowElement;
 
 				const rect = windowElement.getBoundingClientRect();
 				
@@ -398,18 +405,8 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 
 				if (!dragStartRef.current) return;
 
-				// Get the window element to find its parent
-				const windowElements = document.querySelectorAll(`.${styles.window}`);
-				let windowElement: HTMLElement | null = null;
-				
-				// Find the dragging window (the one with position absolute or the first one)
-				for (const el of Array.from(windowElements)) {
-					const htmlEl = el as HTMLElement;
-					if (htmlEl.style.position === 'absolute' || windowElements.length === 1) {
-						windowElement = htmlEl;
-						break;
-					}
-				}
+				// Use the stored window element reference instead of querying the DOM
+				const windowElement = dragWindowRef.current;
 
 				if (!windowElement) return;
 
@@ -438,6 +435,7 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 			const handleMouseUp = () => {
 				setIsDragging(false);
 				dragStartRef.current = null;
+				dragWindowRef.current = null;
 			};
 
 			document.addEventListener('mousemove', handleMouseMove);
