@@ -16,7 +16,7 @@
 
 .listView {
 	/* Fill the entire content area */
-	flex: 1;
+	flex: 1 1 auto;
 	
 	/* Remove extra borders (Window already has a border) */
 	border: none;

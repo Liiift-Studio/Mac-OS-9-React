@@ -69,7 +69,7 @@
 
 .headerCell:last-child {
 	border-right: none;
-	flex: 1; /* Last column takes remaining space */
+	flex: 1 1 auto; /* Last column takes remaining space */
 }
 
 .headerCell.sortable {
@@ -91,7 +91,7 @@
 
 .body {
 	/* Layout */
-	flex: 1;
+	flex: 1 1 auto;
 	overflow-y: auto;
 	
 	/* Background */
@@ -145,7 +145,7 @@
 
 .cell:last-child {
 	border-right: none;
-	flex: 1; /* Last cell takes remaining space */
+	flex: 1 1 auto; /* Last cell takes remaining space */
 }
 
 .icon {

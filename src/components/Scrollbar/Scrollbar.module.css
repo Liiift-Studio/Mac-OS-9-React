@@ -127,7 +127,7 @@
 	background: var(--color-gray-200);
 	
 	/* Layout */
-	flex: 1;
+	flex: 1 1 auto;
 	position: relative;
 	
 	/* Cursor */

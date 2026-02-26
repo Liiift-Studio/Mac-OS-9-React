@@ -50,7 +50,7 @@
 	/* Container for all menu items */
 	display: flex;
 	align-items: stretch;
-	flex: 1;
+	flex: 1 1 auto;
 }
 
 /* ========================================
