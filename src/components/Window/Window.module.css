@@ -125,7 +125,7 @@
 	top: 50%;	
 	flex-grow: 1;
 	/* Responsive width - extends from right edge to center, with padding for title */
-	flex: 1;
+	flex: 1 1 auto;
 	/* max-width: 100px; */
 	height: 12px;
 	
@@ -293,7 +293,7 @@
 
 .content {
 	/* Content area */
-	flex: 1;
+	flex: 1 1 auto;
 	overflow: auto;
 	
 	/* Background - white content area like authentic Mac OS 9 */
