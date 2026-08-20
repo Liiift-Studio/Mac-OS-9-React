@@ -15,15 +15,18 @@
 //    iframe, etc., and filters out hidden / aria-hidden / zero-size nodes
 //  - Focus restore on close checks isConnected before calling .focus(),
 //    so a detached trigger doesn't silently fail focus management
+//
+// Correctness notes (panel review #28, #31, #117):
+//  - The backdrop is portaled to <body>, so an ancestor's overflow/transform/
+//    contain/z-index stacking context can't clip or bury the dialog
+//  - The scroll lock pads out the scrollbar gutter to stop the page behind
+//    shifting, and swaps to position:fixed on iOS where overflow:hidden is
+//    ignored; both are restored exactly on the last unlock
+//  - initialFocus also accepts a () => HTMLElement | null callback, and the
+//    ref form is typed against HTMLElement | null so narrow refs assign
 
-import React, {
-	forwardRef,
-	useCallback,
-	useEffect,
-	useId,
-	useLayoutEffect,
-	useRef,
-} from 'react';
+import React, { forwardRef, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { Window, type WindowProps } from '../Window/Window';
 import styles from './Dialog.module.css';
 
@@ -36,27 +39,90 @@ import styles from './Dialog.module.css';
 const dialogStack: HTMLElement[] = [];
 
 // Reference-counted body scroll lock so two stacked dialogs don't fight
-// over `document.body.style.overflow`. The first lock captures whatever
-// value the host app had set, and the last release restores it.
+// over the body's inline styles. The first lock captures whatever values
+// the host app had set, and the last release restores them verbatim.
 let scrollLockCount = 0;
-let savedBodyOverflow: string | null = null;
+
+// Inline body styles captured at first lock, restored at last release.
+interface SavedBodyStyle {
+	overflow: string;
+	paddingRight: string;
+	position: string;
+	top: string;
+	width: string;
+	// Scroll offset to restore when the position:fixed strategy was used.
+	scrollY: number;
+	// Which strategy was applied, so unlock mirrors lock exactly even if
+	// the UA check would answer differently by then.
+	usedFixed: boolean;
+}
+
+let savedBodyStyle: SavedBodyStyle | null = null;
+
+// iOS Safari ignores `overflow: hidden` on <body> and keeps scrolling the
+// page under the modal, so it needs the position:fixed + negative-top
+// workaround. Every other engine uses the cheaper overflow lock, which has
+// the advantage of not disturbing the scroll offset at all.
+function needsFixedScrollLock(): boolean {
+	if (typeof navigator === 'undefined') return false;
+	if (/iP(ad|hone|od)/.test(navigator.platform)) return true;
+	// iPadOS 13+ reports itself as MacIntel; touch points disambiguate it
+	// from a real desktop Mac.
+	return navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+}
 
 function lockBodyScroll(): void {
 	if (typeof document === 'undefined') return;
 	scrollLockCount += 1;
-	if (scrollLockCount === 1) {
-		savedBodyOverflow = document.body.style.overflow;
-		document.body.style.overflow = 'hidden';
+	if (scrollLockCount !== 1) return;
+
+	const body = document.body;
+	const usedFixed = needsFixedScrollLock();
+	savedBodyStyle = {
+		overflow: body.style.overflow,
+		paddingRight: body.style.paddingRight,
+		position: body.style.position,
+		top: body.style.top,
+		width: body.style.width,
+		scrollY: window.scrollY,
+		usedFixed,
+	};
+
+	// Compensate for the classic scrollbar disappearing, otherwise the page
+	// behind the backdrop shifts sideways by its width when we lock.
+	const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+	if (scrollbarWidth > 0) {
+		const existing = parseFloat(window.getComputedStyle(body).paddingRight) || 0;
+		body.style.paddingRight = `${existing + scrollbarWidth}px`;
+	}
+
+	if (usedFixed) {
+		body.style.position = 'fixed';
+		body.style.top = `-${savedBodyStyle.scrollY}px`;
+		body.style.width = '100%';
+	} else {
+		body.style.overflow = 'hidden';
 	}
 }
 
 function unlockBodyScroll(): void {
 	if (typeof document === 'undefined') return;
 	scrollLockCount = Math.max(0, scrollLockCount - 1);
-	if (scrollLockCount === 0) {
-		document.body.style.overflow = savedBodyOverflow ?? '';
-		savedBodyOverflow = null;
-	}
+	if (scrollLockCount !== 0 || !savedBodyStyle) return;
+
+	const body = document.body;
+	const saved = savedBodyStyle;
+	savedBodyStyle = null;
+
+	body.style.overflow = saved.overflow;
+	body.style.paddingRight = saved.paddingRight;
+	body.style.position = saved.position;
+	body.style.top = saved.top;
+	body.style.width = saved.width;
+
+	// position:fixed collapsed the scroll offset to 0 — put the user back
+	// exactly where they were before the dialog opened.
+	if (saved.usedFixed) window.scrollTo(0, saved.scrollY);
 }
 
 function isTopmost(el: HTMLElement | null): boolean {
@@ -83,20 +149,28 @@ const FOCUSABLE_SELECTOR = [
 	'[tabindex]',
 ].join(',');
 
-function isElementFocusable(el: HTMLElement): boolean {
+function isElementFocusable(el: HTMLElement, checkGeometry: boolean): boolean {
 	// Native disabled, programmatic disabled via aria-disabled,
 	// explicit removal from tab order, and visibility checks.
 	if ((el as HTMLInputElement).disabled) return false;
 	if (el.getAttribute('tabindex') === '-1') return false;
 	if (el.hidden) return false;
 	if (el.closest('[aria-hidden="true"]')) return false;
-	if (el.getClientRects().length === 0) return false;
+	// Zero-size elements aren't reachable by Tab. This is the only check
+	// that needs a layout engine, so it is skipped where there isn't one.
+	if (checkGeometry && el.getClientRects().length === 0) return false;
 	return true;
 }
 
 function getFocusables(root: HTMLElement): HTMLElement[] {
-	return Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
-		isElementFocusable,
+	// jsdom and other zero-layout environments report no client rects for
+	// anything, which would make the trap conclude the dialog is empty and
+	// fall back to focusing the container. Only apply the geometry filter
+	// when the environment actually performs layout — detected by asking
+	// the mounted dialog root, which always has a rect where layout runs.
+	const checkGeometry = root.getClientRects().length > 0;
+	return Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter((el) =>
+		isElementFocusable(el, checkGeometry)
 	);
 }
 
@@ -139,16 +213,21 @@ export interface DialogProps extends Omit<WindowProps, 'active'> {
 	trapFocus?: boolean;
 
 	/**
-	 * Initial focus target. May be a CSS selector or a ref to a known
-	 * element inside the dialog. When omitted, focus moves to the first
-	 * focusable element in the dialog (or the dialog container itself
-	 * if none exists), as required by the WAI-ARIA dialog pattern.
+	 * Initial focus target. Accepts a CSS selector, a ref to a known element
+	 * inside the dialog, or a callback returning the element (useful for
+	 * late binding, when the target does not exist until the dialog renders).
+	 * When omitted, focus moves to the first focusable element in the dialog
+	 * (or the dialog container itself if none exists), as required by the
+	 * WAI-ARIA dialog pattern.
+	 *
+	 * The ref form is typed against `HTMLElement | null` so a narrower ref
+	 * such as `useRef<HTMLButtonElement>(null)` assigns without casting.
 	 *
 	 * **Security note:** when supplied as a string, the value is passed to
 	 * `querySelector`. Treat it as a developer-supplied static selector —
 	 * never derive it from untrusted input.
 	 */
-	initialFocus?: string | React.RefObject<HTMLElement | null>;
+	initialFocus?: string | React.RefObject<HTMLElement | null> | (() => HTMLElement | null);
 
 	/**
 	 * ARIA role. Use `'alertdialog'` for destructive or error confirmations
@@ -224,10 +303,17 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
 			children,
 			...windowProps
 		},
-		ref,
+		ref
 	) => {
 		const dialogRef = useRef<HTMLDivElement>(null);
 		const previousActiveElement = useRef<HTMLElement | null>(null);
+
+		// Held in a ref so the initial-focus effect can depend on `open`
+		// alone. Depending on `initialFocus` directly would re-run — and
+		// yank focus back to the top — on every render when a consumer
+		// passes an inline selector callback.
+		const initialFocusRef = useRef(initialFocus);
+		initialFocusRef.current = initialFocus;
 
 		// Derive an accessible name. Prefer explicit ariaLabelledBy → ariaLabel
 		// → the Window title if it happens to be a plain string.
@@ -270,16 +356,21 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
 			if (!open || !dialogRef.current) return;
 			const root = dialogRef.current;
 
+			const requested = initialFocusRef.current;
 			let target: HTMLElement | null = null;
-			if (typeof initialFocus === 'string') {
+			if (typeof requested === 'function') {
+				target = requested();
+			} else if (typeof requested === 'string') {
 				try {
-					target = root.querySelector<HTMLElement>(initialFocus);
+					// Scoped to the dialog root, so even a broad selector can
+					// only ever match inside this dialog.
+					target = root.querySelector<HTMLElement>(requested);
 				} catch {
 					// Malformed selector — ignore and fall through to default.
 					target = null;
 				}
-			} else if (initialFocus && 'current' in initialFocus) {
-				target = initialFocus.current;
+			} else if (requested && 'current' in requested) {
+				target = requested.current;
 			}
 
 			if (!target) {
@@ -296,7 +387,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
 			}
 
 			target?.focus();
-		}, [open, initialFocus]);
+		}, [open]);
 
 		// Escape: only the topmost dialog reacts so stacked dialogs close
 		// one at a time. The bubble phase + stopPropagation also prevents
@@ -359,14 +450,14 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
 					onClose?.();
 				}
 			},
-			[closeOnBackdropClick, onClose],
+			[closeOnBackdropClick, onClose]
 		);
 
 		if (!open) return null;
 
 		const backdropClassNames = [styles.backdrop, backdropClassName].filter(Boolean).join(' ');
 
-		return (
+		const content = (
 			<div className={backdropClassNames} onClick={handleBackdropClick}>
 				<div
 					className={styles.dialogContainer}
@@ -383,7 +474,14 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
 				</div>
 			</div>
 		);
-	},
+
+		// Portal to <body> so the backdrop escapes any ancestor's
+		// `overflow: hidden`, `transform`, `contain`, or z-index stacking
+		// context. During SSR there is no document to portal into, and the
+		// dialog is not interactive there anyway, so render in place.
+		if (typeof document === 'undefined') return content;
+		return createPortal(content, document.body);
+	}
 );
 
 Dialog.displayName = 'Dialog';
