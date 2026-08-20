@@ -1,10 +1,31 @@
 // Tabs component - Mac OS 9 style
 // Classic tabbed navigation with raised tab appearance
+//
+// Correctness notes (panel review #39, #49, #50, #85, #116):
+//  - forwardRef, matching every other component (#39)
+//  - Generic over the tab id, so literal-union ids survive instead of being
+//    widened to string (#49)
+//  - The children array is derived once per children change rather than
+//    reallocated every render, which also restores handleKeyDown's
+//    memoization (#50)
+//  - The active panel is focusable, so a scrollable panel with no focusable
+//    content is still reachable per the APG tabs pattern (#85)
+//  - children is ReactNode, so conditionals, fragments and mapped arrays
+//    type-check; the runtime filter already handled them (#116)
 
-import React, { useState, useCallback, Children, isValidElement, ReactElement } from 'react';
+import React, {
+	Children,
+	forwardRef,
+	isValidElement,
+	useCallback,
+	useId,
+	useMemo,
+	useState,
+	type ReactElement,
+} from 'react';
 import styles from './Tabs.module.css';
 
-export interface TabPanelProps {
+export interface TabPanelProps<TValue extends string = string> {
 	/**
 	 * Label for the tab
 	 */
@@ -27,26 +48,35 @@ export interface TabPanelProps {
 	disabled?: boolean;
 
 	/**
-	 * Value identifier for controlled tabs
+	 * Value identifier for controlled tabs.
+	 *
+	 * Generic, so a literal union such as `'general' | 'advanced'` survives
+	 * into `onChange` instead of being widened to `string`.
 	 */
-	value?: string;
+	value?: TValue;
 }
 
 /**
  * TabPanel component - Individual tab content
  * Must be used as a child of Tabs component
  */
-export const TabPanel: React.FC<TabPanelProps> = ({ children }) => {
+export function TabPanel<TValue extends string = string>({
+	children,
+}: TabPanelProps<TValue>): React.JSX.Element {
 	return <>{children}</>;
-};
+}
 
 TabPanel.displayName = 'TabPanel';
 
-export interface TabsProps {
+export interface TabsProps<TValue extends string = string> {
 	/**
-	 * Tab panels as children
+	 * Tab panels as children.
+	 *
+	 * Typed as ReactNode rather than a strict TabPanel element union, so
+	 * conditional children, fragments and mapped arrays type-check. Non-element
+	 * children are filtered out at runtime.
 	 */
-	children: ReactElement<TabPanelProps> | ReactElement<TabPanelProps>[];
+	children: React.ReactNode;
 
 	/**
 	 * Index of the default active tab (uncontrolled)
@@ -62,7 +92,7 @@ export interface TabsProps {
 	/**
 	 * Callback when tab changes
 	 */
-	onChange?: (index: number, value?: string) => void;
+	onChange?: (index: number, value?: TValue) => void;
 
 	/**
 	 * Size of the tabs
@@ -99,9 +129,9 @@ export interface TabsProps {
 
 /**
  * Mac OS 9 style Tabs component
- * 
+ *
  * Classic tabbed navigation with raised tab appearance and inset panel.
- * 
+ *
  * Features:
  * - Classic Mac OS 9 tab styling
  * - Controlled and uncontrolled modes
@@ -109,7 +139,7 @@ export interface TabsProps {
  * - Full accessibility with ARIA
  * - Optional icons in tabs
  * - Disabled tab states
- * 
+ *
  * @example
  * ```tsx
  * // Uncontrolled
@@ -121,7 +151,7 @@ export interface TabsProps {
  *     <p>Advanced settings content</p>
  *   </TabPanel>
  * </Tabs>
- * 
+ *
  * // Controlled
  * <Tabs activeTab={activeIndex} onChange={setActiveIndex}>
  *   <TabPanel label="Tab 1">Content 1</TabPanel>
@@ -129,26 +159,38 @@ export interface TabsProps {
  * </Tabs>
  * ```
  */
-export const Tabs: React.FC<TabsProps> = ({
-	children,
-	defaultActiveTab = 0,
-	activeTab: controlledActiveTab,
-	onChange,
-	size = 'md',
-	fullWidth = false,
-	className = '',
-	tabListClassName = '',
-	panelClassName = '',
-	ariaLabel = 'Tabs',
-}) => {
+function TabsInner<TValue extends string = string>(
+	{
+		children,
+		defaultActiveTab = 0,
+		activeTab: controlledActiveTab,
+		onChange,
+		size = 'md',
+		fullWidth = false,
+		className = '',
+		tabListClassName = '',
+		panelClassName = '',
+		ariaLabel = 'Tabs',
+	}: TabsProps<TValue>,
+	ref: React.ForwardedRef<HTMLDivElement>
+): React.JSX.Element {
+	// Ids are scoped per instance, so two Tabs on one page don't collide on
+	// `tab-0` / `panel-0` and cross-wire their aria-controls.
+	const baseId = useId();
 	// Controlled vs uncontrolled state
 	const [uncontrolledActiveTab, setUncontrolledActiveTab] = useState(defaultActiveTab);
 	const isControlled = controlledActiveTab !== undefined;
 	const activeTabIndex = isControlled ? controlledActiveTab : uncontrolledActiveTab;
 
-	// Extract tab information from children
-	const tabs = Children.toArray(children).filter(
-		(child): child is ReactElement<TabPanelProps> => isValidElement(child)
+	// Derived once per children change. Previously this reallocated on every
+	// render, which made handleKeyDown's useCallback identity-fresh each time
+	// and defeated its own memoization (issue #50).
+	const tabs = useMemo(
+		() =>
+			Children.toArray(children).filter((child): child is ReactElement<TabPanelProps<TValue>> =>
+				isValidElement(child)
+			),
+		[children]
 	);
 
 	// Handle tab change
@@ -239,7 +281,7 @@ export const Tabs: React.FC<TabsProps> = ({
 		.join(' ');
 
 	return (
-		<div className={containerClassNames}>
+		<div ref={ref} className={containerClassNames}>
 			<div role="tablist" aria-label={ariaLabel} className={tabListClassNames}>
 				{tabs.map((tab, index) => {
 					const isActive = index === activeTabIndex;
@@ -261,8 +303,8 @@ export const Tabs: React.FC<TabsProps> = ({
 							role="tab"
 							type="button"
 							aria-selected={isActive}
-							aria-controls={`panel-${index}`}
-							id={`tab-${index}`}
+							aria-controls={`${baseId}-panel-${index}`}
+							id={`${baseId}-tab-${index}`}
 							tabIndex={isActive ? 0 : -1}
 							disabled={isDisabled}
 							className={tabClassNames}
@@ -282,9 +324,13 @@ export const Tabs: React.FC<TabsProps> = ({
 					<div
 						key={index}
 						role="tabpanel"
-						id={`panel-${index}`}
-						aria-labelledby={`tab-${index}`}
+						id={`${baseId}-panel-${index}`}
+						aria-labelledby={`${baseId}-tab-${index}`}
 						hidden={!isActive}
+						// The APG tabs pattern requires the panel be focusable
+						// when its content isn't, so a scrollable panel can be
+						// reached and read by keyboard users (issue #85).
+						tabIndex={isActive ? 0 : undefined}
 						className={panelContainerClassNames}
 					>
 						{isActive && tab.props.children}
@@ -293,8 +339,25 @@ export const Tabs: React.FC<TabsProps> = ({
 			})}
 		</div>
 	);
-};
+}
 
-Tabs.displayName = 'Tabs';
+const TabsWithRef = forwardRef(TabsInner);
+TabsWithRef.displayName = 'Tabs';
+
+/**
+ * Mac OS 9 style Tabs component.
+ *
+ * Generic over the tab id, so a literal union survives into `onChange`:
+ *
+ * ```tsx
+ * <Tabs<'general' | 'advanced'> onChange={(index, value) => …}>
+ *   <TabPanel label="General" value="general">…</TabPanel>
+ *   <TabPanel label="Advanced" value="advanced">…</TabPanel>
+ * </Tabs>
+ * ```
+ */
+export const Tabs = TabsWithRef as <TValue extends string = string>(
+	props: TabsProps<TValue> & { ref?: React.Ref<HTMLDivElement> }
+) => React.JSX.Element;
 
 export default Tabs;
