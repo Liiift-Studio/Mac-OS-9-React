@@ -164,6 +164,23 @@
  * Accessibility
  * ======================================== */
 
+/* ========================================
+ * Empty / loading placeholder
+ * ======================================== */
+
+/* Shown in place of rows when the list is empty or loading. Centred in the
+ * body so it reads as a state rather than a first row. */
+.placeholder {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: var(--spacing-lg, 16px);
+	min-height: 48px;
+	color: var(--color-text-secondary, #666666);
+	text-align: center;
+	user-select: none;
+}
+
 /* Keyboard focus */
 .row:focus-visible {
 	outline: 1px dotted var(--color-focus);
