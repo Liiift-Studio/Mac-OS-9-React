@@ -4,6 +4,57 @@
 import React, { forwardRef, useCallback, useRef, useState } from 'react';
 import styles from './MenuItem.module.css';
 
+/**
+ * Map a displayed shortcut to the `aria-keyshortcuts` token format.
+ *
+ * The visual form uses Mac glyphs (⌘⌥⌃⇧), which screen readers announce
+ * inconsistently — VoiceOver says "command", NVDA may say "place of interest
+ * sign", JAWS may skip it entirely. `aria-keyshortcuts` wants named modifiers
+ * joined by "+", so shortcuts become programmatically discoverable regardless
+ * of how the glyph itself is spoken (issue #37).
+ *
+ * @param shortcut - Display string, e.g. "⌘S", "Ctrl+O", "⇧⌘Z"
+ * @returns ARIA token string, e.g. "Meta+S", "Control+O", "Shift+Meta+Z"
+ */
+export function toAriaKeyShortcuts(shortcut: string): string {
+	const modifiers: string[] = [];
+	let rest = shortcut;
+
+	// Glyph forms, in the order ARIA expects them to be listed.
+	const glyphs: ReadonlyArray<[string, string]> = [
+		['⌃', 'Control'],
+		['⌥', 'Alt'],
+		['⇧', 'Shift'],
+		['⌘', 'Meta'],
+	];
+	for (const [glyph, name] of glyphs) {
+		if (rest.includes(glyph)) {
+			modifiers.push(name);
+			rest = rest.split(glyph).join('');
+		}
+	}
+
+	// Written forms, e.g. "Ctrl+Shift+O".
+	const words = rest
+		.split('+')
+		.map((part) => part.trim())
+		.filter(Boolean);
+	const keyParts: string[] = [];
+	for (const word of words) {
+		const lower = word.toLowerCase();
+		if (lower === 'ctrl' || lower === 'control') modifiers.push('Control');
+		else if (lower === 'alt' || lower === 'option') modifiers.push('Alt');
+		else if (lower === 'shift') modifiers.push('Shift');
+		else if (lower === 'cmd' || lower === 'command' || lower === 'meta') modifiers.push('Meta');
+		else keyParts.push(word);
+	}
+
+	// De-duplicate while preserving order, in case a shortcut mixed forms.
+	const ordered = ['Control', 'Alt', 'Shift', 'Meta'].filter((name) => modifiers.includes(name));
+	const key = keyParts.join('+');
+	return [...ordered, key].filter(Boolean).join('+');
+}
+
 export interface MenuItemProps {
 	/**
 	 * Menu item label text
@@ -78,9 +129,9 @@ export interface MenuItemProps {
 
 /**
  * Mac OS 9 style MenuItem component
- * 
+ *
  * Individual menu item for use within MenuBar or dropdown menus.
- * 
+ *
  * Features:
  * - Classic Mac OS 9 menu item styling
  * - Disabled state support
@@ -91,24 +142,24 @@ export interface MenuItemProps {
  * - Icon support
  * - Submenu indicator
  * - Full keyboard and mouse support
- * 
+ *
  * @example
  * ```tsx
  * // Basic menu item
  * <MenuItem label="Open..." onClick={() => console.log('Open')} />
- * 
+ *
  * // With keyboard shortcut
  * <MenuItem label="Save" shortcut="⌘S" onClick={() => console.log('Save')} />
- * 
+ *
  * // Disabled item
  * <MenuItem label="Undo" disabled />
- * 
+ *
  * // Checked item (toggle)
  * <MenuItem label="Show Grid" checked onClick={() => console.log('Toggle')} />
- * 
+ *
  * // With separator
  * <MenuItem label="Preferences..." separator onClick={() => console.log('Prefs')} />
- * 
+ *
  * // With submenu indicator
  * <MenuItem label="Recent Files" hasSubmenu />
  * ```
@@ -180,8 +231,7 @@ export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(
 				setIsSubmenuOpen(true);
 				// Defer focus until after the submenu renders.
 				queueMicrotask(() => {
-					const firstItem =
-						submenuRef.current?.querySelector<HTMLElement>('[role="menuitem"]');
+					const firstItem = submenuRef.current?.querySelector<HTMLElement>('[role="menuitem"]');
 					firstItem?.focus();
 				});
 			} else if (event.key === 'ArrowLeft' && isSubmenuOpen) {
@@ -212,6 +262,7 @@ export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(
 					aria-checked={checked ? 'true' : undefined}
 					aria-haspopup={effectiveHasSubmenu ? 'menu' : undefined}
 					aria-expanded={effectiveHasSubmenu ? isSubmenuOpen : undefined}
+					aria-keyshortcuts={shortcut ? toAriaKeyShortcuts(shortcut) : undefined}
 				>
 					{/* Checkmark area */}
 					<span className={styles.checkmark}>{checked && '✓'}</span>
@@ -223,7 +274,14 @@ export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(
 					<span className={styles.label}>{label}</span>
 
 					{/* Shortcut */}
-					{shortcut && <span className={styles.shortcut}>{shortcut}</span>}
+					{/* Hidden from AT: the glyphs read inconsistently, and
+					    aria-keyshortcuts above carries the same information in a
+					    form screen readers agree on (issue #37). */}
+					{shortcut && (
+						<span className={styles.shortcut} aria-hidden="true">
+							{shortcut}
+						</span>
+					)}
 
 					{/* Submenu indicator */}
 					{effectiveHasSubmenu && <span className={styles.submenuArrow}>▶</span>}

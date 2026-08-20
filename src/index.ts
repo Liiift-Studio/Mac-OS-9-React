@@ -7,7 +7,13 @@ import './styles/theme.css';
 
 // Export components
 export { Button, type ButtonProps } from './components/Button';
-export { Icon, IconLibrary, type IconProps, type IconLibraryProps, type IconName } from './components/Icon';
+export {
+	Icon,
+	IconLibrary,
+	type IconProps,
+	type IconLibraryProps,
+	type IconName,
+} from './components/Icon';
 export { IconButton, type IconButtonProps } from './components/IconButton';
 export { Checkbox, type CheckboxProps } from './components/Checkbox';
 export { Radio, RadioGroup, type RadioProps, type RadioGroupProps } from './components/Radio';
@@ -17,19 +23,29 @@ export { Tabs, TabPanel, type TabsProps, type TabPanelProps } from './components
 export { Window, type WindowProps, type WindowClasses } from './components/Window';
 export { Dialog, type DialogProps } from './components/Dialog';
 // export { TitleBar, type TitleBarProps } from './components/TitleBar'; // Hidden - needs visual refinement
-export { MenuBar, MenuItem, MenuDropdown, type MenuBarProps, type MenuItemProps, type Menu, type MenuDropdownProps } from './components/MenuBar';
+export {
+	MenuBar,
+	MenuItem,
+	MenuDropdown,
+	toAriaKeyShortcuts,
+	type MenuBarProps,
+	type MenuItemProps,
+	type Menu,
+	type MenuItemDescriptor,
+	type MenuDropdownProps,
+} from './components/MenuBar';
 export { Scrollbar, type ScrollbarProps } from './components/Scrollbar';
-export { 
-	ListView, 
-	type ListViewProps, 
-	type ListColumn, 
+export {
+	ListView,
+	type ListViewProps,
+	type ListColumn,
 	type ListItem,
 	type ListViewClasses,
 	type RowRenderState,
 	type RowDefaultProps,
 	type CellRenderState,
 	type HeaderCellRenderState,
-	type HeaderCellDefaultProps
+	type HeaderCellDefaultProps,
 } from './components/ListView';
 export { FolderList, type FolderListProps, type FolderListClasses } from './components/FolderList';
 

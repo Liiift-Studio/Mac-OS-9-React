@@ -1,132 +1,150 @@
-import React, { useState, useEffect, useRef } from 'react';
+// MenuDropdown component - Mac OS 9 style
+// Standalone dropdown sharing the MenuBar's styling
+//
+// Correctness notes (panel review #34, #35, #40):
+//  - forwardRef + displayName, matching every sibling component (#40)
+//  - Collision-aware placement: the menu flips above its trigger and shifts
+//    horizontally rather than being clipped at a viewport edge (#34)
+//  - The open menu is labelled by its trigger via aria-labelledby (#35)
+
+import React, { forwardRef, useCallback, useId, useRef, useState } from 'react';
+import { useOutsideClick } from '../../hooks/useOutsideClick';
+import { useMenuPosition } from '../../hooks/useMenuPosition';
 import styles from './MenuBar.module.css';
 
 export interface MenuDropdownProps {
-    /**
-     * Menu label (displayed in the menu bar/button)
-     */
-    label: React.ReactNode;
+	/**
+	 * Menu label (displayed in the menu bar/button)
+	 */
+	label: React.ReactNode;
 
-    /**
-     * Menu items (content of the dropdown)
-     */
-    items: React.ReactNode;
+	/**
+	 * Menu items (content of the dropdown)
+	 */
+	items: React.ReactNode;
 
-    /**
-     * Whether the menu is disabled
-     * @default false
-     */
-    disabled?: boolean;
+	/**
+	 * Whether the menu is disabled
+	 * @default false
+	 */
+	disabled?: boolean;
 
-    /**
-     * Custom class name for the menu container
-     */
-    className?: string;
+	/**
+	 * Custom class name for the menu container
+	 */
+	className?: string;
 
-    /**
-     * Custom class name for menu dropdown
-     */
-    dropdownClassName?: string;
+	/**
+	 * Custom class name for menu dropdown
+	 */
+	dropdownClassName?: string;
 
-    /**
-     * Alignment of the dropdown menu
-     * @default 'left'
-     */
-    align?: 'left' | 'right';
+	/**
+	 * Alignment of the dropdown menu
+	 * @default 'left'
+	 */
+	align?: 'left' | 'right';
 }
 
 /**
  * Mac OS 9 style MenuDropdown component
- * 
+ *
  * A standalone dropdown menu that shares the styling of the MenuBar.
  * Useful for placing menus in the status area (rightContent) or other parts of the app.
  */
-export const MenuDropdown: React.FC<MenuDropdownProps> = ({
-    label,
-    items,
-    disabled = false,
-    className = '',
-    dropdownClassName = '',
-    align = 'left',
-}) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const containerRef = useRef<HTMLDivElement>(null);
+export const MenuDropdown = forwardRef<HTMLDivElement, MenuDropdownProps>(
+	(
+		{ label, items, disabled = false, className = '', dropdownClassName = '', align = 'left' },
+		ref
+	) => {
+		const [isOpen, setIsOpen] = useState(false);
+		const containerRef = useRef<HTMLDivElement | null>(null);
+		const triggerRef = useRef<HTMLButtonElement | null>(null);
+		const menuRef = useRef<HTMLDivElement | null>(null);
+		const triggerId = useId();
 
-    // Handle click outside to close menu
-    useEffect(() => {
-        if (!isOpen) return;
+		const setContainerRef = useCallback(
+			(node: HTMLDivElement | null) => {
+				containerRef.current = node;
+				if (typeof ref === 'function') ref(node);
+				else if (ref) ref.current = node;
+			},
+			[ref]
+		);
 
-        const handleClickOutside = (event: MouseEvent) => {
-            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-                setIsOpen(false);
-            }
-        };
+		// Capture-phase click, so an item rendered in a portal still receives
+		// its own click before the menu closes (issue #36). Escape included.
+		useOutsideClick({
+			enabled: isOpen,
+			refs: [containerRef, menuRef],
+			onOutside: () => setIsOpen(false),
+		});
 
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen]);
+		// Keeps the menu on screen near a viewport edge (issue #34).
+		const { style: positionStyle } = useMenuPosition({
+			open: isOpen,
+			anchorRef: triggerRef,
+			menuRef,
+			align,
+		});
 
-    // Handle Escape key to close menu
-    useEffect(() => {
-        if (!isOpen) return;
+		const handleToggle = () => {
+			if (!disabled) setIsOpen((open) => !open);
+		};
 
-        const handleEscape = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') {
-                event.preventDefault();
-                setIsOpen(false);
-            }
-        };
+		const menuContainerClassNames = [styles.menuContainer, className].filter(Boolean).join(' ');
 
-        document.addEventListener('keydown', handleEscape);
-        return () => document.removeEventListener('keydown', handleEscape);
-    }, [isOpen]);
+		const menuButtonClassNames = [
+			styles.menuButton,
+			isOpen ? styles['menuButton--open'] : '',
+			disabled ? styles['menuButton--disabled'] : '',
+		]
+			.filter(Boolean)
+			.join(' ');
 
-    const handleToggle = () => {
-        if (!disabled) {
-            setIsOpen(!isOpen);
-        }
-    };
+		const dropdownClassNames = [
+			styles.dropdown,
+			align === 'right' ? styles['dropdown--right'] : '',
+			dropdownClassName,
+		]
+			.filter(Boolean)
+			.join(' ');
 
-    const menuContainerClassNames = [
-        styles.menuContainer,
-        className
-    ].filter(Boolean).join(' ');
+		return (
+			<div ref={setContainerRef} className={menuContainerClassNames}>
+				<button
+					ref={triggerRef}
+					id={triggerId}
+					type="button"
+					className={menuButtonClassNames}
+					onClick={handleToggle}
+					disabled={disabled}
+					aria-haspopup="menu"
+					aria-expanded={isOpen}
+					aria-disabled={disabled}
+				>
+					{/* A <span>, not an <h3>: headings here pollute the document
+					    outline and the screen-reader heading list (issue #33). */}
+					{typeof label === 'string' ? <span>{label}</span> : label}
+				</button>
 
-    const menuButtonClassNames = [
-        styles.menuButton,
-        isOpen ? styles['menuButton--open'] : '',
-        disabled ? styles['menuButton--disabled'] : '',
-    ].filter(Boolean).join(' ');
+				{isOpen && (
+					<div
+						ref={menuRef}
+						className={dropdownClassNames}
+						style={positionStyle}
+						role="menu"
+						aria-labelledby={triggerId}
+						onClick={() => setIsOpen(false)}
+					>
+						{items}
+					</div>
+				)}
+			</div>
+		);
+	}
+);
 
-    const dropdownClassNames = [
-        styles.dropdown,
-        align === 'right' ? styles['dropdown--right'] : '',
-        dropdownClassName
-    ].filter(Boolean).join(' ');
+MenuDropdown.displayName = 'MenuDropdown';
 
-    return (
-        <div ref={containerRef} className={menuContainerClassNames}>
-            <button
-                type="button"
-                className={menuButtonClassNames}
-                onClick={handleToggle}
-                disabled={disabled}
-                aria-haspopup="true"
-                aria-expanded={isOpen}
-                aria-disabled={disabled}
-            >
-                {typeof label === 'string' ? <h3>{label}</h3> : label}
-            </button>
-
-            {isOpen && (
-                <div
-                    className={dropdownClassNames}
-                    role="menu"
-                    onClick={() => setIsOpen(false)} // Close when an item is clicked
-                >
-                    {items}
-                </div>
-            )}
-        </div>
-    );
-};
+export default MenuDropdown;

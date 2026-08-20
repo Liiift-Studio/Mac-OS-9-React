@@ -13,12 +13,16 @@
 	
 	background-color: var(--color-gray-100); /* Light gray like Mac OS 9 */
 	border-bottom: var(--border-width-thin) solid var(--color-black);
-	background: linear-gradient(180deg,
-			#EEEEEE 0%,
-			#DDDDDD 5%,
-			#DDDDDD 90%,
-			#BBBBBB 95%,
-			#262626 100%);
+	/* Stops reference the palette rather than repeating its hex values, so a
+	 * future palette change can't leave this gradient stale (issue #105). */
+	background: linear-gradient(
+		180deg,
+		var(--color-gray-200) 0%,
+		var(--color-gray-300) 5%,
+		var(--color-gray-300) 90%,
+		var(--color-gray-500) 95%,
+		var(--color-gray-900) 100%
+	);
 	/* Layout */
 	width: 100%;
 	min-height: 24px;
