@@ -3,6 +3,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { Window } from './Window';
+import { WindowManagerProvider } from '../WindowManager';
 import { Button } from '../Button/Button';
 import { TextField } from '../TextField/TextField';
 import { Checkbox } from '../Checkbox/Checkbox';
@@ -18,7 +19,8 @@ const meta = {
 	argTypes: {
 		active: {
 			control: 'boolean',
-			description: 'Whether window is active/focused',
+			description:
+				'Whether window is active/focused. Defaults to false; inside a WindowManagerProvider it is derived from stack order.',
 		},
 		width: {
 			control: 'text',
@@ -47,6 +49,9 @@ type Story = StoryObj<typeof meta>;
  */
 export const Default: Story = {
 	args: {
+		// `active` now defaults to false, so a story showing a focused window
+		// has to say so explicitly.
+		active: true,
 		title: 'Untitled',
 		children: (
 			<div>
@@ -569,5 +574,51 @@ export const MultipleDraggableWindows: Story = {
 				</div>
 			</Window>
 		</div>
+	),
+};
+
+/**
+ * Multiple windows coordinated by a WindowManagerProvider.
+ *
+ * Click any window to raise it — the provider tracks stack order, assigns
+ * ascending z-indexes, and marks the topmost window active. Without the
+ * provider, Window neither assigns a z-index nor raises on click.
+ */
+export const WithWindowManager: Story = {
+	render: () => (
+		<WindowManagerProvider>
+			<div style={{ position: 'relative', height: 320, width: 520 }}>
+				<Window
+					title="Finder"
+					draggable
+					defaultPosition={{ x: 0, y: 0 }}
+					width={260}
+					height={160}
+					showControls={false}
+				>
+					<p>Click a window to bring it forward.</p>
+				</Window>
+				<Window
+					title="Notes"
+					draggable
+					defaultPosition={{ x: 80, y: 60 }}
+					width={260}
+					height={160}
+					showControls={false}
+				>
+					<p>Stack order and the active state follow your clicks.</p>
+				</Window>
+				<Window
+					title="Calculator"
+					draggable
+					defaultPosition={{ x: 160, y: 120 }}
+					width={260}
+					height={160}
+					showControls={false}
+				>
+					<p>Drag by the title bar, or focus it and use the arrow keys.</p>
+				</Window>
+			</div>
+		</WindowManagerProvider>
 	),
 };

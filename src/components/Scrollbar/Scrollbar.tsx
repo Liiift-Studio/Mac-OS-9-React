@@ -3,7 +3,8 @@
 
 'use client';
 
-import React, { forwardRef, useRef, useState, useEffect, useCallback } from 'react';
+import React, { forwardRef, useRef, useCallback } from 'react';
+import { usePointerGesture } from '../../hooks/usePointerGesture';
 import styles from './Scrollbar.module.css';
 
 export interface ScrollbarProps {
@@ -63,10 +64,10 @@ export interface ScrollbarProps {
 
 /**
  * Mac OS 9 style Scrollbar component
- * 
+ *
  * Classic scrollbar with arrow buttons and draggable thumb.
  * Can be used standalone or integrated with scrollable content.
- * 
+ *
  * @example
  * ```tsx
  * <Scrollbar
@@ -93,9 +94,6 @@ export const Scrollbar = forwardRef<HTMLDivElement, ScrollbarProps>(
 		ref
 	) => {
 		const trackRef = useRef<HTMLDivElement>(null);
-		const [isDragging, setIsDragging] = useState(false);
-		const [dragStartPos, setDragStartPos] = useState(0);
-		const [dragStartValue, setDragStartValue] = useState(0);
 
 		const isVertical = orientation === 'vertical';
 
@@ -128,8 +126,14 @@ export const Scrollbar = forwardRef<HTMLDivElement, ScrollbarProps>(
 			.join(' ');
 
 		// Handle arrow clicks
-		const handleDecrement = useCallback(() => commitValue(value - step), [commitValue, step, value]);
-		const handleIncrement = useCallback(() => commitValue(value + step), [commitValue, step, value]);
+		const handleDecrement = useCallback(
+			() => commitValue(value - step),
+			[commitValue, step, value]
+		);
+		const handleIncrement = useCallback(
+			() => commitValue(value + step),
+			[commitValue, step, value]
+		);
 
 		// WAI-ARIA scrollbar keyboard interaction.
 		// Arrow keys step by `step`, PageUp/PageDown step by `viewportRatio`,
@@ -176,9 +180,7 @@ export const Scrollbar = forwardRef<HTMLDivElement, ScrollbarProps>(
 				if (disabled || !onChange || !trackRef.current) return;
 
 				const rect = trackRef.current.getBoundingClientRect();
-				const clickPos = isVertical
-					? event.clientY - rect.top
-					: event.clientX - rect.left;
+				const clickPos = isVertical ? event.clientY - rect.top : event.clientX - rect.left;
 				const trackSize = isVertical ? rect.height : rect.width;
 
 				// Convert click position to scroll value (0-1)
@@ -189,54 +191,35 @@ export const Scrollbar = forwardRef<HTMLDivElement, ScrollbarProps>(
 			[disabled, onChange, isVertical]
 		);
 
-		// Pointer-down on the thumb starts a drag. Pointer Events instead
-		// of mouse events give us mouse/touch/pen support — previously the
-		// thumb was un-draggable on tablets and phones (issue #11).
-		const handleThumbPointerDown = useCallback(
-			(event: React.PointerEvent) => {
-				if (disabled) return;
-				if (event.button !== 0 || !event.isPrimary) return;
+		// Thumb drag, on the shared pointer-gesture primitive (issue #55).
+		// That brings rAF coalescing for free, so a high-refresh pointer can
+		// no longer fire an onChange per raw move event (issue #21), and the
+		// track is measured once at gesture start rather than every frame
+		// (issue #23).
+		const { isActive: isDragging, start: startThumbDrag } = usePointerGesture<{
+			pointerPos: number;
+			startValue: number;
+			trackSize: number;
+		}>({
+			onStart: (event) => {
+				if (disabled || !onChange || !trackRef.current) return null;
 				event.preventDefault();
 				event.stopPropagation();
-				setIsDragging(true);
-				setDragStartPos(isVertical ? event.clientY : event.clientX);
-				setDragStartValue(value);
+
+				const rect = trackRef.current.getBoundingClientRect();
+				return {
+					pointerPos: isVertical ? event.clientY : event.clientX,
+					startValue: value,
+					trackSize: isVertical ? rect.height : rect.width,
+				};
 			},
-			[disabled, isVertical, value]
-		);
-
-		// Handle drag move. Pointer events for touch/pen uniformity;
-		// pointercancel covers system interruptions on mobile.
-		useEffect(() => {
-			if (!isDragging || !onChange || !trackRef.current) return;
-
-			const handlePointerMove = (event: PointerEvent) => {
-				if (!event.isPrimary) return;
+			onMove: (event, start) => {
+				if (!onChange || start.trackSize <= 0) return;
 				const currentPos = isVertical ? event.clientY : event.clientX;
-				const delta = currentPos - dragStartPos;
-
-				const rect = trackRef.current!.getBoundingClientRect();
-				const trackSize = isVertical ? rect.height : rect.width;
-				const deltaRatio = delta / trackSize;
-
-				const newValue = Math.max(0, Math.min(1, dragStartValue + deltaRatio));
-				onChange(newValue);
-			};
-
-			const handlePointerEnd = () => {
-				setIsDragging(false);
-			};
-
-			document.addEventListener('pointermove', handlePointerMove);
-			document.addEventListener('pointerup', handlePointerEnd);
-			document.addEventListener('pointercancel', handlePointerEnd);
-
-			return () => {
-				document.removeEventListener('pointermove', handlePointerMove);
-				document.removeEventListener('pointerup', handlePointerEnd);
-				document.removeEventListener('pointercancel', handlePointerEnd);
-			};
-		}, [isDragging, dragStartPos, dragStartValue, onChange, isVertical]);
+				const deltaRatio = (currentPos - start.pointerPos) / start.trackSize;
+				onChange(Math.max(0, Math.min(1, start.startValue + deltaRatio)));
+			},
+		});
 
 		return (
 			<div ref={ref} className={classNames}>
@@ -272,7 +255,7 @@ export const Scrollbar = forwardRef<HTMLDivElement, ScrollbarProps>(
 							[isVertical ? 'top' : 'left']: `${thumbPos}%`,
 							touchAction: 'none',
 						}}
-						onPointerDown={handleThumbPointerDown}
+						onPointerDown={startThumbDrag}
 					/>
 				</div>
 

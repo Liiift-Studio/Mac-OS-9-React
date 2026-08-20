@@ -1,10 +1,95 @@
 // Window component - Mac OS 9 style
 // Classic window container with optional title bar
+//
+// Interaction notes (panel review #21-#27, #54, #55, #98):
+//  - Drag and resize run on the shared useDraggable / useResizable hooks, so
+//    the document-listener lifecycle lives in one place instead of being
+//    re-implemented per component (#55)
+//  - Pointer moves are coalesced into one requestAnimationFrame callback, so
+//    a high-refresh pointer can't drive more than one state update per
+//    frame (#21)
+//  - Geometry is measured once at gesture start and the gesture then works in
+//    pure pointer deltas: no per-frame layout reads (#23), and no dependence
+//    on offsetParent, which is wrong under transforms and null inside a
+//    position:fixed chain (#22)
+//  - A controlled `position` applies the moment it appears rather than only
+//    after the first manual drag (#26)
+//  - All eight edges and corners expose resize handles, and the cursor turns
+//    to not-allowed while pinned against a min/max limit (#27)
+//  - The title bar is a focusable toolbar: arrow keys move, Shift+arrow
+//    resizes, Alt selects a 1px step, and both announce politely (#25)
+//  - The pinstripe title texture is memoized so its 18 <rect> nodes don't
+//    reconcile on every drag frame (#54)
+//  - z-order and the active flag are coordinated by an optional
+//    WindowManagerProvider; `active` now defaults to false (#24, #98)
 
-import React, { forwardRef, useState, useRef, useEffect, useCallback } from 'react';
+import React, {
+	forwardRef,
+	memo,
+	useCallback,
+	useEffect,
+	useId,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import { mergeClasses } from '../../utils/classNames';
 import { WindowPosition } from '../../types';
+import { useDraggable } from '../../hooks/useDraggable';
+import { useResizable, type ResizeDirection, type ResizeRect } from '../../hooks/useResizable';
+import { clamp } from '../../hooks/gestureGeometry';
+import { useWindowManager } from '../WindowManager/WindowManager';
 import styles from './Window.module.css';
+
+/**
+ * The pinstripe texture that flanks the window title.
+ *
+ * Memoized because it is pure static decoration: nine <rect> nodes per side,
+ * eighteen in total, that React would otherwise reconcile on every drag frame
+ * as the window's position state changes (issue #54).
+ */
+const TitleBarTexture = memo(function TitleBarTexture(): React.JSX.Element {
+	return (
+		<svg
+			width="132"
+			height="13"
+			viewBox="0 0 132 13"
+			fill="none"
+			preserveAspectRatio="none"
+			xmlns="http://www.w3.org/2000/svg"
+			aria-hidden="true"
+			focusable="false"
+		>
+			<rect width="130.517" height="13" fill="#DDDDDD" />
+			<rect width="1" height="13" fill="#EEEEEE" />
+			<rect x="130" width="1" height="13" fill="#C5C5C5" />
+			<rect y="1" width="131.268" height="1" fill="#999999" />
+			<rect y="5" width="131.268" height="1" fill="#999999" />
+			<rect y="9" width="131.268" height="1" fill="#999999" />
+			<rect y="3" width="131.268" height="1" fill="#999999" />
+			<rect y="7" width="131.268" height="1" fill="#999999" />
+			<rect y="11" width="131.268" height="1" fill="#999999" />
+		</svg>
+	);
+});
+
+/** Every edge and corner a resizable window exposes (issue #27). */
+const RESIZE_DIRECTIONS: readonly ResizeDirection[] = [
+	'n',
+	's',
+	'e',
+	'w',
+	'ne',
+	'nw',
+	'se',
+	'sw',
+] as const;
+
+/** Pixels a single arrow-key press moves or resizes the window (issue #25). */
+const KEYBOARD_STEP = 8;
+
+/** Finer step when Alt is held, for precise placement. */
+const KEYBOARD_FINE_STEP = 1;
 
 /**
  * Classes for targeting Window sub-elements
@@ -42,8 +127,14 @@ export interface WindowProps {
 	titleBar?: React.ReactNode;
 
 	/**
-	 * Whether window is active/focused
-	 * @default true
+	 * Whether the window is active/focused.
+	 *
+	 * Inside a `WindowManagerProvider` this is derived from stack order and
+	 * only needs setting to override the manager. Outside one it defaults to
+	 * `false`, matching every other boolean flag in the library — a window
+	 * that should render focused must now say so explicitly.
+	 *
+	 * @default false (or manager-derived inside a WindowManagerProvider)
 	 */
 	active?: boolean;
 
@@ -171,20 +262,38 @@ export interface WindowProps {
 	 * @default 'parent'
 	 */
 	boundary?: 'parent' | 'none';
+
+	/**
+	 * Explicit stack order. Overrides the z-index a surrounding
+	 * `WindowManagerProvider` would otherwise assign.
+	 */
+	zIndex?: number;
+
+	/**
+	 * Callback when the window is raised to the front, either by a pointer
+	 * press or by keyboard focus.
+	 */
+	onFocus?: () => void;
+
+	/**
+	 * Which edges and corners expose a resize handle. Ignored unless
+	 * `resizable` is true.
+	 * @default all eight edges and corners
+	 */
+	resizeDirections?: readonly ResizeDirection[];
+
+	/**
+	 * Step in pixels for keyboard move/resize from the title bar.
+	 * @default 8
+	 */
+	keyboardStep?: number;
 }
 
 /**
- * Minimum number of pixels of the title bar that must remain inside the
- * parent rect when `boundary="parent"` is active. Tuned to match a single
- * close-button hitbox so the user always has somewhere to grab.
- */
-const DRAG_BOUNDARY_BUFFER = 24;
-
-/**
  * Mac OS 9 style Window component
- * 
+ *
  * Classic window container with title bar and content area.
- * 
+ *
  * Features:
  * - Classic Mac OS 9 window styling with beveled edges
  * - Optional title bar with window controls
@@ -192,42 +301,42 @@ const DRAG_BOUNDARY_BUFFER = 24;
  * - Composable with custom TitleBar component
  * - Flexible sizing
  * - Draggable windows (optional) - drag by title bar
- * 
+ *
  * @example
  * ```tsx
  * // Simple window with title
  * <Window title="My Window">
  *   <p>Window content goes here</p>
  * </Window>
- * 
+ *
  * // Window with custom title bar
  * <Window titleBar={<TitleBar title="Custom" />}>
  *   <p>Content</p>
  * </Window>
- * 
+ *
  * // Window with controls and callbacks
- * <Window 
+ * <Window
  *   title="Document"
  *   onClose={() => console.log('Close')}
  *   onMinimize={() => console.log('Minimize')}
  * >
  *   <p>Content</p>
  * </Window>
- * 
+ *
  * // Draggable window (uncontrolled)
  * <Window title="Draggable" draggable>
  *   <p>Drag me by the title bar!</p>
  * </Window>
- * 
+ *
  * // Draggable window with initial position
- * <Window 
+ * <Window
  *   title="Positioned"
  *   draggable
  *   defaultPosition={{ x: 100, y: 100 }}
  * >
  *   <p>Starts at a specific position</p>
  * </Window>
- * 
+ *
  * // Controlled draggable window
  * const [pos, setPos] = useState({ x: 0, y: 0 });
  * <Window
@@ -246,7 +355,7 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 			children,
 			title,
 			titleBar,
-			active = true,
+			active,
 			width = 'auto',
 			height = 'auto',
 			className = '',
@@ -268,280 +377,202 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 			position: controlledPosition,
 			onPositionChange,
 			boundary = 'parent',
+			zIndex,
+			onFocus,
+			resizeDirections = RESIZE_DIRECTIONS,
+			keyboardStep = KEYBOARD_STEP,
 		},
 		ref
 	) => {
-		// Ref to store the window element being dragged
-		// This avoids the need for DOM queries during mousemove
-		const dragWindowRef = useRef<HTMLElement | null>(null);
+		// Root element, needed by the gesture hooks to measure geometry and by
+		// the manager integration to raise on pointer press.
+		const windowRef = useRef<HTMLDivElement | null>(null);
+		const setWindowRef = useCallback(
+			(node: HTMLDivElement | null) => {
+				windowRef.current = node;
+				if (typeof ref === 'function') ref(node);
+				else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+			},
+			[ref]
+		);
 
-		// Drag state management
+		// --- Window manager integration (issue #24) ---------------------------
+		// Optional: outside a provider this is null and the window falls back
+		// entirely to its own props, preserving the previous behaviour.
+		const manager = useWindowManager();
+		const windowId = useId();
+
+		useEffect(() => {
+			if (!manager) return;
+			manager.register(windowId);
+			return () => manager.unregister(windowId);
+			// `manager` identity changes whenever the stack does; depending on
+			// it here would unregister/re-register on every raise.
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, [windowId]);
+
+		const raiseSelf = useCallback(() => {
+			manager?.raise(windowId);
+			onFocus?.();
+		}, [manager, windowId, onFocus]);
+
+		// Explicit prop wins; then manager stack order; then the `false`
+		// default that matches every other boolean flag (issue #98).
+		const resolvedActive = active ?? (manager ? manager.activeId === windowId : false);
+		const resolvedZIndex = zIndex ?? (manager ? manager.getZIndex(windowId) : undefined);
+
+		// --- Position state ---------------------------------------------------
+
 		const [internalPosition, setInternalPosition] = useState<WindowPosition | null>(
 			defaultPosition || null
 		);
-		const [isDragging, setIsDragging] = useState(false);
-		const [hasBeenDragged, setHasBeenDragged] = useState(
-			!!(defaultPosition || controlledPosition)
+
+		// A controlled `position` is honoured the moment it appears, not only
+		// after the user has dragged manually (issue #26).
+		const isPositioned = !!(controlledPosition || internalPosition);
+		const currentPosition = controlledPosition || internalPosition;
+
+		const commitPosition = useCallback(
+			(next: WindowPosition) => {
+				if (controlledPosition && onPositionChange) onPositionChange(next);
+				else setInternalPosition(next);
+			},
+			[controlledPosition, onPositionChange]
 		);
-		const dragStartRef = useRef<{ x: number; y: number } | null>(null);
 
-		// Resize state management. `hasBeenResized` flips to true on the first
-		// successful resize and stays true thereafter; from that point on
-		// `internalSize` is the canonical width/height so the user's resize
-		// persists after mouseup (issue #10).
-		const [internalSize, setInternalSize] = useState<{ width: number | string; height: number | string }>({
-			width,
-			height,
-		});
-		const [isResizing, setIsResizing] = useState(false);
+		// --- Size state -------------------------------------------------------
+		// `hasBeenResized` latches on first resize; from then on internalSize is
+		// canonical so the user's size survives pointerup (issue #10).
+		const [internalSize, setInternalSize] = useState<{
+			width: number | string;
+			height: number | string;
+		}>({ width, height });
 		const [hasBeenResized, setHasBeenResized] = useState(false);
-		const resizeStartRef = useRef<{ width: number; height: number; mouseX: number; mouseY: number } | null>(null);
 
-		// Latest-callback refs. Reading from a ref inside the document mousemove
-		// handler means we can leave callbacks out of the effect dependency
-		// arrays — otherwise the listeners would re-attach mid-drag every time
-		// the parent re-rendered (issue #9), causing dropped move events.
-		const latestRef = useRef({
-			controlledPosition,
-			onPositionChange,
-			onResize,
+		const currentWidth = hasBeenResized ? internalSize.width : width;
+		const currentHeight = hasBeenResized ? internalSize.height : height;
+
+		// --- Screen-reader announcements for keyboard move/resize (issue #25) --
+		const [announcement, setAnnouncement] = useState('');
+
+		// --- Drag -------------------------------------------------------------
+
+		const resolveWindowElement = useCallback(() => windowRef.current, []);
+
+		const { isDragging, handleProps: dragHandleProps } = useDraggable({
+			enabled: draggable,
+			resolveTarget: resolveWindowElement,
+			boundary,
+			onDrag: commitPosition,
+			onDragStart: raiseSelf,
+		});
+
+		// --- Resize -----------------------------------------------------------
+
+		const handleResizeFrame = useCallback(
+			(rect: ResizeRect) => {
+				setInternalSize({ width: rect.width, height: rect.height });
+				setHasBeenResized(true);
+				onResize?.({ width: rect.width, height: rect.height });
+
+				// A north/west handle grows the box toward the pointer, so the
+				// origin shifts to keep the opposite edge anchored.
+				if (rect.dx !== 0 || rect.dy !== 0) {
+					const base = currentPosition ?? { x: 0, y: 0 };
+					commitPosition({ x: base.x + rect.dx, y: base.y + rect.dy });
+				}
+			},
+			[onResize, commitPosition, currentPosition]
+		);
+
+		const { isResizing, isClamped, getHandleProps } = useResizable({
+			enabled: resizable,
+			resolveTarget: resolveWindowElement,
 			minWidth,
 			minHeight,
 			maxWidth,
 			maxHeight,
-			boundary,
+			onResize: handleResizeFrame,
+			onResizeStart: raiseSelf,
 		});
-		useEffect(() => {
-			latestRef.current = {
-				controlledPosition,
-				onPositionChange,
-				onResize,
+
+		// --- Keyboard move / resize (issue #25, WCAG 2.1.1) -------------------
+		// Arrow keys move the window; Shift+Arrow resizes it; Alt selects a
+		// 1px fine step. Both are announced politely so screen-reader users
+		// get feedback that something moved.
+		const handleTitleBarKeyDown = useCallback(
+			(event: React.KeyboardEvent<HTMLDivElement>) => {
+				const deltas: Record<string, [number, number]> = {
+					ArrowLeft: [-1, 0],
+					ArrowRight: [1, 0],
+					ArrowUp: [0, -1],
+					ArrowDown: [0, 1],
+				};
+				const delta = deltas[event.key];
+				if (!delta) return;
+
+				const resizing = event.shiftKey;
+				if (resizing && !resizable) return;
+				if (!resizing && !draggable) return;
+
+				event.preventDefault();
+				const step = event.altKey ? KEYBOARD_FINE_STEP : keyboardStep;
+				const [dx, dy] = delta;
+
+				if (resizing) {
+					const element = windowRef.current;
+					if (!element) return;
+					const baseWidth = typeof currentWidth === 'number' ? currentWidth : element.offsetWidth;
+					const baseHeight =
+						typeof currentHeight === 'number' ? currentHeight : element.offsetHeight;
+
+					const nextWidth = clamp(
+						baseWidth + dx * step,
+						minWidth,
+						maxWidth ?? Number.POSITIVE_INFINITY
+					);
+					const nextHeight = clamp(
+						baseHeight + dy * step,
+						minHeight,
+						maxHeight ?? Number.POSITIVE_INFINITY
+					);
+
+					setInternalSize({ width: nextWidth, height: nextHeight });
+					setHasBeenResized(true);
+					onResize?.({ width: nextWidth, height: nextHeight });
+					setAnnouncement(`Width ${Math.round(nextWidth)}, height ${Math.round(nextHeight)}`);
+					return;
+				}
+
+				const base = currentPosition ?? {
+					x: windowRef.current?.offsetLeft ?? 0,
+					y: windowRef.current?.offsetTop ?? 0,
+				};
+				const next = { x: base.x + dx * step, y: base.y + dy * step };
+				commitPosition(next);
+				setAnnouncement(`Position ${Math.round(next.x)}, ${Math.round(next.y)}`);
+			},
+			[
+				draggable,
+				resizable,
+				keyboardStep,
+				currentWidth,
+				currentHeight,
 				minWidth,
 				minHeight,
 				maxWidth,
 				maxHeight,
-				boundary,
-			};
-		});
-
-		// Use controlled position if provided, otherwise use internal state
-		const currentPosition = controlledPosition || internalPosition;
-
-		// Once the user has resized, internalSize wins so the dimensions
-		// persist after mouseup. Before that we honor the width/height props.
-		const currentWidth = hasBeenResized ? internalSize.width : width;
-		const currentHeight = hasBeenResized ? internalSize.height : height;
-
-		// Pointer-down on the title bar starts a drag. Pointer Events (instead
-		// of mouse events) unify mouse, touch, and pen input so the component
-		// works on tablets and phones — previously it was mouse-only.
-		const handleTitleBarPointerDown = useCallback(
-			(event: React.PointerEvent<HTMLDivElement>) => {
-				if (!draggable) return;
-
-				// Only react to primary button / primary contact. Ignores
-				// right-click and secondary touches that browsers report
-				// alongside the primary one.
-				if (event.button !== 0 || !event.isPrimary) return;
-
-				// Don't start drag if clicking on buttons
-				if ((event.target as HTMLElement).closest('button')) {
-					return;
-				}
-
-				event.preventDefault();
-
-				const windowElement = (event.currentTarget as HTMLElement).closest(
-					`.${styles.window}`
-				) as HTMLElement;
-
-				if (!windowElement) return;
-
-				// Store the window element reference for use during drag
-				dragWindowRef.current = windowElement;
-
-				const rect = windowElement.getBoundingClientRect();
-
-				// Get the parent container to calculate position relative to it
-				const parent = windowElement.offsetParent as HTMLElement;
-				const parentRect = parent ? parent.getBoundingClientRect() : { left: 0, top: 0 };
-
-				// Store drag start info - offset from pointer to window position within parent
-				// This accounts for the parent's coordinate system
-				dragStartRef.current = {
-					x: event.clientX - (rect.left - parentRect.left),
-					y: event.clientY - (rect.top - parentRect.top),
-				};
-
-				setIsDragging(true);
-			},
-			[draggable]
+				onResize,
+				currentPosition,
+				commitPosition,
+			]
 		);
-
-		// Pointer-down on the resize handle starts a resize gesture.
-		const handleResizePointerDown = useCallback(
-			(event: React.PointerEvent<HTMLDivElement>) => {
-				if (!resizable) return;
-				if (event.button !== 0 || !event.isPrimary) return;
-
-				event.preventDefault();
-				event.stopPropagation();
-
-				const windowElement = (event.currentTarget as HTMLElement).closest(
-					`.${styles.window}`
-				) as HTMLElement;
-
-				if (!windowElement) return;
-
-				const rect = windowElement.getBoundingClientRect();
-
-				// Store resize start info
-				resizeStartRef.current = {
-					width: rect.width,
-					height: rect.height,
-					mouseX: event.clientX,
-					mouseY: event.clientY,
-				};
-
-				setIsResizing(true);
-			},
-			[resizable]
-		);
-
-		// Resize listeners. Depends only on `isResizing` so they attach once
-		// when the user grabs the handle and detach on pointerup, regardless
-		// of how often the parent re-renders during the gesture (issue #9).
-		// Pointer events instead of mouse events give us mouse/touch/pen
-		// uniformity (issue #11); pointercancel covers system interruptions.
-		useEffect(() => {
-			if (!isResizing) return;
-
-			const handlePointerMove = (event: PointerEvent) => {
-				if (!event.isPrimary) return;
-				event.preventDefault();
-				if (!resizeStartRef.current) return;
-
-				const {
-					minWidth: liveMinWidth,
-					minHeight: liveMinHeight,
-					maxWidth: liveMaxWidth,
-					maxHeight: liveMaxHeight,
-					onResize: liveOnResize,
-				} = latestRef.current;
-
-				const deltaX = event.clientX - resizeStartRef.current.mouseX;
-				const deltaY = event.clientY - resizeStartRef.current.mouseY;
-
-				let newWidth = resizeStartRef.current.width + deltaX;
-				let newHeight = resizeStartRef.current.height + deltaY;
-
-				if (newWidth < liveMinWidth) newWidth = liveMinWidth;
-				if (newHeight < liveMinHeight) newHeight = liveMinHeight;
-				if (liveMaxWidth && newWidth > liveMaxWidth) newWidth = liveMaxWidth;
-				if (liveMaxHeight && newHeight > liveMaxHeight) newHeight = liveMaxHeight;
-
-				setInternalSize({ width: newWidth, height: newHeight });
-				setHasBeenResized(true);
-				liveOnResize?.({ width: newWidth, height: newHeight });
-			};
-
-			const handlePointerEnd = () => {
-				setIsResizing(false);
-				resizeStartRef.current = null;
-			};
-
-			document.addEventListener('pointermove', handlePointerMove);
-			document.addEventListener('pointerup', handlePointerEnd);
-			document.addEventListener('pointercancel', handlePointerEnd);
-
-			return () => {
-				document.removeEventListener('pointermove', handlePointerMove);
-				document.removeEventListener('pointerup', handlePointerEnd);
-				document.removeEventListener('pointercancel', handlePointerEnd);
-			};
-		}, [isResizing]);
-
-		// Drag listeners. Same effect-deps strategy as resize — attach once
-		// on drag start, detach on drag end (issue #9). The boundary clamp
-		// (issue #12) prevents the window from being lost off-screen.
-		// Pointer events for touch / pen support (issue #11).
-		useEffect(() => {
-			if (!isDragging) return;
-
-			const handlePointerMove = (event: PointerEvent) => {
-				if (!event.isPrimary) return;
-				event.preventDefault();
-				if (!dragStartRef.current) return;
-
-				const windowElement = dragWindowRef.current;
-				if (!windowElement) return;
-
-				const parent = windowElement.offsetParent as HTMLElement | null;
-				const parentRect = parent
-					? parent.getBoundingClientRect()
-					: { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
-
-				let newX = event.clientX - parentRect.left - dragStartRef.current.x;
-				let newY = event.clientY - parentRect.top - dragStartRef.current.y;
-
-				// Clamp so at least DRAG_BOUNDARY_BUFFER px of the window stays
-				// inside the parent. This keeps the title bar reachable.
-				if (latestRef.current.boundary === 'parent') {
-					const windowWidth = windowElement.offsetWidth;
-					const windowHeight = windowElement.offsetHeight;
-					const parentWidth = parent
-						? parent.clientWidth
-						: typeof window !== 'undefined'
-							? window.innerWidth
-							: Number.POSITIVE_INFINITY;
-					const parentHeight = parent
-						? parent.clientHeight
-						: typeof window !== 'undefined'
-							? window.innerHeight
-							: Number.POSITIVE_INFINITY;
-					const minX = DRAG_BOUNDARY_BUFFER - windowWidth;
-					const maxX = parentWidth - DRAG_BOUNDARY_BUFFER;
-					const minY = 0;
-					const maxY = parentHeight - DRAG_BOUNDARY_BUFFER;
-					newX = Math.max(minX, Math.min(maxX, newX));
-					newY = Math.max(minY, Math.min(maxY, newY));
-				}
-
-				const newPosition: WindowPosition = { x: newX, y: newY };
-
-				const { controlledPosition: liveControlled, onPositionChange: liveOnChange } =
-					latestRef.current;
-				if (liveControlled && liveOnChange) {
-					liveOnChange(newPosition);
-				} else {
-					setInternalPosition(newPosition);
-				}
-
-				if (!hasBeenDragged) setHasBeenDragged(true);
-			};
-
-			const handlePointerEnd = () => {
-				setIsDragging(false);
-				dragStartRef.current = null;
-				dragWindowRef.current = null;
-			};
-
-			document.addEventListener('pointermove', handlePointerMove);
-			document.addEventListener('pointerup', handlePointerEnd);
-			document.addEventListener('pointercancel', handlePointerEnd);
-
-			return () => {
-				document.removeEventListener('pointermove', handlePointerMove);
-				document.removeEventListener('pointerup', handlePointerEnd);
-				document.removeEventListener('pointercancel', handlePointerEnd);
-			};
-		}, [isDragging, hasBeenDragged]);
 
 		// Class names
 		const windowClassNames = mergeClasses(
 			styles.window,
-			active ? styles['window--active'] : styles['window--inactive'],
-			draggable && hasBeenDragged && styles['window--draggable'],
+			resolvedActive ? styles['window--active'] : styles['window--inactive'],
+			draggable && isPositioned && styles['window--draggable'],
 			className,
 			classes?.root
 		);
@@ -557,22 +588,27 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 
 		// Window style
 		const windowStyle: React.CSSProperties = {};
-		
+
 		// Apply width - use currentWidth during resize, otherwise use prop
 		if (currentWidth !== 'auto') {
 			windowStyle.width = typeof currentWidth === 'number' ? `${currentWidth}px` : currentWidth;
 		}
-		
+
 		// Apply height - use currentHeight during resize, otherwise use prop
 		if (currentHeight !== 'auto') {
 			windowStyle.height = typeof currentHeight === 'number' ? `${currentHeight}px` : currentHeight;
 		}
 
-		// Apply position if draggable and has been dragged
-		if (draggable && hasBeenDragged && currentPosition) {
+		// Apply position as soon as one exists, whether it came from
+		// defaultPosition, a controlled `position`, or a drag (issue #26).
+		if (draggable && currentPosition) {
 			windowStyle.position = 'absolute';
 			windowStyle.left = `${currentPosition.x}px`;
 			windowStyle.top = `${currentPosition.y}px`;
+		}
+
+		if (resolvedZIndex !== undefined) {
+			windowStyle.zIndex = resolvedZIndex;
 		}
 
 		// Render title bar if title provided and no custom titleBar
@@ -586,21 +622,33 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 					<div
 						className={titleBarClassNames}
 						data-numControls={[onClose, onMinimize, onMaximize].filter(Boolean).length}
-						onPointerDown={handleTitleBarPointerDown}
-						style={draggable ? { touchAction: 'none' } : undefined}
+						{...dragHandleProps}
+						onKeyDown={handleTitleBarKeyDown}
+						// The title bar becomes a real tab stop when it can be
+						// moved or resized, so keyboard users can reach the
+						// arrow-key affordance at all (issue #25).
+						tabIndex={draggable || resizable ? 0 : undefined}
+						role={draggable || resizable ? 'toolbar' : undefined}
+						aria-label={
+							draggable || resizable
+								? `${title} window controls. Arrow keys move${
+										resizable ? ', Shift plus arrow keys resize' : ''
+									}.`
+								: undefined
+						}
 					>
 						{showControls && (
 							<div className={mergeClasses(styles.controls, classes?.controls)}>
 								{onClose && (
-								<button
-									type="button"
-									className={mergeClasses(styles.controlButton, classes?.controlButton)}
-									onClick={onClose}
-									aria-label="Close"
-									title="Close"
-								>
-									<div className={styles.closeBox} />
-								</button>
+									<button
+										type="button"
+										className={mergeClasses(styles.controlButton, classes?.controlButton)}
+										onClick={onClose}
+										aria-label="Close"
+										title="Close"
+									>
+										<div className={styles.closeBox} />
+									</button>
 								)}
 								{onMinimize && (
 									<button
@@ -627,31 +675,12 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 							</div>
 						)}
 						<div className={styles.titleCenter}>
-						<svg width="132" height="13" viewBox="0 0 132 13" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-							<rect width="130.517" height="13" fill="#DDDDDD"/>
-							<rect width="1" height="13" fill="#EEEEEE"/>
-							<rect x="130" width="1" height="13" fill="#C5C5C5"/>
-							<rect y="1" width="131.268" height="1" fill="#999999"/>
-							<rect y="5" width="131.268" height="1" fill="#999999"/>
-							<rect y="9" width="131.268" height="1" fill="#999999"/>
-							<rect y="3" width="131.268" height="1" fill="#999999"/>
-							<rect y="7" width="131.268" height="1" fill="#999999"/>
-							<rect y="11" width="131.268" height="1" fill="#999999"/>
-						</svg>
-						<div className={mergeClasses(styles.titleText, classes?.titleText, 'bold')}>{title}</div>
-							<svg width="132" height="13" viewBox="0 0 132 13" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-								<rect width="130.517" height="13" fill="#DDDDDD"/>
-								<rect width="1" height="13" fill="#EEEEEE"/>
-								<rect x="130" width="1" height="13" fill="#C5C5C5"/>
-								<rect y="1" width="131.268" height="1" fill="#999999"/>
-								<rect y="5" width="131.268" height="1" fill="#999999"/>
-								<rect y="9" width="131.268" height="1" fill="#999999"/>
-								<rect y="3" width="131.268" height="1" fill="#999999"/>
-								<rect y="7" width="131.268" height="1" fill="#999999"/>
-								<rect y="11" width="131.268" height="1" fill="#999999"/>
-							</svg>
+							<TitleBarTexture />
+							<div className={mergeClasses(styles.titleText, classes?.titleText, 'bold')}>
+								{title}
+							</div>
+							<TitleBarTexture />
 						</div>
-
 					</div>
 				);
 			}
@@ -660,22 +689,37 @@ export const Window = forwardRef<HTMLDivElement, WindowProps>(
 		};
 
 		return (
-			<div 
-				ref={ref} 
-				className={windowClassNames} 
+			<div
+				ref={setWindowRef}
+				className={windowClassNames}
 				style={windowStyle}
 				onMouseEnter={onMouseEnter}
+				// Raise on press so a partially obscured window comes forward,
+				// and on focus so keyboard traversal does the same (issue #24).
+				onPointerDownCapture={raiseSelf}
+				onFocusCapture={raiseSelf}
 			>
 				{renderTitleBar()}
 				<div className={contentClassNames}>{children}</div>
-				{resizable && (
-					<div
-						className={styles.resizeHandle}
-						onPointerDown={handleResizePointerDown}
-						style={{ touchAction: 'none' }}
-						aria-hidden="true"
-					/>
-				)}
+
+				{/* Announces keyboard-driven moves and resizes (issue #25). */}
+				<div className={styles.visuallyHidden} role="status" aria-live="polite">
+					{announcement}
+				</div>
+
+				{resizable &&
+					resizeDirections.map((direction) => (
+						<div
+							key={direction}
+							{...getHandleProps(direction)}
+							className={mergeClasses(
+								styles.resizeHandle,
+								styles[`resizeHandle--${direction}`],
+								isClamped && styles['resizeHandle--clamped']
+							)}
+							aria-hidden="true"
+						/>
+					))}
 			</div>
 		);
 	}
