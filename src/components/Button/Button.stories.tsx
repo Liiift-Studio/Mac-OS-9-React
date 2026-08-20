@@ -138,11 +138,13 @@ export const AllSizes: Story = {
 // ========================================
 
 export const AsLink: Story = {
+	// No cast needed: the discriminated union accepts the anchor shape
+	// directly once `as: 'a'` is a literal (issue #115).
 	args: {
-		as: 'a',
+		as: 'a' as const,
 		href: '/dashboard',
 		children: 'Go to Dashboard',
-	} as any,
+	},
 	parameters: {
 		docs: {
 			description: {

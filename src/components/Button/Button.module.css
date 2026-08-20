@@ -96,6 +96,14 @@
 	font-weight: var(--font-weight-bold);
 }
 
+.button--secondary {
+	/* De-emphasised action: same bevel, lighter fill and normal weight so it
+	 * reads as subordinate to `primary` without losing affordance. Added when
+	 * the shared Variant token set was unified (issue #43). */
+	background-color: var(--color-gray-200);
+	font-weight: var(--font-weight-normal, normal);
+}
+
 .button--danger {
 	/* Error state styling */
 	color: var(--color-error);

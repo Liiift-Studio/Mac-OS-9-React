@@ -1,24 +1,34 @@
 // IconButton component - Mac OS 9 style button with icon
-// Button variant that includes an icon, with optional label
+//
+// A thin preset over Button rather than a parallel implementation.
+//
+// IconButton and Button were wholly independent: both defined variant, size
+// and disabled, both had their own CSS module, and Button already supported
+// iconOnly / leftIcon / rightIcon. The only thing IconButton actually added
+// was `labelPosition`, including the vertical placements Button's inline
+// icon slots can't express (issue #88). So that is all this adds now — every
+// other prop, and all the behaviour, comes from Button.
 
-'use client';
-
-import React, { forwardRef, ButtonHTMLAttributes } from 'react';
+import React, { forwardRef } from 'react';
+import { Button } from '../Button/Button';
+import { mergeClasses } from '../../utils/classNames';
+import type { Size, Variant } from '../../types';
 import styles from './IconButton.module.css';
 
-export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-	/**
-	 * Icon element to display
-	 */
+export interface IconButtonProps extends Omit<
+	React.ButtonHTMLAttributes<HTMLButtonElement>,
+	// `children` is composed from icon + label here; the aria props and
+	// the form-method narrowing are re-declared by Button itself.
+	'children' | 'aria-label' | 'aria-describedby' | 'formMethod'
+> {
+	/** Icon to display */
 	icon: React.ReactNode;
 
-	/**
-	 * Optional text label to display alongside icon
-	 */
+	/** Optional text label to display alongside the icon */
 	label?: string;
 
 	/**
-	 * Label position relative to icon
+	 * Label position relative to the icon
 	 * @default 'right'
 	 */
 	labelPosition?: 'left' | 'right' | 'top' | 'bottom';
@@ -27,50 +37,42 @@ export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>
 	 * Button variant
 	 * @default 'default'
 	 */
-	variant?: 'default' | 'primary' | 'danger';
+	variant?: Variant;
 
 	/**
 	 * Button size
 	 * @default 'md'
 	 */
-	size?: 'sm' | 'md' | 'lg';
+	size?: Size;
 
-	/**
-	 * Whether button is disabled
-	 * @default false
-	 */
+	/** Whether the button is disabled */
 	disabled?: boolean;
 
 	/**
-	 * Additional CSS class names
+	 * Accessible name.
+	 *
+	 * Required when there is no `label`, since an icon alone gives assistive
+	 * technology nothing to announce.
 	 */
+	'aria-label'?: string;
+
+	/** ID of element that describes this button */
+	'aria-describedby'?: string;
+
+	/** Additional CSS class names */
 	className?: string;
 }
 
 /**
- * IconButton component for Mac OS 9 UI
- * 
- * Button with an icon, optionally with a text label.
- * Supports all button variants and sizes.
- * 
+ * Mac OS 9 style IconButton.
+ *
+ * Button with an icon and an optional label that can sit on any side.
+ *
  * @example
  * ```tsx
- * // Icon-only button
- * <IconButton icon={<SaveIcon />} />
- * 
- * // Icon with label
- * <IconButton 
- *   icon={<FolderIcon />} 
- *   label="New Folder"
- *   variant="primary"
- * />
- * 
- * // Icon with label on different sides
- * <IconButton 
- *   icon={<SearchIcon />} 
- *   label="Search"
- *   labelPosition="right"
- * />
+ * <IconButton icon={<SaveIcon />} aria-label="Save" />
+ * <IconButton icon={<FolderIcon />} label="New Folder" />
+ * <IconButton icon={<SearchIcon />} label="Search" labelPosition="bottom" />
  * ```
  */
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
@@ -83,39 +85,40 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
 			size = 'md',
 			disabled = false,
 			className = '',
-			...props
+			'aria-label': ariaLabel,
+			'aria-describedby': ariaDescribedBy,
+			...rest
 		},
 		ref
 	) => {
-		// Build class names
-		const classNames = [
+		// Vertical stacking is the one layout Button's inline icon slots
+		// can't express, so it stays here as a modifier class.
+		const classNames = mergeClasses(
 			styles.iconButton,
-			styles[`iconButton--${variant}`],
 			styles[`iconButton--${size}`],
+			styles[`iconButton--${variant}`],
+			styles[`iconButton--label-${labelPosition}`],
 			label && styles['iconButton--with-label'],
-			label && styles[`iconButton--label-${labelPosition}`],
-			disabled && styles['iconButton--disabled'],
-			className,
-		]
-			.filter(Boolean)
-			.join(' ');
+			className
+		);
 
 		return (
-			<button
+			<Button
+				{...rest}
 				ref={ref}
-				type="button"
-				className={classNames}
+				variant={variant}
+				size={size}
 				disabled={disabled}
-				{...props}
+				className={classNames}
+				iconOnly={!label}
+				aria-label={ariaLabel ?? label}
+				aria-describedby={ariaDescribedBy}
 			>
-		{label && (labelPosition === 'left' || labelPosition === 'top') && (
-			<span className={styles.label}>{label}</span>
-		)}
-		<span className={styles.icon}>{icon}</span>
-		{label && (labelPosition === 'right' || labelPosition === 'bottom') && (
-			<span className={styles.label}>{label}</span>
-		)}
-			</button>
+				<span className={styles.icon} aria-hidden="true">
+					{icon}
+				</span>
+				{label && <span className={styles.label}>{label}</span>}
+			</Button>
 		);
 	}
 );

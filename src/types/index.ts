@@ -6,7 +6,6 @@
  */
 export interface ComponentClasses {
 	root?: string;
-	[key: string]: string | undefined;
 }
 
 /**
@@ -42,14 +41,23 @@ export interface RenderState {
 }
 
 /**
- * Common variant types for Mac OS 9 components
+ * Common variant types for Mac OS 9 components.
+ *
+ * The shared type previously listed `default | primary | secondary` while
+ * every component actually implemented `default | primary | danger`, so it
+ * described no component in the library (issue #43). It is now the union of
+ * all four, and every component accepts all four.
  */
-export type Variant = 'default' | 'primary' | 'secondary';
+export type Variant = 'default' | 'primary' | 'secondary' | 'danger';
 
 /**
- * Common size types
+ * Common size types.
+ *
+ * Was `small | medium | large` while every component used `sm | md | lg`,
+ * leaving the shared type unused and misleading (issue #42). Aligned on the
+ * abbreviated form, which is what the components already shipped.
  */
-export type Size = 'small' | 'medium' | 'large';
+export type Size = 'sm' | 'md' | 'lg';
 
 /**
  * Common state types
@@ -69,6 +77,39 @@ export interface WindowPosition {
  */
 export type ButtonRef = HTMLButtonElement;
 export type InputRef = HTMLInputElement;
-export type SelectRef = HTMLSelectElement;
+export type SelectRef = HTMLButtonElement;
 export type TextAreaRef = HTMLTextAreaElement;
 export type DivRef = HTMLDivElement;
+
+/**
+ * Standard ARIA props every interactive component accepts.
+ *
+ * Components previously exposed camelCase `ariaLabel` / `ariaDescribedBy` /
+ * `ariaPressed`, which broke `eslint-plugin-jsx-a11y`, testing-library
+ * queries and general ecosystem expectations (issue #41). The hyphenated
+ * React/HTML idiom is canonical now.
+ */
+export interface AriaProps {
+	'aria-label'?: string;
+	'aria-labelledby'?: string;
+	'aria-describedby'?: string;
+	'aria-pressed'?: boolean;
+	'aria-disabled'?: boolean;
+	'aria-busy'?: boolean;
+}
+
+/**
+ * Deprecated camelCase ARIA aliases, kept for one major version so 0.x code
+ * keeps compiling. Each logs a development-only warning when used and is
+ * ignored if the hyphenated form is also supplied.
+ *
+ * @deprecated Use the hyphenated `aria-*` props instead. Removed in 2.0.
+ */
+export interface LegacyAriaProps {
+	/** @deprecated Use `aria-label`. */
+	ariaLabel?: string;
+	/** @deprecated Use `aria-describedby`. */
+	ariaDescribedBy?: string;
+	/** @deprecated Use `aria-pressed`. */
+	ariaPressed?: boolean;
+}

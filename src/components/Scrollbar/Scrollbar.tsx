@@ -4,6 +4,7 @@
 'use client';
 
 import React, { forwardRef, useRef, useState, useEffect, useCallback } from 'react';
+import { warnMissingProp } from '../../utils/deprecation';
 import styles from './Scrollbar.module.css';
 
 export interface ScrollbarProps {
@@ -22,6 +23,15 @@ export interface ScrollbarProps {
 	 * Viewport size relative to content size (0-1)
 	 * Used to calculate thumb size AND the page-step size for
 	 * PageUp/PageDown keyboard navigation.
+	 */
+	/**
+	 * Fraction of the scrollable content currently visible, 0–1. Drives the
+	 * thumb's size.
+	 *
+	 * Defaulted to 0.2 until 1.0, which meant a consumer who forgot to pass a
+	 * real value got a plausibly-sized but wrong thumb with no error and no
+	 * warning (issue #122). It is still optional so the control degrades
+	 * rather than crashing, but omitting it now warns in development.
 	 */
 	viewportRatio?: number;
 
@@ -63,10 +73,10 @@ export interface ScrollbarProps {
 
 /**
  * Mac OS 9 style Scrollbar component
- * 
+ *
  * Classic scrollbar with arrow buttons and draggable thumb.
  * Can be used standalone or integrated with scrollable content.
- * 
+ *
  * @example
  * ```tsx
  * <Scrollbar
@@ -82,7 +92,7 @@ export const Scrollbar = forwardRef<HTMLDivElement, ScrollbarProps>(
 		{
 			orientation = 'vertical',
 			value = 0,
-			viewportRatio = 0.2,
+			viewportRatio,
 			onChange,
 			className = '',
 			disabled = false,
@@ -111,7 +121,18 @@ export const Scrollbar = forwardRef<HTMLDivElement, ScrollbarProps>(
 		);
 
 		// Calculate thumb size based on viewport ratio
-		const thumbSize = Math.max(viewportRatio * 100, 10); // Minimum 10% size
+		// Omitting viewportRatio is a bug in the caller, not a supported mode:
+		// warn, then fall back so the control still renders (issue #122).
+		if (viewportRatio === undefined) {
+			warnMissingProp(
+				'Scrollbar',
+				'`viewportRatio` was not provided, so the thumb size is a guess. ' +
+					'Pass the fraction of content currently visible (0-1).'
+			);
+		}
+		const effectiveViewportRatio = viewportRatio ?? 0.2;
+
+		const thumbSize = Math.max(effectiveViewportRatio * 100, 10); // Minimum 10% size
 
 		// Calculate thumb position
 		const maxThumbPos = 100 - thumbSize;
@@ -128,8 +149,14 @@ export const Scrollbar = forwardRef<HTMLDivElement, ScrollbarProps>(
 			.join(' ');
 
 		// Handle arrow clicks
-		const handleDecrement = useCallback(() => commitValue(value - step), [commitValue, step, value]);
-		const handleIncrement = useCallback(() => commitValue(value + step), [commitValue, step, value]);
+		const handleDecrement = useCallback(
+			() => commitValue(value - step),
+			[commitValue, step, value]
+		);
+		const handleIncrement = useCallback(
+			() => commitValue(value + step),
+			[commitValue, step, value]
+		);
 
 		// WAI-ARIA scrollbar keyboard interaction.
 		// Arrow keys step by `step`, PageUp/PageDown step by `viewportRatio`,
@@ -151,11 +178,11 @@ export const Scrollbar = forwardRef<HTMLDivElement, ScrollbarProps>(
 						break;
 					case 'PageUp':
 						event.preventDefault();
-						commitValue(value - viewportRatio);
+						commitValue(value - effectiveViewportRatio);
 						break;
 					case 'PageDown':
 						event.preventDefault();
-						commitValue(value + viewportRatio);
+						commitValue(value + effectiveViewportRatio);
 						break;
 					case 'Home':
 						event.preventDefault();
@@ -167,7 +194,7 @@ export const Scrollbar = forwardRef<HTMLDivElement, ScrollbarProps>(
 						break;
 				}
 			},
-			[commitValue, disabled, isVertical, step, value, viewportRatio]
+			[commitValue, disabled, isVertical, step, value, effectiveViewportRatio]
 		);
 
 		// Handle track clicks
@@ -176,9 +203,7 @@ export const Scrollbar = forwardRef<HTMLDivElement, ScrollbarProps>(
 				if (disabled || !onChange || !trackRef.current) return;
 
 				const rect = trackRef.current.getBoundingClientRect();
-				const clickPos = isVertical
-					? event.clientY - rect.top
-					: event.clientX - rect.left;
+				const clickPos = isVertical ? event.clientY - rect.top : event.clientX - rect.left;
 				const trackSize = isVertical ? rect.height : rect.width;
 
 				// Convert click position to scroll value (0-1)

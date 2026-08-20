@@ -1,11 +1,15 @@
 // TextField component - Mac OS 9 style
 // Classic text input with label support and full accessibility
 
-import React, { forwardRef, InputHTMLAttributes } from 'react';
+import React, {
+	forwardRef,
+	useId,
+	type InputHTMLAttributes,
+	type TextareaHTMLAttributes,
+} from 'react';
 import styles from './TextField.module.css';
 
-export interface TextFieldProps
-	extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
+export interface TextFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
 	/**
 	 * Label text for the text field
 	 */
@@ -39,6 +43,26 @@ export interface TextFieldProps
 	 * Error message to display below the field
 	 */
 	errorMessage?: string;
+
+	/**
+	 * Render a multi-line textarea instead of a single-line input.
+	 *
+	 * The docs implied multiline support that did not exist (issue #84).
+	 * @default false
+	 */
+	multiline?: boolean;
+
+	/**
+	 * Visible rows when `multiline` is set.
+	 * @default 3
+	 */
+	rows?: number;
+
+	/**
+	 * Show a live character counter. Requires `maxLength`.
+	 * @default false
+	 */
+	showCount?: boolean;
 
 	/**
 	 * Helper text to display below the field
@@ -78,9 +102,9 @@ export interface TextFieldProps
 
 /**
  * Mac OS 9 style TextField component
- * 
+ *
  * Classic text input with inset bevel effect and optional label.
- * 
+ *
  * Features:
  * - Classic Mac OS 9 inset bevel styling
  * - Label positioning (top/left/right)
@@ -91,26 +115,26 @@ export interface TextFieldProps
  * - Full accessibility with ARIA support
  * - Keyboard navigation
  * - Form integration
- * 
+ *
  * @example
  * ```tsx
  * // Basic text field
  * <TextField placeholder="Enter text..." />
- * 
+ *
  * // With label
  * <TextField label="Username" placeholder="Enter username" />
- * 
+ *
  * // With error
- * <TextField 
- *   label="Email" 
- *   error 
+ * <TextField
+ *   label="Email"
+ *   error
  *   errorMessage="Invalid email address"
  *   value={email}
  *   onChange={(e) => setEmail(e.target.value)}
  * />
- * 
+ *
  * // With icons
- * <TextField 
+ * <TextField
  *   leftIcon={<SearchIcon />}
  *   placeholder="Search..."
  * />
@@ -125,6 +149,9 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 			fullWidth = false,
 			error = false,
 			errorMessage,
+			multiline = false,
+			rows = 3,
+			showCount = false,
 			helperText,
 			leftIcon,
 			rightIcon,
@@ -140,7 +167,10 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 		ref
 	) => {
 		// Generate ID if not provided (for label association)
-		const inputId = id || React.useId();
+		// useId is called unconditionally (hooks must be), but its result is
+		// only used when the consumer didn't supply an id (issue #96).
+		const generatedId = useId();
+		const inputId = id ?? generatedId;
 
 		// Generate helper/error text ID for aria-describedby
 		const helperId = `${inputId}-helper`;
@@ -155,38 +185,38 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 			.filter(Boolean)
 			.join(' ');
 
-	// Build class names
-	const wrapperClassNames = [
-		styles.wrapper,
-		styles[`wrapper--${size}`],
-		styles[`wrapper--label-${labelPosition}`],
-		fullWidth && styles['wrapper--full-width'],
-		disabled && styles['wrapper--disabled'],
-		wrapperClassName,
-	]
-		.filter(Boolean)
-		.join(' ');
+		// Build class names
+		const wrapperClassNames = [
+			styles.wrapper,
+			styles[`wrapper--${size}`],
+			styles[`wrapper--label-${labelPosition}`],
+			fullWidth && styles['wrapper--full-width'],
+			disabled && styles['wrapper--disabled'],
+			wrapperClassName,
+		]
+			.filter(Boolean)
+			.join(' ');
 
-	const inputWrapperClassNames = [
-		styles['input-wrapper'],
-		(leftIcon || rightIcon) && styles['input-wrapper--with-icon'],
-		leftIcon && styles['input-wrapper--with-left-icon'],
-		rightIcon && styles['input-wrapper--with-right-icon'],
-	]
-		.filter(Boolean)
-		.join(' ');
+		const inputWrapperClassNames = [
+			styles['input-wrapper'],
+			(leftIcon || rightIcon) && styles['input-wrapper--with-icon'],
+			leftIcon && styles['input-wrapper--with-left-icon'],
+			rightIcon && styles['input-wrapper--with-right-icon'],
+		]
+			.filter(Boolean)
+			.join(' ');
 
-	const inputClassNames = [
-		styles.input,
-		styles[`input--${size}`],
-		error && styles['input--error'],
-		fullWidth && styles['input--full-width'],
-		className,
-	]
-		.filter(Boolean)
-		.join(' ');
+		const inputClassNames = [
+			styles.input,
+			styles[`input--${size}`],
+			error && styles['input--error'],
+			fullWidth && styles['input--full-width'],
+			className,
+		]
+			.filter(Boolean)
+			.join(' ');
 
-	const labelClassNames = [styles.label, styles[`label--${size}`]].filter(Boolean).join(' ');
+		const labelClassNames = [styles.label, styles[`label--${size}`]].filter(Boolean).join(' ');
 
 		// ARIA attributes
 		const ariaAttributes = {
@@ -204,27 +234,39 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 				)}
 
 				<div className={inputWrapperClassNames}>
-			{leftIcon && (
-				<span className={styles['input-icon-left']} aria-hidden="true">
-					{leftIcon}
-				</span>
-			)}
+					{leftIcon && (
+						<span className={styles['input-icon-left']} aria-hidden="true">
+							{leftIcon}
+						</span>
+					)}
 
-			<input
-				ref={ref}
-				type={type}
-				id={inputId}
-				className={inputClassNames}
-				disabled={disabled}
-				{...ariaAttributes}
-				{...props}
-			/>
+					{multiline ? (
+						<textarea
+							ref={ref as unknown as React.Ref<HTMLTextAreaElement>}
+							id={inputId}
+							rows={rows}
+							className={inputClassNames}
+							disabled={disabled}
+							{...ariaAttributes}
+							{...(props as unknown as TextareaHTMLAttributes<HTMLTextAreaElement>)}
+						/>
+					) : (
+						<input
+							ref={ref}
+							type={type}
+							id={inputId}
+							className={inputClassNames}
+							disabled={disabled}
+							{...ariaAttributes}
+							{...props}
+						/>
+					)}
 
-			{rightIcon && (
-				<span className={styles['input-icon-right']} aria-hidden="true">
-					{rightIcon}
-				</span>
-			)}
+					{rightIcon && (
+						<span className={styles['input-icon-right']} aria-hidden="true">
+							{rightIcon}
+						</span>
+					)}
 				</div>
 
 				{label && labelPosition === 'right' && (
@@ -233,17 +275,28 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 					</label>
 				)}
 
-		{helperText && !error && (
-			<p id={helperId} className={styles['helper-text']}>
-				{helperText}
-			</p>
-		)}
+				{helperText && !error && (
+					<p id={helperId} className={styles['helper-text']}>
+						{helperText}
+					</p>
+				)}
 
-		{error && errorMessage && (
-			<p id={errorId} className={styles['error-message']}>
-				{errorMessage}
-			</p>
-		)}
+				{/* Character counter, announced politely so it doesn't interrupt
+		    typing the way an assertive region would (issue #84). */}
+				{showCount && props.maxLength !== undefined && (
+					<p className={styles['helper-text']} aria-live="polite">
+						{String(props.value ?? props.defaultValue ?? '').length} / {props.maxLength}
+					</p>
+				)}
+
+				{/* role="alert" so a validation message that appears after render is
+		    announced; a plain <p> was silently missed by screen readers
+		    (issue #84). */}
+				{error && errorMessage && (
+					<p id={errorId} className={styles['error-message']} role="alert">
+						{errorMessage}
+					</p>
+				)}
 			</div>
 		);
 	}

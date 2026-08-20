@@ -154,6 +154,12 @@
 	background: var(--color-gray-300);
 }
 
+.iconButton--secondary {
+	/* Matches Button's secondary: lighter fill, normal weight (issue #43). */
+	background-color: var(--color-gray-200);
+	font-weight: var(--font-weight-normal, normal);
+}
+
 .iconButton--danger {
 	background: var(--color-gray-400);
 	color: var(--color-text);
