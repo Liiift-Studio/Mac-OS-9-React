@@ -4,7 +4,17 @@
 
 ### Patch Changes
 
-- Fix two defects found while filling coverage gaps.
+- Fix three defects: a window that resized when you grabbed it, and two found while filling coverage gaps.
+
+  A `Window` switches to `position: absolute` the moment a drag starts. Any width
+  it was inheriting — a grid cell, a flex child, a `width: 100%` rule — then
+  resolved against the positioned ancestor instead, so the window visibly jumped
+  to a different size as you touched the title bar. It now measures itself once
+  at the start of the gesture and keeps the size it already had.
+
+  `maxWidth` and `maxHeight` now constrain layout as well as resizing. They were
+  passed to the resize hook and nowhere else, so the props only took effect once
+  you dragged the grow box.
 
   `Button` with `asChild` called `React.Children.only`, which throws on anything
   that is not exactly one element — taking down the consumer's tree, and throwing
