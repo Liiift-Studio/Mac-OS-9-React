@@ -8,6 +8,17 @@ on:
       - 'package.json'
   workflow_dispatch:
 
+# Trusted publishing: GitHub mints a short-lived OIDC token for this workflow
+# and npm verifies it against the trusted publisher registered on the package.
+# There is no NPM_TOKEN any more — the secret that used to be here expired
+# silently and three releases failed with `E404 ... PUT` before anyone noticed,
+# because npm answers an unauthorized publish with 404 rather than 403 to avoid
+# leaking whether a package exists. A credential that cannot expire cannot do
+# that. It also gets us provenance attestation for free.
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -19,12 +30,16 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          # jsdom 29 requires Node 20 or newer. On 18 the test run died inside
-          # jsdom's dependency chain — a require() of an ES module — which
-          # failed this workflow for reasons that had nothing to do with the
-          # package being published.
-          node-version: '20'
+          # Trusted publishing needs Node 22.14 or newer. (It also has to be
+          # 20+ regardless: on 18 the test run died inside jsdom's dependency
+          # chain — a require() of an ES module — failing this workflow for
+          # reasons that had nothing to do with the package being published.)
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org'
+
+      # Node 22 ships npm 10, and OIDC publishing landed in 11.5.1.
+      - name: Use an npm that can publish with OIDC
+        run: npm install -g npm@latest
 
       # Whether to publish is decided by comparing the manifest version to what
       # is actually on the registry. The previous condition matched the words
@@ -60,8 +75,6 @@ jobs:
       - name: Publish to npm
         if: steps.check.outputs.should_publish == 'true'
         run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Summary
         run: |
