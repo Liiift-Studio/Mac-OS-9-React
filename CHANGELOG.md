@@ -1,5 +1,25 @@
 # @liiift-studio/mac-os9-ui
 
+## 2.1.1
+
+### Patch Changes
+
+- Fix two defects found while filling coverage gaps.
+
+  `Button` with `asChild` called `React.Children.only`, which throws on anything
+  that is not exactly one element — taking down the consumer's tree, and throwing
+  before the component's own `isValidElement` check could run, so its friendlier
+  error message and `return null` were unreachable. It now counts children
+  instead and fails soft: a development error naming what it received, and
+  nothing rendered.
+
+  `FolderList` declared `classes.window` and `classes.titleBar` but forwarded
+  neither, so setting either did nothing. Both now reach the underlying `Window`.
+  `FolderList` also reached the content area through `Window`'s
+  `contentClassName`, which 2.0 deprecated — so every `FolderList` render logged a
+  deprecation warning about a prop the consumer had never passed and could not
+  stop passing. It goes through `classes` now.
+
 ## 2.1.0
 
 ### Minor Changes
