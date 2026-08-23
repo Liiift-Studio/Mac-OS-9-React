@@ -201,11 +201,19 @@ a {
 	z-index: 3;
 }
 
-/* Released back into plain layout, at the top-left of the stage. */
+/* Released back into plain layout. The aperture is larger than the viewport,
+ * so it is centred and top-aligned — which is what puts the page inside it at
+ * exactly 0, 0. */
 .machineRelease > .machineScreen__live {
 	position: absolute;
 	top: 0;
-	left: 0;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.zoomStage[data-released='true'] .machineScreen__page {
+	overflow-y: auto;
+	overscroll-behavior-y: contain;
 }
 
 .zoomStage[data-released='false'] .machineRelease {
@@ -223,11 +231,23 @@ a {
  * letterbox, because it is the same colour.
  * ========================================================================== */
 
+/* The whole 4:3 aperture. Its pixel size is written by machineGL, because it
+ * is derived from the same numbers the geometry uses. */
 .machineScreen__live {
-	width: 100vw;
-	height: 100vh;
 	overflow: hidden;
 	background: var(--desktop-bg);
+}
+
+/* The viewport-sized region inside the aperture, anchored to its top so the
+ * menu bar sits at the top of the screen. At the end of the zoom this is
+ * exactly the page. */
+.machineScreen__page {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	width: 100vw;
+	height: 100vh;
+	transform: translateX(-50%);
 }
 
 /* Once the zoom has finished, the desktop is the thing you are using: it
@@ -237,10 +257,7 @@ a {
 	pointer-events: none;
 }
 
-.zoomStage[data-released='true'] .machineScreen__live {
-	overflow-y: auto;
-	overscroll-behavior-y: contain;
-}
+
 
 /* ==========================================================================
  * Desktop

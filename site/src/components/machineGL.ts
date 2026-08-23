@@ -18,6 +18,12 @@
 // still occluding the body behind it. This is three.js's own `css3d_mixed`
 // arrangement.
 //
+// The aperture is 4:3, not the shape of the window. A viewport-shaped screen
+// forced a viewport-shaped case, and a widescreen iMac does not read as an
+// iMac. The desktop is a viewport-sized region anchored to the top of that
+// aperture, with the rest of the aperture filled in the same desktop colour —
+// which reads as more desktop rather than as letterboxing.
+//
 // Everything here is loaded on demand: see MachineStage for the import.
 
 import type * as THREE_NS from 'three';
@@ -27,14 +33,14 @@ type THREE = typeof THREE_NS;
 /** Bondi blue, as linear-ish sRGB hex for the shell. */
 const SHELL_COLOUR = 0x0f6f87;
 
-/** The "ice" front panel — frosted polycarbonate over light grey. */
-const ICE_COLOUR = 0xe8eef0;
+/** The "ice" front panel — frosted polycarbonate over a light grey. */
+const ICE_COLOUR = 0xdfe7ea;
 
 /** Field of view, degrees. Long-ish, so the machine reads as a product shot. */
 const FOV = 32;
 
-/** How far back the camera sits in the hero, as a multiple of the end distance. */
-const HERO_DISTANCE = 3.35;
+/** Fraction of the viewport the machine fills in the hero. */
+const HERO_FILL = 0.66;
 
 export interface MachineGLOptions {
 	/** Element the two renderers are appended to. */
@@ -56,6 +62,10 @@ export interface MachineGLHandle {
 	resize(): void;
 	/** Show or hide the 3D presentation. */
 	setVisible(visible: boolean): void;
+	/** The aperture's rendered size, so the host element can match it. */
+	getApertureSize(): { width: number; height: number };
+	/** The band of viewport the hero copy leaves free, in pixels. */
+	setHeroBand(top: number, bottom: number): void;
 	/** Release GPU resources and remove the canvases. */
 	dispose(): void;
 }
@@ -110,6 +120,84 @@ function roundedRect(
 	}
 
 	return shape;
+}
+
+/**
+ * Punch a circular hole in a shape.
+ *
+ * The speaker wells need real holes in the ice panel. Placing the grilles at a
+ * recessed z only buried them inside the panel's extrusion, because the panel
+ * is solid there — a recess is an absence of material, not a depth offset.
+ */
+function circleHole(THREE: THREE, shape: THREE_NS.Shape, x: number, y: number, radius: number) {
+	const path = new THREE.Path();
+	path.absarc(x, y, radius, 0, Math.PI * 2, true);
+	shape.holes.push(path);
+}
+
+/**
+ * A grid of perforations, drawn to a canvas.
+ *
+ * The speakers were domes sitting proud of the panel, which read as blue
+ * bumps. A real grille is a recess full of holes, and the holes are what your
+ * eye actually uses to identify it.
+ */
+function perforationTexture(THREE: THREE): THREE_NS.CanvasTexture {
+	const size = 256;
+	const canvas = document.createElement('canvas');
+	canvas.width = size;
+	canvas.height = size;
+	const ctx = canvas.getContext('2d');
+
+	if (ctx) {
+		ctx.fillStyle = '#0d5568';
+		ctx.fillRect(0, 0, size, size);
+
+		const pitch = size / 15;
+		ctx.fillStyle = '#04222c';
+		for (let row = 0; row < 17; row++) {
+			for (let col = 0; col < 17; col++) {
+				// Alternate rows are offset, the way a moulded grille is packed.
+				const x = col * pitch + (row % 2 ? pitch / 2 : 0);
+				const y = row * pitch;
+				ctx.beginPath();
+				ctx.arc(x, y, pitch * 0.26, 0, Math.PI * 2);
+				ctx.fill();
+			}
+		}
+	}
+
+	const texture = new THREE.CanvasTexture(canvas);
+	texture.colorSpace = THREE.SRGBColorSpace;
+	return texture;
+}
+
+/**
+ * The `iMac` wordmark, drawn to a transparent canvas.
+ *
+ * Applied as a decal rather than modelled: it is printed type on the real
+ * machine, and type is what a canvas is good at.
+ */
+function wordmarkTexture(THREE: THREE): THREE_NS.CanvasTexture {
+	const width = 512;
+	const height = 192;
+	const canvas = document.createElement('canvas');
+	canvas.width = width;
+	canvas.height = height;
+	const ctx = canvas.getContext('2d');
+
+	if (ctx) {
+		ctx.clearRect(0, 0, width, height);
+		ctx.fillStyle = '#77868c';
+		ctx.textAlign = 'center';
+		ctx.textBaseline = 'middle';
+		ctx.font = '400 132px Georgia, "Times New Roman", serif';
+		ctx.fillText('iMac', width / 2, height / 2 + 6);
+	}
+
+	const texture = new THREE.CanvasTexture(canvas);
+	texture.colorSpace = THREE.SRGBColorSpace;
+	return texture;
 }
 
 /**
@@ -179,20 +267,62 @@ export async function createMachineGL(options: MachineGLOptions): Promise<Machin
 		envMapIntensity: 1.15,
 	});
 
+	// Frosted polycarbonate: a soft, slightly blue body under a hard gloss
+	// coat. `sheen` is what stops it reading as painted card — it lifts the
+	// grazing angles the way a diffusing plastic does.
 	const iceMaterial = new THREE.MeshPhysicalMaterial({
 		color: ICE_COLOUR,
-		roughness: 0.42,
+		roughness: 0.55,
 		metalness: 0,
-		clearcoat: 0.7,
-		clearcoatRoughness: 0.22,
-		envMapIntensity: 0.85,
+		clearcoat: 1,
+		clearcoatRoughness: 0.12,
+		sheen: 0.6,
+		sheenRoughness: 0.5,
+		sheenColor: new THREE.Color(0xbfd6dd),
+		ior: 1.5,
+		envMapIntensity: 1,
 	});
 
-	/** Sized from the viewport, so the screen is exactly the desktop. */
+	const recessMaterial = new THREE.MeshStandardMaterial({
+		color: 0x0a3540,
+		roughness: 0.8,
+		metalness: 0,
+	});
+
+	const grilleTexture = perforationTexture(THREE);
+	const grilleMaterial = new THREE.MeshStandardMaterial({
+		map: grilleTexture,
+		roughness: 0.65,
+		metalness: 0,
+	});
+
+	const markTexture = wordmarkTexture(THREE);
+	const markMaterial = new THREE.MeshBasicMaterial({
+		map: markTexture,
+		transparent: true,
+		depthWrite: false,
+	});
+
+	const slotMaterial = new THREE.MeshStandardMaterial({ color: 0x27313a, roughness: 0.7 });
+
 	let parts: THREE_NS.Object3D[] = [];
 	let cutout: THREE_NS.Mesh | null = null;
 	let screenObject: THREE_NS.Object3D | null = null;
+
+	/** Camera geometry, recomputed whenever the viewport changes. */
 	let endDistance = 1000;
+	let heroDistance = 3000;
+	let heroCentreY = 0;
+	let desktopCentreY = 0;
+	let aperture = { width: 0, height: 0 };
+
+	/** The vertical band the hero copy leaves free, in viewport pixels. */
+	let heroBand = { top: 0, bottom: window.innerHeight };
+
+	const add = (mesh: THREE_NS.Object3D) => {
+		machine.add(mesh);
+		parts.push(mesh);
+	};
 
 	const buildGeometry = () => {
 		for (const part of parts) {
@@ -204,20 +334,35 @@ export async function createMachineGL(options: MachineGLOptions): Promise<Machin
 		}
 		parts = [];
 
-		const screenW = window.innerWidth;
-		const screenH = window.innerHeight;
+		const viewW = window.innerWidth;
+		const viewH = window.innerHeight;
 
-		// Proportions taken off the real machine, expressed against the screen.
-		// The chin is deep because that is where the iMac keeps its speakers,
-		// its drive and its name — take it away and the case reads as a slab.
+		// A 4:3 aperture, large enough that a viewport-sized desktop fits
+		// across it. This is the whole reason the case reads as an iMac rather
+		// than as a widescreen slab: a viewport-shaped screen forces a
+		// viewport-shaped case.
+		const screenW = Math.max(viewW, (viewH * 4) / 3);
+		const screenH = (screenW * 3) / 4;
+		aperture = { width: screenW, height: screenH };
+
+		// Proportions taken off the real machine, expressed against the
+		// aperture. The chin is deep because that is where the iMac keeps its
+		// speakers, its drive and its name — take it away and the case reads
+		// as a slab.
 		const bezel = screenW * 0.055;
 		const frontW = screenW + bezel * 2;
-		const chin = screenH * 0.34;
+		const chin = screenH * 0.26;
 		const frontH = screenH + bezel + chin;
-		const depth = screenW * 0.62;
+		const depth = screenW * 0.6;
 
-		// The screen sits above centre, with the chin below it.
+		// The aperture sits above centre, with the chin below it.
 		const screenOffsetY = (chin - bezel) / 2;
+
+		// Chin geometry, needed before the front panel is built because the
+		// speaker wells are holes in it.
+		const chinY = screenOffsetY - screenH / 2 - chin / 2;
+		const grilleR = chin * 0.34;
+		const grilleX = frontW * 0.35;
 
 		// The ice front panel: a bevelled extrusion with the screen cut out of
 		// it. The bevel is what rounds the edges.
@@ -227,6 +372,9 @@ export async function createMachineGL(options: MachineGLOptions): Promise<Machin
 			radius: screenW * 0.012,
 			offsetY: screenOffsetY,
 		});
+		circleHole(THREE, frontShape, -grilleX, chinY, grilleR);
+		circleHole(THREE, frontShape, grilleX, chinY, grilleR);
+
 		const frontGeo = new THREE.ExtrudeGeometry(frontShape, {
 			depth: screenW * 0.05,
 			bevelEnabled: true,
@@ -281,50 +429,69 @@ export async function createMachineGL(options: MachineGLOptions): Promise<Machin
 		machine.add(back);
 		parts.push(back);
 
-		// --- The chin: two speakers, the slot drive, and the foot ----------
+		// --- Chin hardware -------------------------------------------------
 		//
 		// These are the parts that say iMac. Without them the front is a
 		// rounded rectangle and could be anything.
-		const chinY = screenOffsetY - screenH / 2 - bezel - chin / 2;
-		const speakerR = chin * 0.42;
-		const speakerX = frontW * 0.36;
+		// Where the ice panel's front surface actually is. ExtrudeGeometry runs
+		// the shape from z=0 to z=depth and the bevel adds bevelThickness at
+		// each end, so after the translate the face sits here. The chin
+		// hardware was placed at negative z and ended up buried inside the
+		// panel — invisible, which is why the chin read as a blank slab.
+		const faceZ = screenW * 0.028;
+
+		// The shell's own front face, by the same arithmetic. Anything recessed
+		// into the chin has to stay in front of this or the shell covers it —
+		// which is the second reason the speakers never appeared.
+		const shellFaceZ = -depth * 0.78 + depth * 0.72 + screenW * 0.05;
+		const recessZ = Math.max(faceZ - screenW * 0.016, shellFaceZ + screenW * 0.004);
 
 		for (const side of [-1, 1]) {
-			// A shallow dome, recessed into the panel and coloured like the
-			// shell — the translucent grille of the real machine.
-			const domeGeo = new THREE.SphereGeometry(speakerR, 28, 20, 0, Math.PI * 2, 0, Math.PI / 2);
-			domeGeo.rotateX(Math.PI / 2);
-			domeGeo.scale(1, 1, 0.3);
-			domeGeo.translate(side * speakerX, chinY, screenW * 0.012);
-			const dome = new THREE.Mesh(domeGeo, shellMaterial);
-			machine.add(dome);
-			parts.push(dome);
+			// A well sunk into the panel...
+			const wellGeo = new THREE.CylinderGeometry(
+				grilleR * 1.08,
+				grilleR * 1.08,
+				Math.max(faceZ - recessZ, 1),
+				36,
+				1,
+				true
+			);
+			wellGeo.rotateX(Math.PI / 2);
+			wellGeo.translate(side * grilleX, chinY, (faceZ + recessZ) / 2);
+			add(new THREE.Mesh(wellGeo, recessMaterial));
+
+			// ...with the perforated grille at the bottom of it. The speakers
+			// used to be domes standing proud of the panel, which read as blue
+			// bumps; a real grille is a recess full of holes, and the holes are
+			// what the eye uses to identify it.
+			const grilleGeo = new THREE.CircleGeometry(grilleR, 40);
+			grilleGeo.translate(side * grilleX, chinY, recessZ);
+			add(new THREE.Mesh(grilleGeo, grilleMaterial));
 		}
 
 		// The slot-loading drive.
-		const slotGeo = new THREE.BoxGeometry(frontW * 0.34, chin * 0.075, screenW * 0.012);
-		slotGeo.translate(0, chinY, screenW * 0.02);
-		const slot = new THREE.Mesh(
-			slotGeo,
-			new THREE.MeshStandardMaterial({ color: 0x2b3338, roughness: 0.6 })
-		);
-		machine.add(slot);
-		parts.push(slot);
+		const slotGeo = new THREE.BoxGeometry(frontW * 0.32, chin * 0.07, screenW * 0.014);
+		slotGeo.translate(0, chinY - chin * 0.1, faceZ - screenW * 0.003);
+		add(new THREE.Mesh(slotGeo, slotMaterial));
 
-		// The foot the whole thing sits on.
-		const footShape = roundedRect(THREE, frontW * 0.3, chin * 0.34, chin * 0.16);
+		// The wordmark, printed just under the aperture.
+		const markW = frontW * 0.115;
+		const markGeo = new THREE.PlaneGeometry(markW, markW * 0.375);
+		markGeo.translate(0, chinY + chin * 0.3, faceZ + 1);
+		add(new THREE.Mesh(markGeo, markMaterial));
+
+		// --- The foot --------------------------------------------------------
+		const footShape = roundedRect(THREE, frontW * 0.3, chin * 0.4, chin * 0.18);
 		const footGeo = new THREE.ExtrudeGeometry(footShape, {
 			depth: depth * 0.34,
 			bevelEnabled: true,
-			bevelThickness: chin * 0.1,
-			bevelSize: chin * 0.09,
+			bevelThickness: chin * 0.12,
+			bevelSize: chin * 0.1,
 			bevelSegments: 5,
 			curveSegments: 16,
 		});
-		footGeo.translate(0, chinY - chin * 0.58, -depth * 0.36);
-		const foot = new THREE.Mesh(footGeo, shellMaterial);
-		machine.add(foot);
-		parts.push(foot);
+		footGeo.translate(0, chinY - chin * 0.68, -depth * 0.36);
+		add(new THREE.Mesh(footGeo, shellMaterial));
 
 		// The hole. NoBlending with zero opacity writes depth but no colour, so
 		// the canvas is transparent here and the DOM behind shows through —
@@ -354,17 +521,47 @@ export async function createMachineGL(options: MachineGLOptions): Promise<Machin
 		cutout.renderOrder = -1;
 		machine.add(cutout);
 
-		// The live desktop, in the same camera space as the case.
+		// The live desktop, in the same camera space as the case. The host is
+		// the whole 4:3 aperture; the viewport-sized page sits at the top of it
+		// and the rest is filled in the same desktop colour, which reads as
+		// more desktop rather than as letterboxing.
+		screenContent.style.width = `${screenW}px`;
+		screenContent.style.height = `${screenH}px`;
+
 		if (!screenObject) {
 			screenObject = new CSS3DObject(screenContent) as unknown as THREE_NS.Object3D;
 			machine.add(screenObject);
 		}
 		screenObject.position.set(0, screenOffsetY, 0);
 
-		// Camera distance at which the screen plane exactly fills the viewport.
-		// This is the same relation CSS3DRenderer uses for its perspective, so
-		// at the end of the zoom the desktop is at 1:1.
-		endDistance = screenH / (2 * Math.tan((FOV * Math.PI) / 360));
+		// Where that viewport-sized page sits inside the aperture: anchored to
+		// its top, so the menu bar is at the top of the screen.
+		desktopCentreY = screenOffsetY + screenH / 2 - viewH / 2;
+
+		// Camera distance at which the page exactly fills the viewport. This is
+		// the same relation CSS3DRenderer uses for its perspective, so at the
+		// end of the zoom the desktop is at 1:1.
+		const halfFov = Math.tan((FOV * Math.PI) / 360);
+		endDistance = viewH / (2 * halfFov);
+
+		// And the distance at which the whole machine fits the band the copy
+		// leaves free. Derived rather than a fixed multiple: a constant looks
+		// right at one viewport and collides with the headline at another.
+		const machineH = frontH * 1.045 + chin * 0.9;
+		const machineW = frontW * 1.055;
+		const bandH = Math.max(heroBand.bottom - heroBand.top, 80);
+		const bandFill = (bandH / viewH) * HERO_FILL;
+
+		heroDistance = Math.max(
+			machineH / (2 * halfFov * bandFill),
+			machineW / (2 * halfFov * bandFill * Math.max(camera.aspect, 0.1))
+		);
+
+		// Centre the machine in that band rather than in the viewport. The
+		// band's midpoint in pixels, converted to world units at hero distance.
+		const bandCentrePx = (heroBand.top + heroBand.bottom) / 2 - viewH / 2;
+		const worldPerPixel = (2 * heroDistance * halfFov) / viewH;
+		heroCentreY = -bandCentrePx * worldPerPixel;
 	};
 
 	const resize = () => {
@@ -381,17 +578,43 @@ export async function createMachineGL(options: MachineGLOptions): Promise<Machin
 
 	const update = (progress: number, tiltX: number, tiltY: number) => {
 		// Dolly in rather than scale up: the perspective genuinely changes,
-		// which a CSS scale cannot do.
+		// which a CSS scale cannot do. The camera also pans from the middle of
+		// the machine to the middle of the desktop, because once the aperture
+		// is taller than the viewport those are not the same point.
 		const eased = progress * progress;
-		const distance = endDistance * (HERO_DISTANCE - (HERO_DISTANCE - 1) * eased);
-		camera.position.set(0, 0, distance);
-		camera.lookAt(0, 0, 0);
+		const distance = heroDistance + (endDistance - heroDistance) * eased;
+		const centreY = heroCentreY + (desktopCentreY - heroCentreY) * eased;
 
-		machine.rotation.x = (tiltX * Math.PI) / 180;
-		machine.rotation.y = (tiltY * Math.PI) / 180;
+		// The tilt orbits the CAMERA around the machine rather than rotating
+		// the machine.
+		//
+		// Rotating the object made the two renderers disagree: the WebGL hole
+		// and the CSS3D desktop drifted apart as soon as there was any
+		// rotation, so the desktop spilled out past the side of the case. Both
+		// renderers derive everything from `camera.matrixWorldInverse`, so
+		// moving the camera instead is the one transform they cannot disagree
+		// about. It reads the same — the machine appears to turn toward you —
+		// and it is honest about what is happening: you are the one leaning.
+		const yaw = (tiltY * Math.PI) / 180;
+		const pitch = (tiltX * Math.PI) / 180;
+
+		camera.position.set(
+			distance * Math.sin(yaw) * Math.cos(pitch),
+			centreY + distance * Math.sin(pitch),
+			distance * Math.cos(yaw) * Math.cos(pitch)
+		);
+		camera.up.set(0, 1, 0);
+		camera.lookAt(0, centreY, 0);
 
 		gl.render(scene, camera);
 		css3d.render(scene, camera);
+	};
+
+	const getApertureSize = () => aperture;
+
+	const setHeroBand = (top: number, bottom: number) => {
+		heroBand = { top, bottom };
+		buildGeometry();
 	};
 
 	const setVisible = (visible: boolean) => {
@@ -410,6 +633,12 @@ export async function createMachineGL(options: MachineGLOptions): Promise<Machin
 		cutout?.geometry.dispose();
 		shellMaterial.dispose();
 		iceMaterial.dispose();
+		recessMaterial.dispose();
+		grilleMaterial.dispose();
+		markMaterial.dispose();
+		slotMaterial.dispose();
+		grilleTexture.dispose();
+		markTexture.dispose();
 		envMap.dispose();
 		pmrem.dispose();
 		gl.dispose();
@@ -417,5 +646,5 @@ export async function createMachineGL(options: MachineGLOptions): Promise<Machin
 		css3d.domElement.remove();
 	};
 
-	return { update, resize, setVisible, dispose };
+	return { update, resize, setVisible, getApertureSize, setHeroBand, dispose };
 }

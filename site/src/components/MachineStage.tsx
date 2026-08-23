@@ -40,6 +40,9 @@ const TILT_GONE_AT = 0.4;
 /** Per-frame fraction of the remaining distance to the pointer. */
 const TILT_EASE = 0.09;
 
+/** Clear space kept between the machine and the copy above and below it. */
+const HERO_GUTTER = 16;
+
 function clamp(value: number, min: number, max: number): number {
 	return Math.min(max, Math.max(min, value));
 }
@@ -55,12 +58,20 @@ function hasWebGL(): boolean {
 }
 
 export function MachineStage({ children, above, below }: MachineStageProps) {
-	// Created once and never re-created: this is the element React portals the
-	// desktop into, and the one that gets moved between homes.
-	const host = useMemo(() => {
-		const node = document.createElement('div');
-		node.className = 'machineScreen__live';
-		return node;
+	// Created once and never re-created. `host` is the whole 4:3 aperture and
+	// is what gets moved between homes; `page` is the viewport-sized region
+	// inside it that React actually portals the desktop into. The rest of the
+	// aperture is filled in the desktop's own colour, so it reads as more
+	// desktop rather than as letterboxing.
+	const { host, page } = useMemo(() => {
+		const hostNode = document.createElement('div');
+		hostNode.className = 'machineScreen__live';
+
+		const pageNode = document.createElement('div');
+		pageNode.className = 'machineScreen__page';
+		hostNode.appendChild(pageNode);
+
+		return { host: hostNode, page: pageNode };
 	}, []);
 
 	const trackRef = useRef<HTMLDivElement>(null);
@@ -75,7 +86,15 @@ export function MachineStage({ children, above, below }: MachineStageProps) {
 		const stage = stageRef.current;
 		const mount = mountRef.current;
 		const release = releaseRef.current;
-		if (!track || !stage || !mount || !release) return;
+		const above = stage?.querySelector<HTMLElement>('.zoomCopy--above');
+		const below = stage?.querySelector<HTMLElement>('.zoomCopy--below');
+		if (!track || !stage || !mount || !release || !above || !below) return;
+
+		/** The vertical band the copy leaves free for the machine. */
+		const measureBand = () => ({
+			top: above.getBoundingClientRect().bottom + HERO_GUTTER,
+			bottom: below.getBoundingClientRect().top - HERO_GUTTER,
+		});
 
 		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 		const canHover = window.matchMedia('(hover: hover) and (pointer: fine)');
@@ -99,10 +118,14 @@ export function MachineStage({ children, above, below }: MachineStageProps) {
 			if (next) {
 				release.appendChild(host);
 				// CSS3DRenderer writes position and a matrix3d straight onto the
-				// element it owns. Those survive the move, so without clearing
-				// them the desktop lands half a viewport up and to the left.
-				host.style.position = '';
-				host.style.transform = '';
+				// element it owns. Those survive the move, so they have to be
+				// replaced rather than merely cleared — the aperture is wider
+				// and taller than the viewport, and the page inside it only
+				// lands at 0,0 if the host is centred and top-aligned.
+				host.style.position = 'absolute';
+				host.style.top = '0';
+				host.style.left = '50%';
+				host.style.transform = 'translateX(-50%)';
 				host.style.willChange = '';
 				host.removeAttribute('inert');
 				host.removeAttribute('aria-hidden');
@@ -184,6 +207,8 @@ export function MachineStage({ children, above, below }: MachineStageProps) {
 
 		const onResize = () => {
 			handle?.resize();
+			const band = measureBand();
+			handle?.setHeroBand(band.top, band.bottom);
 			apply();
 		};
 
@@ -199,6 +224,8 @@ export function MachineStage({ children, above, below }: MachineStageProps) {
 				}
 
 				setMode('gl');
+				const band = measureBand();
+				handle.setHeroBand(band.top, band.bottom);
 				setReleased(false);
 				apply();
 
@@ -223,7 +250,7 @@ export function MachineStage({ children, above, below }: MachineStageProps) {
 			if (frame !== null) cancelAnimationFrame(frame);
 			handle?.dispose();
 		};
-	}, [host]);
+	}, [host, page]);
 
 	return (
 		<div className="zoomTrack" ref={trackRef} data-mode={mode}>
@@ -233,7 +260,7 @@ export function MachineStage({ children, above, below }: MachineStageProps) {
 				<div className="machineRelease" ref={releaseRef} />
 				<div className="zoomCopy zoomCopy--below">{below}</div>
 			</div>
-			{createPortal(children, host)}
+			{createPortal(children, page)}
 		</div>
 	);
 }
