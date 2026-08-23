@@ -7,6 +7,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Alert } from './Alert';
+import { ErrorIcon, StopIcon } from '../Icon';
 import { checkA11y } from '../../test/axe';
 import { nth } from '../../test/nth';
 
@@ -58,7 +59,13 @@ describe('Alert', () => {
 			const onConfirm = vi.fn();
 			const onClose = vi.fn();
 			render(
-				<Alert open heading="Erase disk?" confirmLabel="Erase" onConfirm={onConfirm} onClose={onClose} />
+				<Alert
+					open
+					heading="Erase disk?"
+					confirmLabel="Erase"
+					onConfirm={onConfirm}
+					onClose={onClose}
+				/>
 			);
 
 			fireEvent.click(screen.getByRole('button', { name: 'Erase' }));
@@ -84,6 +91,38 @@ describe('Alert', () => {
 
 			expect(onClose).toHaveBeenCalled();
 			expect(onConfirm).not.toHaveBeenCalled();
+		});
+	});
+
+	describe('severity icon', () => {
+		/** The glyph markup an icon renders, independent of where it sits. */
+		const glyphOf = (node: Element | null) => node?.querySelector('svg')?.innerHTML ?? '';
+
+		it('shows the circular stop-alert glyph, not the media stop square', () => {
+			// StopIcon is the transport control — a filled square. Mac OS 9 stop
+			// alerts used the circular glyph, which is ErrorIcon. They are easy to
+			// confuse by name, and once did get confused here.
+			const { container: alert } = render(<Alert open severity="stop" heading="Disk is full" />);
+			const { container: wanted } = render(<ErrorIcon size="xl" label={null} />);
+			const { container: wrong } = render(<StopIcon size="xl" label={null} />);
+
+			expect(glyphOf(alert.ownerDocument.body)).toBe(glyphOf(wanted));
+			expect(glyphOf(alert.ownerDocument.body)).not.toBe(glyphOf(wrong));
+		});
+
+		it('gives each severity a distinct glyph', () => {
+			const severities = ['stop', 'caution', 'note', 'question'] as const;
+			const glyphs = severities.map((severity) => {
+				const { container, unmount } = render(
+					<Alert open severity={severity} heading="Heads up" />
+				);
+				const glyph = glyphOf(container.ownerDocument.body);
+				unmount();
+				return glyph;
+			});
+
+			// A severity that looks like another severity is not communicating one.
+			expect(new Set(glyphs).size).toBe(severities.length);
 		});
 	});
 

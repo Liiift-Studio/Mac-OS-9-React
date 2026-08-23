@@ -12,7 +12,7 @@
 import React, { forwardRef } from 'react';
 import { Dialog, type DialogProps } from '../Dialog';
 import { Button } from '../Button';
-import { StopIcon, AlertIcon, InfoIcon, QuestionIcon, type PixelIconProps } from '../Icon';
+import { ErrorIcon, AlertIcon, InfoIcon, QuestionIcon, type PixelIconProps } from '../Icon';
 import { mergeClasses } from '../../utils/classNames';
 import styles from './Alert.module.css';
 
@@ -97,8 +97,11 @@ export interface AlertProps
 }
 
 /** Severity to the icon that has always been in the registry for it. */
+// `stop` maps to ErrorIcon, not StopIcon: StopIcon is the media transport
+// control — a filled square — while ErrorIcon is the circular stop-alert glyph
+// Mac OS 9 actually showed, and matches the other three in the set.
 const ICONS: Record<AlertSeverity, React.FC<PixelIconProps>> = {
-	stop: StopIcon,
+	stop: ErrorIcon,
 	caution: AlertIcon,
 	note: InfoIcon,
 	question: QuestionIcon,
